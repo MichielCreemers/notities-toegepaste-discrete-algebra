@@ -1,0 +1,27 @@
+{
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (lualatex)",
+      "tools": ["lualatexmk"]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "lualatexmk",
+      "command": "latexmk",
+      "args": [
+        "-lualatex",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-outdir=out",
+        "%DOC%"
+      ]
+    }
+  ],
+  "latex-workshop.latex.outDir": "out",
+  "latex-workshop.latex.build.enableMagicComments": true,
+  "latex-workshop.latex.recipe.default": "latexmk (lualatex)",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.view.pdf.viewer": "tab"
+}

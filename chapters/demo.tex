@@ -1,0 +1,248 @@
+\section{Demonstration of this template}
+
+\subsection*{Hallo}
+\subsection{Hallo1}
+
+Given predictions $y_i$ and targets $t_i$, the mean squared error over $n$ samples is
+\begin{equation}\label{eq:mse}
+  \mathrm{MSE}=\frac{1}{n}\sum_{i=1}^n (y_i-t_i)^2.
+\end{equation}
+Some text yadayadayada.
+
+\subsection{Custom boxes}
+\subsubsection{Lemmas and proofs}
+
+yadayadayada
+
+yadayadayada
+
+yadayadayada
+
+yadayadayada
+
+\begin{nicelemma}* \label{lem:whatever}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+    \nextpart[Example.]
+    If $c > 0$, then $a = b$ is obvious. If $c < 0$, then $-c > 0$ and $-ca = -cb$, so $-a = -b$ and $a = b$.
+    Just checking to see what happens if the proof ends in an equation
+    \[
+        \int_0^x y^2 \,\mathrm{d}x = \frac{1}{3} x^3 \,. 
+    \]
+    Can I say more?
+    \[
+    \text{More equations} = \pi \,. 
+    \]
+
+    \begin{equation}
+    \begin{split}
+      A &= B + C\\
+        &= D 
+    \end{split}\qedtag
+    \end{equation}
+
+    \begin{align}
+      a &= b + c \\
+        &= d \qedtag
+    \end{align}
+\end{nicelemma}
+
+\begin{nicelemma} \label{lem:seemstowork}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$. \manualqed
+\end{nicelemma}
+
+Some text yadayadayada
+
+\begin{nicetheorem}* \label{theo:whatever}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+    \nextpart
+    If $c > 0$, then $a = b$ is obvious. If $c < 0$, then $-c > 0$ and $-ca = -cb$, so $-a = -b$ and $a = b$.
+    Just checking to see what happens if the proof ends in an equation
+    \[
+        \int_0^x y^2 \,\mathrm{d}x = \frac{1}{3} x^3 \,. 
+    \]
+\end{nicetheorem}
+
+\begin{nicetheorem*}* \label{theo:whatever2}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+    \nextpart
+    If $c > 0$, then $a = b$ is obvious. If $c < 0$, then $-c > 0$ and $-ca = -cb$, so $-a = -b$ and $a = b$.
+    Just checking to see what happens if the proof ends in an equation
+    \[
+        \int_0^x y^2 \,\mathrm{d}x = \frac{1}{3} x^3 \,. 
+    \]
+\end{nicetheorem*}
+
+\begin{nicetheorem} \label{theo:seemstowork}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+\end{nicetheorem}
+
+Some text yadayadayada
+
+\begin{nicecorollary}* \label{cor:whatever}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+    \nextpart
+    If $c > 0$, then $a = b$ is obvious. If $c < 0$, then $-c > 0$ and $-ca = -cb$, so $-a = -b$ and $a = b$.
+    Just checking to see what happens if the proof ends in an equation
+    \begin{equation}
+        \int_0^x y^2 \,\mathrm{d}x = \frac{1}{3} x^3 \,. \qedtag
+    \end{equation}
+\end{nicecorollary}
+
+\begin{nicecorollary} \label{cor:seemstowork}
+    Let $a,b,c\in\mathbb{Z}$. If $ca = cb$ and $c\neq 0$, then $a = b$.
+\end{nicecorollary}
+
+Some text yadayadayada
+
+\begin{nicedefinition}[Circle roundness]
+    A circle is always round, omg right! ja ja ja ja nee nee nee nee
+\end{nicedefinition}
+
+\begin{nicealgorithm}*[Fibonacci]
+    The algorithm to calculate fibonacci numbers.
+    \nextpart[Algorithm.]
+    Here the pseudocode:
+    \vspace{0.5em}
+    \hrule
+    \vspace{0.5em}
+    \begin{algorithmic}[1]
+        \Function{Fibonacci}{$n$}
+            \If{$n \leq 1$}
+                \State \Return $n$
+            \Else
+                \State \Return \Call{Fibonacci}{$n-1$} + \Call{Fibonacci}{$n-2$}
+            \EndIf
+        \EndFunction
+    \end{algorithmic}
+\end{nicealgorithm}
+
+\begin{nicecode}*
+  Demo of fibonacci in python:
+  \nextpart[Code:]*
+
+  \begin{lstlisting}[language=Python]
+def fib(n):
+    if n <= 1:
+        return n
+    else:
+        return fib(n-1) + fib(n-2)
+  \end{lstlisting}
+\end{nicecode}
+
+\section*{NJA}
+
+\texttt{Code fonts test} \\
+Referencing is easy, just use \inlinecode{\texttt{\backslash Cref\{\}}}, for example u can reference to \Cref{lem:whatever}. Ofcourse u need to label it correctly using \inlinecode{\texttt{\backslash label\{\}}}.
+
+\section*{Figures}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/test2.jpeg}
+    \caption{Test Image}
+    \label{fig:test_image}
+\end{figure}
+
+U can reference as follows: \Cref{fig:test_image} \\
+\\
+Test inlinebox: A piece of \inlinetext{text} by using \texttt{\backslash inlinetext\{$\cdots$\}}. \\
+\\
+Now try a piece of \inlinecode{code -> \#2 != \#1} by using \texttt{\backslash inlindecode\{$\cdots$\}}.
+
+A default grey \inlinetext{note}
+and a colored one \inlinetext{warning}[orange!30].
+
+Code: \inlinecode{foo()->bar} and \inlinecode{alert!}[yellow!25].
+
+\subsection{Custom Equation Boxes}
+
+Starred \inlinecode{*}, as in \inlinecode{\textbackslash begin\{equationbox\}*} results in an unnumbered equationbox, while no star adds an equation number.
+
+% Example 1: Standard (Numbered, Black Border, Transparent Fill)
+\begin{equationbox}
+    \tilde{x}_i = V_m s_i
+\end{equationbox}
+
+% Example 2: Starred (No Number, Black Border, Transparent Fill)
+\begin{equationbox}*
+    \tilde{x}_i = V_m s_i
+\end{equationbox}
+
+An equationbox takes $2$ parameters that are \inlinetext{optional}[green!25] and alter the \inlinetext{linecolor} and the\newline \inlinetext{fill color}. They can be used as follows: 
+\begin{center}
+    \inlinecode{\textbackslash begin\{equationbox\}[<linecolor>(Optional)][<fillcolor>(Optional)]}    
+\end{center}
+
+
+% Example 3: Custom Line Color (Red Line, Transparent Fill)
+\begin{equationbox}[red]
+    E = mc^2
+\end{equationbox}
+
+When you want multiple equations in one box that are aligned with respect to a "=" for example, use \inlinecode{\textbackslash begin\{aligned\}} and \inlinecode{\&=}. Just aligning multiple lines in a single box $\longrightarrow$ use \inlinecode{\textbackslash begin\{gathered\}}. You need so separate lines by ending a line with \inlinecode{\textbackslash\textbackslash}.
+
+% Example 4: Custom Line AND Fill (Blue Line, Yellow Fill)
+\begin{equationbox}[blue][yellow!20]
+    \begin{gathered}
+        \nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0} \\
+        \text{JA ANOTHER ONE} \\
+        yada = \sum_{i=1}^{\infty} y_a^d \times a 
+    \end{gathered}
+\end{equationbox}
+
+\subsection{Custom left-bar box}
+
+\begin{barbox}
+This is some text with a default gray bar and white background.
+\end{barbox}
+
+\begin{barbox}[red]
+This is some text with a red bar and white background.
+\end{barbox}
+
+\begin{barbox}[blue][yellow!20]
+This one has a blue bar and a light yellow background.
+\end{barbox}
+
+\begin{barbox}[][green!10]
+This one has the default gray bar and a light green background.
+\end{barbox}
+
+\subsection{Custom rounded text-box}
+
+\begin{roundbox}
+I am Sam
+\end{roundbox}
+
+\begin{roundbox}[yellow!20] % custom background, no border
+Sam I am
+\end{roundbox}
+
+\begin{roundbox}[green!10][blue] % background + border color
+I do not like green eggs and ham
+\end{roundbox}
+
+\newpage
+\subsection{Custom environments}
+
+\subsubsection{Environment with text on one side and image on other side}
+
+\begin{sidebyimage}{figures/test2.jpeg}[0.5\textwidth][My Caption][fig:mylabel]
+    Here is some text that describes the image. Because I did not specify 'l' or 'r', 
+    the logic defaults to the right side. The text is vertically centered relative 
+    to the image.
+\end{sidebyimage}
+
+\begin{sidebyimage}[l]{figures/test2.jpeg}[0.5\textwidth]
+    Now the image is on the left. I omitted the caption and label here, 
+    so the image just appears by itself. The text width is automatically 
+    calculated to fill the rest of the page.
+\end{sidebyimage}
+
+\begin{wrapimage}[r]{figures/test2.jpeg}[0.5\textwidth][My Caption]
+    This is a long paragraph of text. Because I am using 'wrapimage', 
+    the text will start next to the image on the left. Once the text 
+    exceeds the height of the image, it will naturally wrap underneath 
+    it and span the full width of the page, just like in a newspaper 
+    or magazine article. ha ha ha ha ha h a ha ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah. ha ha ha ha ha h a ha ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah ah. 
+\end{wrapimage}

@@ -1,0 +1,164 @@
+% ---- Public style hooks (defaults) ----
+\providecommand{\SectionBackColor}{accent}
+\providecommand{\SectionTextColor}{white}
+
+\providecommand{\SubsectionBackColor}{accent!10}
+\providecommand{\SubsectionFrameColor}{accent}
+\providecommand{\SubsectionTextColor}{black}
+
+\providecommand{\SubsubBackColor}{accent!5}
+\providecommand{\SubsubFrameColor}{accent}
+\providecommand{\SubsubTextColor}{black}
+
+\newcommand{\HeadingVCenter}{\vphantom{Ag}} % A for tall ascender, g for deep descender
+
+\providecommand{\HeadingCornerRadius}{1mm} % rounded corners
+\providecommand{\HeadingHLeft}{8pt}        % internal left padding
+\providecommand{\HeadingHRight}{8pt}       % internal right padding
+\providecommand{\HeadingVTop}{6pt}         % internal top padding
+\providecommand{\HeadingVBottom}{6pt}      % internal bottom padding
+
+% ---- Heading spacing knobs (external spacing) ----
+% These are GLUE amounts. You can include stretch/shrink if you like.
+\providecommand{\SectionBeforeSkip}{6pt plus 2pt minus 2pt}
+\providecommand{\SectionAfterSkip}{6pt}
+
+\providecommand{\SubsectionBeforeSkip}{5pt plus 2pt minus 2pt}
+\providecommand{\SubsectionAfterSkip}{5pt}
+
+\providecommand{\SubsubBeforeSkip}{4pt plus 1pt minus 1pt}
+\providecommand{\SubsubAfterSkip}{4pt}
+
+% Quick presets (optional): call one of these anywhere after the provides.
+\newcommand{\HeadingSpacingTight}{%
+  \renewcommand{\SectionBeforeSkip}{4pt plus 1pt minus 1pt}%
+  \renewcommand{\SectionAfterSkip}{4pt}%
+  \renewcommand{\SubsectionBeforeSkip}{3pt plus 1pt minus 1pt}%
+  \renewcommand{\SubsectionAfterSkip}{3pt}%
+  \renewcommand{\SubsubBeforeSkip}{2pt plus 1pt minus 1pt}%
+  \renewcommand{\SubsubAfterSkip}{2pt}%
+}
+\newcommand{\HeadingSpacingComfy}{%
+  \renewcommand{\SectionBeforeSkip}{10pt plus 4pt minus 2pt}%
+  \renewcommand{\SectionAfterSkip}{10pt}%
+  \renewcommand{\SubsectionBeforeSkip}{8pt plus 3pt minus 2pt}%
+  \renewcommand{\SubsectionAfterSkip}{8pt}%
+  \renewcommand{\SubsubBeforeSkip}{6pt plus 2pt minus 1pt}%
+  \renewcommand{\SubsubAfterSkip}{6pt}%
+}
+
+% Toggle: make \subsubsection full width?
+\newif\ifSubsubFullWidth
+\SubsubFullWidthfalse   % default = natural/content width
+% \SubsubFullWidthtrue  % uncomment to make it full width
+
+% Reusable styles for boxes (add nobeforeafter!)
+\tcbset{
+  secbox/.style={
+    colback=\SectionBackColor, coltext=\SectionTextColor,
+    boxrule=0pt,
+    left=\HeadingHLeft, right=\HeadingHRight,
+    top=\HeadingVTop, bottom=\HeadingVBottom,
+    sharp corners, rounded corners, arc=\HeadingCornerRadius,
+    nobeforeafter
+  },
+  subsecbox/.style={
+    colback=\SubsectionBackColor, colframe=\SubsectionFrameColor,
+    coltext=\SubsectionTextColor, boxrule=0.5pt,
+    left=\HeadingHLeft, right=\HeadingHRight,
+    top=\HeadingVTop, bottom=\HeadingVBottom,
+    sharp corners, rounded corners, arc=\HeadingCornerRadius,
+    nobeforeafter
+  }
+}
+
+% Fonts for headings (like your titlesec sizes)
+\setkomafont{section}{\Large\bfseries}
+\setkomafont{subsection}{\large\bfseries}
+\setkomafont{subsubsection}{\normalsize\bfseries}
+
+% Spacing around headings (match your titlespacing)
+% Use negative beforeskip to suppress indent of the following paragraph.
+% Spacing around headings (negative "before" suppresses indent of the next paragraph)
+\RedeclareSectionCommand[
+  beforeskip=-\SectionBeforeSkip, afterskip=\SectionAfterSkip]{section}
+\RedeclareSectionCommand[
+  beforeskip=-\SubsectionBeforeSkip, afterskip=\SubsectionAfterSkip]{subsection}
+\RedeclareSectionCommand[
+  beforeskip=-\SubsubBeforeSkip, afterskip=\SubsubAfterSkip]{subsubsection}
+
+% Draw the line itself with a tcolorbox
+\makeatletter
+\renewcommand*\sectionlinesformat[4]{%
+  % #1 level, #2 indent (GLUE), #3 number, #4 text
+  % (1) convert glue -> dimen once
+  \@tempskipa=#2\relax \@tempdima=\@tempskipa
+  %
+  \Ifstr{#1}{section}{%
+    \hspace*{#2}%
+    \begin{tcolorbox}[secbox, width=\dimexpr\linewidth-\@tempdima\relax]
+      \usekomafont{section}\IfUseNumber{#3\quad #4}{#4}\HeadingVCenter% (2) add strut here too
+    \end{tcolorbox}%
+  }{%
+  \Ifstr{#1}{subsection}{%
+    \hspace*{#2}%
+    \begin{tcolorbox}[subsecbox, width=\dimexpr\linewidth-\@tempdima\relax]
+      \usekomafont{subsection}\IfUseNumber{#3\quad #4}{#4}\HeadingVCenter
+    \end{tcolorbox}%
+  }{%
+  \Ifstr{#1}{subsubsection}{%
+    \ifSubsubFullWidth
+      \hspace*{#2}%
+      \begin{tcolorbox}[
+        colback=\SubsubBackColor, colframe=\SubsubFrameColor,
+        coltext=\SubsubTextColor, boxrule=0.5pt,
+        sharp corners, rounded corners, arc=\HeadingCornerRadius,
+        left=6pt, right=6pt, top=3pt, bottom=3pt, nobeforeafter,
+        width=\dimexpr\linewidth-\@tempdima\relax
+      ]%
+        \usekomafont{subsubsection}\IfUseNumber{#3\quad #4}{#4}\HeadingVCenter
+      \end{tcolorbox}%
+    \else
+      \noindent\hspace*{#2}%
+      \tcbox[
+        colback=\SubsubBackColor, colframe=\SubsubFrameColor,
+        coltext=\SubsubTextColor, boxrule=0.5pt,
+        sharp corners, rounded corners, arc=\HeadingCornerRadius,
+        left=6pt, right=6pt, top=3pt, bottom=3pt, nobeforeafter,
+        tcbox raise base % (3) nicer baseline for inline pill
+      ]{%
+        \usekomafont{subsubsection}\IfUseNumber{#3\quad #4}{#4}\HeadingVCenter
+      }%
+      \par
+    \fi
+  }{%
+    \@hangfrom{\hskip #2#3}{#4}%
+  }}}%
+}
+\makeatother
+
+% --- Boxed ToC heading (unchanged) ---
+\makeatletter
+\newcommand{\boxedcontents}{%
+  \begin{tcolorbox}[secbox]\bfseries\large CONTENTS\end{tcolorbox}%
+  \begingroup
+    \def\tableofcontents{\@starttoc{toc}}%
+    \tableofcontents
+  \endgroup
+}
+\makeatother
+
+% Custom `SimpleHeading`
+
+% ---- Public style hook for the simple text heading ----
+\providecommand{\SimpleHeadingColor}{accent}
+
+% ---- Command definition ----
+\makeatletter
+\newcommand{\SimpleHeading}[1]{%
+  \par\vspace{1.5ex plus 0.5ex minus 0.2ex}% Add some flexible space above
+  \noindent{\large\bfseries\textcolor{\SimpleHeadingColor}{#1}}% The styled text
+  \par\nobreak\vspace{0.5ex}% Add space below and strictly prevent page breaks here
+  \@afterindentfalse\@afterheading % Suppresses indentation on the paragraph that follows
+}
+\makeatother

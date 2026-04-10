@@ -1,0 +1,326 @@
+\usepackage{amsthm}
+\usepackage{xparse}
+\usepackage{etoolbox}
+% \usepackage{tcolorbox}
+% \tcbuselibrary{skins}
+
+\makeatletter
+% \patchcmd{\proof}{\@addpunct{.}}{}{}{} % <-- This patch is unreliable.
+% We replace it by redefining the 'proof' environment without the dot.
+\renewenvironment{proof}[1][\proofname]{%
+  \par
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+        \itshape
+    #1]\ignorespaces % <--- \@addpunct{.} removed here
+}{%
+  \endtrivlist
+}
+\makeatother
+
+% Put the current \qedsymbol as a right-aligned tag (works in equation/align/gather/split)
+\newcommand{\qedtag}{\tag*{\qedsymbol}}
+
+% For displays without tags (like \[ ... \]) fall back to a manual right push
+\newcommand{\qedatdisplay}{\hfill\qedsymbol}
+
+\newcommand{\manualqed}{\hfill\qedsymbol}
+
+% Factory: #1=base env (lemma), #2=proof env (lemproof), #3=wrapper (nicelemma), #4=color (purple)
+\NewDocumentCommand{\createResEnviornment}{mmmm}{%
+  % Numbered base theorem (resets each section)
+  \newtheorem{#1}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#1}}[section]
+  % Unnumbered base theorem
+  \newtheorem*{#1*}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#1}}
+
+  % Proof environment with optional title (now bold + colored)
+  \NewDocumentEnvironment{#2}{ o }{%
+    \IfNoValueTF{##1}{%
+      \renewcommand{\proofname}{\textbf{\color{#4!50!black}Proof}}%
+      \begin{proof}%
+    }{%
+      \begingroup
+      \renewcommand{\proofname}{\textbf{\color{#4!50!black}##1}}%
+      \begin{proof}%
+    }%
+    % Define the symbol but do NOT auto-place it:
+    \renewcommand{\qedsymbol}{\textcolor{#4!40!black}{\rule{1.5ex}{1.5ex}}}%
+  }{%
+  \end{proof}%
+  \IfNoValueTF{##1}{}{%
+    \endgroup
+  }%
+}
+
+  % ---------------- Numbered wrapper ----------------
+  \NewDocumentEnvironment{#3}{s o}{%
+    \IfBooleanTF{##1}{%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable,after skip=0pt]%
+    }{%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable]%
+    }%
+    \IfNoValueTF{##2}{\begin{#1}}{\begin{#1}[##2]}%
+    % Local helper to split statement/proof
+    % --- FIX 2: Replaced \newcommand with \NewDocumentCommand ---
+    \NewDocumentCommand{\nextpart}{ o s }{%
+      \end{#1}%
+      \end{tcolorbox}%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!2,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable,before skip=0pt]%
+      % Check if \nextpart was given an argument (####1)
+      \IfNoValueTF{####1}{%
+          \begin{#2}% If not, call proof env with no argument
+      }{%
+          \begin{#2}[####1]% If so, pass argument to proof env
+      }%
+      \IfBooleanTF{####2}{\par\noindent}{}%
+    }%
+  }{%
+    \IfBooleanTF{##1}{\end{#2}}{\end{#1}}%
+    \end{tcolorbox}%
+  }%
+
+  % ---------------- Unnumbered wrapper ----------------
+  \NewDocumentEnvironment{#3*}{s o}{%
+    \IfBooleanTF{##1}{%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable,after skip=0pt]%
+    }{%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable]%
+    }%
+    \IfNoValueTF{##2}{\begin{#1*}}{\begin{#1*}[##2]}%
+    % Local helper to split statement/proof
+    % --- FIX 2: Replaced \newcommand with \NewDocumentCommand ---
+    \NewDocumentCommand{\nextpart}{ o s }{%
+      \end{#1*}%
+      \end{tcolorbox}%
+      \begin{tcolorbox}[
+        enhanced,colback=#4!2,fonttitle=\bfseries,sharp corners,
+        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        breakable,before skip=0pt]%
+      % Check if \nextpart was given an argument (####1)
+      \IfNoValueTF{####1}{%
+          \begin{#2}% If not, call proof env with no argument
+      }{%
+          \begin{#2}[####1]% If so, pass argument to proof env
+      }%
+      \IfBooleanTF{####2}{\par\noindent}{}%
+    }%
+  }{%
+    \IfBooleanTF{##1}{\end{#2}}{\end{#1*}}%
+    \end{tcolorbox}%
+  }%
+}
+
+% Instantiate
+\createResEnviornment{lemma}{lemproof}{nicelemma}{purple}
+\createResEnviornment{theorem}{theoproof}{nicetheorem}{red}
+\createResEnviornment{corollary}{corproof}{nicecorollary}{orange}
+\createResEnviornment{definition}{defproof}{nicedefinition}{PineGreen}
+\createResEnviornment{Algorithm}{algproof}{nicealgorithm}{NavyBlue}
+\createResEnviornment{code}{codeproof}{nicecode}{Black}
+\createResEnviornment{example}{exampleproof}{niceexample}{orange}
+\createResEnviornment{exercise}{exerciseproof}{niceexercise}{Periwinkle}
+\createResEnviornment{note}{noteproof}{nicenote}{DarkOrchid}
+
+% For referencing using Cleverref
+% Format: \crefname{<env_name>}{<singular>}{<plural>}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{definition}{Definition}{Definitions}
+\crefname{Algorithm}{Algorithm}{Algorithms}
+\crefname{code}{Code}{Code Blocks}
+\crefname{example}{Example}{Examples}
+\crefname{exercise}{Exercise}{Execises}
+
+
+% Stuff for code boxes
+% If a dedicated JetBrains code font isn't defined in the preamble, define it here.
+% (Assumes LuaLaTeX/XeLaTeX + fontspec is loaded in your preamble.)
+\makeatletter
+\@ifundefined{CodeFont}{%
+  \newfontfamily\CodeFont{JetBrains Mono}
+}{}
+\makeatother
+
+% Basic colors for syntax highlighting
+\definecolor{codekeyword}{HTML}{005CC5} % blue keywords
+\definecolor{codestring}{HTML}{032F62}  % dark blue strings
+\definecolor{codecomment}{HTML}{6A737D} % gray comments
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  upquote=true,
+  tabsize=2,
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  frame=none, framerule=0pt,
+}
+
+\lstdefinestyle{codebox}{
+  basicstyle=\CodeFont\small,      % JetBrains only in code panel
+  keywordstyle=\color{codekeyword}\bfseries,
+  stringstyle=\color{codestring},
+  commentstyle=\color{codecomment}\itshape,
+  numbers=none,                    % no line numbers
+  frame=none, framerule=0pt,       % avoid double frame
+  xleftmargin=0em,
+  aboveskip=4pt, belowskip=2pt,
+}
+
+% Apply JetBrains style only inside the code "proof" part
+\AtBeginEnvironment{codeproof}{\lstset{style=codebox}}
+
+% A custom colored text highlight with rounded corners
+
+\newtcbox{\inlinebox}[1][]{
+  on line,
+  tcbox raise base,        % align baseline with surrounding text 
+  before upper=\vphantom{AgjpqyHMU}, % includes depth for descenders
+  colback=gray!15,
+  colframe=gray!15,
+  boxsep=0pt,
+  left=2pt, right=2pt, top=0.5pt, bottom=0.25pt,
+  arc=2pt,
+  enhanced,
+  tcbox width=auto limited,        % ← allow wrapping up to \linewidth
+  halign=left,                     % nice left alignment when wrapping
+  valign=center,
+  #1
+}
+
+\usepackage{seqsplit}
+
+% \inlinetext{...}[<color>]  (default gray!15)
+\NewDocumentCommand{\inlinetext}{m O{gray!15}}{%
+  \inlinebox[colback=#2,colframe=#2]{#1}%
+}
+
+% \inlinecode{...}[<color>]  (default gray!15)
+\NewDocumentCommand{\inlinecode}{m O{gray!15}}{%
+  \inlinebox[colback=#2,colframe=#2]{\texttt{#1}}%
+}
+
+% ---------- Code for Equation Boxes ------------
+\NewDocumentEnvironment{equationbox}{ s O{black} O{} +b }
+{%
+    % 1. Helper: Define the transparency/fill style safely
+    %    (Solves the "white not defined" and opacity issues)
+    \if\relax\detokenize{#3}\relax
+        % No fill color -> Transparent
+        \tcbset{eqfill/.style={opacityback=0, colback=white}}
+    \else
+        % Fill color provided -> Solid
+        \tcbset{eqfill/.style={opacityback=1, colback=#3}}
+    \fi
+    
+    % 2. Define the specific box appearance
+    \tcbset{eqbox/.style={
+        eqfill,                % Apply the fill logic calculated above
+        sharp corners,
+        boxrule=0.8pt,
+        colframe=#2,           % Line color from argument
+        % Dimensions (Tight fit)
+        top=3pt, bottom=3pt, left=5pt, right=5pt, boxsep=1pt,
+        % Alignment properties
+        nobeforeafter,         % Ensures it behaves like a word, not a paragraph
+        tcbox raise base,      % Aligns the math baseline correctly
+        enhanced               % Required for 'standard jigsaw' transparency
+    }}
+
+    % 3. Output the Environment
+    %    We wrap a \tcbox INSIDE standard math environments.
+    \IfBooleanTF{#1}
+    {% Starred version: Unnumbered \[ ... \]
+        \[
+            \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle #4}}
+        \]
+    }
+    {% Standard version: Numbered \begin{equation} ...
+        \begin{equation}
+            \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle #4}}
+        \end{equation}
+    }
+}{}
+
+% barbox environment: \begin{barbox}[<barcolor>][<bgcolor>] ... \end{barbox}
+\NewDocumentEnvironment{barbox}{ O{gray} o }{%
+  % #1 = bar color  (optional, default gray)
+  % #2 = background (optional, if absent use white)
+  \IfNoValueTF{#2}{%
+    % No background color given -> use white (looks transparent on white paper)
+    \begin{tcolorbox}[
+      enhanced,
+      breakable,
+      colback=white,
+      colframe=white,
+      borderline west={3pt}{0pt}{#1},
+      left=10pt,
+      right=0pt,
+      boxrule=0pt,
+    ]%
+  }{%
+    % Background color given -> use it
+    \begin{tcolorbox}[
+      enhanced,
+      breakable,
+      colback=#2,
+      colframe=white,
+      borderline west={3pt}{0pt}{#1},
+      left=10pt,
+      right=0pt,
+      boxrule=0pt,
+    ]%
+  }%
+}{%
+  \end{tcolorbox}%
+}
+
+% Custom round box to put text in:
+
+% #1 = background color   (optional, default: light gray)
+% #2 = border color       (optional, default: none)
+\NewDocumentEnvironment{roundbox}{ O{gray!15} O{} }{%
+  \IfBlankTF{#2}{%
+    % no border color given
+    \begin{tcolorbox}[
+      enhanced,
+      frame empty,
+      colback=#1,
+      rounded corners,
+      arc=8pt,
+      width=\textwidth,
+      boxsep=4pt
+    ]%
+  }{%
+    % border color given
+    \begin{tcolorbox}[
+      enhanced,
+      colback=#1,
+      colframe=#2,
+      rounded corners,
+      arc=8pt,
+      width=\textwidth,
+      boxsep=4pt
+    ]%
+  }%
+}{%
+  \end{tcolorbox}
+}

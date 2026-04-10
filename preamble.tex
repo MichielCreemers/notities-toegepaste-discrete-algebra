@@ -1,0 +1,111 @@
+% -------- Engine & fonts (LuaLaTeX) --------
+\usepackage{fontspec}
+% Load mathtools BEFORE unicode-math (per its recommendation)
+\usepackage{mathtools} % loads amsmath; do NOT load amssymb with unicode-math
+\usepackage{unicode-math}
+
+\usepackage{luatexja} % enables CJK with LuaLaTeX
+\usepackage{luatexja-fontspec}
+\usepackage{emoji} % List of emoji's: https://ctan.math.washington.edu/tex-archive/macros/luatex/latex/emoji/emoji-doc.pdf
+
+\setmainfont{Libertinus Serif}
+\setsansfont{Libertinus Sans}
+\setmonofont[
+  Path = fonts/JetBrainsMono/,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-Italic,
+  BoldItalicFont = *-BoldItalic,
+  Scale = MatchLowercase
+]{JetBrainsMono}
+% \setmonofont{Latin Modern Mono}
+% \setmathfont{Libertinus Math}     % --> Enable if u want this font!
+% \newfontfamily\emoji[
+%   Path = fonts/NotoColorEmoji/
+% ]{NotoColorEmoji.ttf}
+
+\setmainjfont[
+  Path      = fonts/Noto Serif CJK/, % note the slash
+  Extension = .ttf,
+  FontWeight = 500,
+  AutoFakeBold = 2,      % optional: let bold Chinese work
+  AutoFakeSlant = 0.2    % optional: let italic Chinese work
+]{NotoSansSC-Regular}
+
+
+% -------- Geometry & spacing --------
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{setspace}\onehalfspacing
+% \onehalfspacing % uncomment for draft
+
+% -------- Colors & links --------
+\usepackage[dvipsnames]{xcolor}
+\definecolor{ink}{HTML}{1E1E1E}
+\definecolor{muted}{HTML}{666666}
+\definecolor{accent}{HTML}{2D6CDF}
+\color{ink}
+
+\usepackage{hyperref}
+\usepackage[capitalise,nameinlink,noabbrev]{cleveref}
+
+% -------- Headers/footers (KOMA way) --------
+\usepackage[headsepline]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ihead{\coursename}
+\ohead{\leftmark}
+\cfoot{\pagemark}
+\automark{section}
+
+% -------- Math & symbols --------
+% DO NOT: \usepackage{amssymb}  % (clashes with unicode-math)
+\usepackage{siunitx}
+\sisetup{detect-all,per-mode=symbol,range-phrase=--,range-units=single}
+
+% -------- Figures, tables --------
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+% Define a thinner rule (0.2pt instead of 0.4pt midrule)
+\newcommand{\thinrule}{\specialrule{0.2pt}{2pt}{2pt}}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[table]{xcolor}
+
+% -------- Algorithms & code --------
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  numbers=left, numberstyle=\tiny, numbersep=6pt,
+  frame=single, breaklines=true, tabsize=2,
+  keywordstyle=\bfseries,
+  captionpos=b
+}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% A special style used ONLY by our code box
+\lstdefinestyle{codebox}{
+  basicstyle=\CodeFont\small, % JetBrains here only
+  numbers=left, numberstyle=\tiny, numbersep=6pt,
+  frame=single, breaklines=true, tabsize=2,
+  keywordstyle=\bfseries,
+  captionpos=b
+}
+
+% -------- Theorems with tcolorbox --------
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% -------- Bibliography --------
+\usepackage[backend=biber,style=ieee,sorting=nyt,maxnames=10]{biblatex}
+\addbibresource{refs.bib}
+
+% -------- Equation/figure/table numbering per section --------
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+% -------- For Custom Environments --------
+\usepackage{caption}
+\usepackage{wrapfig}

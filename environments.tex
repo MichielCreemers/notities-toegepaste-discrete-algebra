@@ -1,0 +1,77 @@
+\usepackage{caption}
+\usepackage{wrapfig}
+
+\newlength{\sbitextwidth}
+
+% Define the custom environment
+% Arguments:
+% #1 (Optional): Position 'l' or 'r' (default 'r')
+% #2 (Mandatory): Image Path
+% #3 (Optional): Image Width (default 0.4\textwidth)
+% #4 (Optional): Caption
+% #5 (Optional): Label
+% #6 (Body): The text content (captured automatically)
+
+\NewDocumentEnvironment{sidebyimage}{ O{r} m O{0.4\textwidth} o o +b }{
+    \par\vspace{1em}\noindent
+    % 2. Calculate the width inside (using setlength, not newlength)
+    \setlength{\sbitextwidth}{\dimexpr\textwidth-#3-2em\relax}
+
+    % 3. Define the Image Block
+    \newcommand{\imageblock}{%
+        \begin{minipage}[t]{#3} % [t] for top alignment
+            \vspace{0pt} % Essential anchor for top alignment
+            \centering
+            \includegraphics[width=\linewidth]{#2}
+            \IfValueT{#4}{%
+                \captionof{figure}{#4}
+                \IfValueT{#5}{\label{#5}}%
+            }%
+        \end{minipage}%
+    }
+
+    % 4. Define the Text Block
+    \newcommand{\textblock}{%
+        \begin{minipage}[t]{\sbitextwidth} % [t] for top alignment
+            \vspace{0pt} % Essential anchor for top alignment
+            #6
+        \end{minipage}%
+    }
+
+    % 5. Output logic
+    \if#1l % If Left
+        \imageblock\hfill\textblock
+    \else % Default to Right
+        \textblock\hfill\imageblock
+    \fi
+    \par\vspace{1em}
+}{}
+
+% Arguments are identical to 'sidebyimage':
+% #1 (Optional): Position 'l' or 'r' (default 'r')
+% #2 (Mandatory): Image Path
+% #3 (Optional): Image Width (default 0.4\textwidth)
+% #4 (Optional): Caption
+% #5 (Optional): Label
+% #6 (Body): The text content
+
+\NewDocumentEnvironment{wrapimage}{ O{r} m O{0.4\textwidth} o o +b }{
+    % The wrapfigure environment handles the placement
+    % We use lowercase 'l' or 'r' to force the image to stay exactly here
+    \begin{wrapfigure}{#1}{#3}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        
+        % Caption and Label logic
+        \IfValueT{#4}{%
+            \caption{#4}%
+            \IfValueT{#5}{\label{#5}}%
+        }%
+    \end{wrapfigure}%
+    
+    % Print the text body immediately after
+    #6
+    
+    % Optional: Force a line break after if text is too short
+    % \par 
+}{}

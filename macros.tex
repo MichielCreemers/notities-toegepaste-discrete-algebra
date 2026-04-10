@@ -1,0 +1,35 @@
+% Custom math shortcuts and operators.
+% Ensure required packages (mathtools, unicode-math) are loaded in preamble.tex
+
+% --- Math Operators ---
+\DeclareMathOperator{\E}{\mathbb{E}} % Expectation
+\DeclareMathOperator{\Var}{Var}     % Variance
+\DeclareMathOperator{\Cov}{Cov}     % Covariance
+\DeclareMathOperator*{\argmin}{arg\,min} % Arg min
+\DeclareMathOperator*{\argmax}{arg\,max} % Arg max
+
+% --- Math Shortcuts ---
+\newcommand{\R}{\mathbb{R}} % Real numbers
+\newcommand{\C}{\mathbb{C}} % Complex numbers
+\newcommand{\dif}{\mathop{}\!\mathrm{d}} % Differential d
+\renewcommand{\vec}[1]{\mathbf{#1}} % Vector (bold)
+
+% Custom command for the resolution rule.
+% TODO: Document!
+\newcommand{\resproof}[2]{
+    \left. %{
+    \begin{array}{@{}c@{}} 
+        #1 
+    \end{array} 
+    \right\} \xrightarrow{\text{resolution}} #2
+}
+
+% Variant-self subsuming resolution
+\newcommand{\selfresproof}[2]{
+    \left. %{
+    \begin{array}{@{}c@{}} 
+        #1 
+    \end{array} 
+    \right\} \xrightarrow{\text{self-subsuming resolution}} #2
+}
+

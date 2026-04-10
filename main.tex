@@ -1,0 +1,78 @@
+
+\documentclass[11pt, oneside, parskip=half]{scrartcl} % MUST BE FIRST
+
+% ---------- Base setup ----------
+% Load packages and base settings first
+\input{preamble}
+% Then load custom macros (depends on preamble packages)
+\input{macros}
+% Then load box definitions (depends on preamble packages like tcolorbox)
+\input{boxes}
+% Load custom environments
+\input{environments.tex}
+% Finally load heading styles (depends on preamble, boxes)
+\input{headings}
+
+% ---------- Document metadata ----------
+\newcommand{\coursename}{Beginselen van Kennisrepresentatie en Redeneren}
+\newcommand{\doctitle}{Course Summary}
+\newcommand{\docversion}{v0.5}
+\newcommand{\docauthor}{Michiel Creemers}
+
+\hypersetup{
+  pdftitle   = {\doctitle},
+  pdfauthor  = {\docauthor},
+  pdfsubject = {\coursename},
+  pdfcreator = {LaTeX},
+  colorlinks = true,
+  linkcolor  = black,
+  citecolor  = accent,
+  urlcolor   = accent
+}
+
+% --- Theme overrides (example) ---
+\renewcommand{\SectionBackColor}{BlueViolet!70}
+\renewcommand{\SectionTextColor}{white}
+\renewcommand{\SubsectionBackColor}{BlueViolet!7}
+\renewcommand{\SubsectionFrameColor}{BlueViolet!70}
+\renewcommand{\SubsectionTextColor}{black}
+\renewcommand{\SubsubBackColor}{CadetBlue!5}
+\renewcommand{\SubsubFrameColor}{CadetBlue!70}
+\renewcommand{\SubsubTextColor}{black}
+\renewcommand{\HeadingCornerRadius}{2mm}
+\renewcommand{\HeadingHLeft}{10pt}
+\renewcommand{\HeadingHRight}{10pt}
+\renewcommand{\HeadingVTop}{6pt}
+\renewcommand{\HeadingVBottom}{6pt}
+\renewcommand{\SimpleHeadingColor}{BlueViolet!70}
+
+
+
+\begin{document}
+
+\begin{center}
+  {\LARGE \doctitle}\\[0.2em]
+  {\large \coursename\ — \docversion}\\[0.2em]
+  {\large \docauthor} \\
+  {\small \today}
+\end{center}
+\vspace{0.5em}
+\hrule
+\vspace{1em}
+
+\boxedcontents % Boxed Table of Contents
+\vspace{1em}\hrule\vspace{1em}
+
+% ---------- Include chapters ----------
+\input{chapters/demo.tex}
+
+\newpage
+\input{chapters/CHAPTER2.tex}
+
+\newpage
+\input{chapters/CHAPTER3.tex}
+
+% ---------- References ----------
+\printbibliography % Requires refs.bib and Biber run
+
+\end{document}
