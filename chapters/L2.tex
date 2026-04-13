@@ -70,17 +70,177 @@ Bijvoorbeeld: $\mathbb{Z}_0^{+} = \{1, 2, 3, \dots\}$ en $\mathbb{Q}^{-} = \{x \
 
 \SimpleHeading{Bewerkingen op Verzamelingen}
 
+\begin{nicedefinition}*[Unie (vereniging)]
+    \nextpart[Unie:]*
+
+    \begin{equation*}
+        A \cup B : \{x \mid x \in A \lor x \in B\}
+    \end{equation*}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Doorsnede]
+    \nextpart[Doorsnede:]*
+
+    \begin{equation*}
+        A \cap B : \{x \mid x \in A \land x \in B\}
+    \end{equation*}
+\end{nicedefinition}
+
+\newpage
+\begin{nicedefinition}*[Nog wat extra verzamelingen]
+    \nextpart[Extra verzamelingen:]*
+
+    \begin{itemize}
+        \item \textbf{Universele verzameling:} $U =$ de verzameling van elle mogelijke elementen in de context.
+        \item \textbf{Ledige verzameling:} $\varnothing =$ de verzameling zonder elementen.
+        \item Voor elke verzameling $A$ geldt: $\varnothing \subseteq A \text{ en } A \subseteq U$.
+        \item \textbf{Singleton:} een verzameling met precies één element, bv. $\{\varnothing\}$ (bevat één element, namelijk de lege verzameling).
+        \item \textbf{Disjunct:} $A$ en $B$ zijn disjunct $\Longleftrightarrow A \cap B = \varnothing$.
+        \item \textbf{Complement:} $A' = \{x \mid x \notin A\}$ (alle elementen van $U$ die niet in $A$ zitten). Andere notaties die ook wel gebruikt worden zijn: $A^c$ of $\bar{A}$.
+    \end{itemize}
+\end{nicedefinition}
+
+\begin{niceexample}*
+    Zij $U = \{1,2,3,4,5\}$, $A = \{1, 2, 3\}$, $B = \{3,4,5\}$.
+    \nextpart[Dan:]*
+    \begin{itemize}
+        \item $A \cup B = \{1,2,3,4,5\} = U$
+        \item $A \cap B = \{3\}$
+        \item $A' = \{4,5\}$
+        \item $B' = \{1,2\}$
+        \item $A$ en $B$ zijn niet disjunct (want 3 zit in beide)
+    \end{itemize}
+\end{niceexample}
+
 \subsection{Venn-Diagrammen}
+
+\inlinetext{Venn-diagrammen} zijn grafische voorstellingen van verzamelingen. Een gebied stelt een verzameling voor. Arcering wordt gebruikt om aan te geven welk deel geen elementen bevat.
+
+\colorbox{magenta!66}{TODO: plaats figuur van ven-diagrammen}
 
 \subsection{Algebra van de Verzamelingen}
 
+Met de operatoren \inlinetext{$\cup$}, \inlinetext{$\cap$}, \inlinetext{$'$} en de relaties \inlinetext{$\subseteq$}, \inlinetext{$\subset$}, \inlinetext{$=$} kan men met verzamelingen "rekenen".
+
 \SimpleHeading{Prioriteit van Operatoren}
+
+De prioriteit van operatoren van hoog naar laag:
+\begin{enumerate}
+    \item $'$ (complement) $\rightarrow$ hoogste prioriteit
+    \item $\cap$ (doorsnede)
+    \item $\cup$ (unie)
+    \item $\subset, \subseteq, =$ $\;\rightarrow$ laagste prioriteit
+\end{enumerate}
+
+Dus $A \cup B \cap C$ betekent $A \cup (B \cap C)$, net zoals bij $\times$ en $+$ in de gewone rekenkunde.
 
 \SimpleHeading{Rekenregels}
 
+\begin{nicetheorem}*[Rekenregels]
+    Laat $A,B,C$ verzamelingen zijn. De belangrijkste regels:
+    \nextpart[]*
+
+    \begin{center}
+        \begin{tabularx}{\textwidth}{@{} >{\centering\arraybackslash}p{3cm} X l @{}}
+            \toprule
+            \textbf{Nr} & \textbf{Regel} & \textbf{Naam} \\
+            \midrule
+            \multirow{2}{*}{5, 6}   & $A \cup (A \cap B) = A$                          & \multirow{2}{*}{Absorptie} \\
+                                    & $A \cap (A \cup B) = A$                          & \\
+            \midrule
+            \multirow{2}{*}{7, 8}   & $(A \cup B)' = A' \cap B'$                       & \multirow{2}{*}{De Morgan} \\ 
+                                    & $(A \cap B)' = A' \cup B'$                       & \\
+            \midrule
+            \multirow{2}{*}{9, 10}  & $A \cup B = B \cup A$                            & \multirow{2}{*}{Commutativiteit} \\
+                                    & $A \cap B = B \cap A$                            & \\
+            \midrule
+            \multirow{2}{*}{11, 12} & $A \cup A = A$                                   & \multirow{2}{*}{Idempotentie} \\
+                                    & $A \cap A = A$                                   & \\
+            \midrule
+            13                      & $A \cup (B \cup C) = (A \cup B) \cup C$          & Associativiteit \\
+            \midrule
+            \multirow{2}{*}{14, 15} & $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$ & \multirow{2}{*}{Distributiviteit} \\
+                                    & $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$ & \\
+            \midrule
+            \multirow{2}{*}{16, 17} & $A \cup \varnothing = A$                         & \multirow{2}{*}{Identiteit} \\
+                                    & $A \cap U = A$                                   & \\
+            \midrule
+            \multirow{2}{*}{18, 19} & $A \cup U = U$                                   & \multirow{2}{*}{Nulwet} \\
+                                    & $A \cap \varnothing = \varnothing$               & \\
+            \midrule
+            \multirow{2}{*}{20, 21} & $A \cup A' = U$                                  & \multirow{2}{*}{Complementwet} \\
+                                    & $A \cap A' = \varnothing$                        & \\
+            \bottomrule
+        \end{tabularx}
+    \end{center}
+\end{nicetheorem}
+
+\begin{niceexample}*[De Morgan]
+    Zij $U = \{1,2,3,4,5\}$, $A = \{1,2\}$, $B = \{2,3\}$. Dan:
+    \nextpart[]*
+    \begin{itemize}
+        \item $A \cup B = \{1,2,3\}$, dus $(A \cup B)' = \{4,5\}$
+        \item $A' = \{3,4,5\}$, $B' = \{4,5\}$, dus $A' \cap B' = \{4,5\}$ \emoji{check-mark-button}
+    \end{itemize}
+\end{niceexample}
+
+\begin{niceexample}*[Distributiviteit]
+    Zij $A = \{1,2\}$, $B = \{2,3\}$, $C = \{3,4\}$. Verifieer $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$:
+    \nextpart[Oplossing:]*
+    \begin{itemize}
+        \item $B \cup C = \{2,3,4\}$, dus $A \cap (B \cup C) = \{2\}$
+        \item $A \cap B = \{2\}$, $A \cap C = \varnothing$, dus $(A \cap B) \cup (A \cap C) = \{2\}$ \emoji{check-mark-button}
+    \end{itemize}
+\end{niceexample}
+
 \SimpleHeading{Verschiloperatoren}
 
+\begin{nicedefinition}*[Verschiloperatoren]
+    \nextpart[Verschiloperatoren:]*
+    \begin{itemize}
+        \item \textbf{Verschil:}
+        \begin{equation*}
+            A \backslash B = \{x \mid x \in A \text{ en } x \notin B\} = A \cap B'
+        \end{equation*} 
+        \item \textbf{Symmetrisch verschil:}
+        \begin{equation*}
+            A \triangle B = (A \backslash B) \cup (B \backslash A)
+        \end{equation*}
+        $\longrightarrow$ De elementen die in precies één van de twee verzamelingen zitten.
+    \end{itemize}
+\end{nicedefinition}
+
+\begin{niceexample}*
+    Gegeven de verzamelingen $A = \{1,2,3\}$ en $B = \{2,3,4\}$.
+    \nextpart[Dan:]*
+    \begin{itemize}
+        \item $A \backslash B = \{1\}$
+        \item $B \backslash A = \{4\}$
+        \item $A \triangle B = \{1,4\}$
+    \end{itemize}
+\end{niceexample}
+
 \SimpleHeading{Machtsverzameling}
+
+De verzameling van alle deelverzamelingen van $A$ wordt genoteerd als $2^{A}$:
+\begin{equation}
+    2^{A} = \{S \mid S \subseteq A\}
+\end{equation}
+
+\begin{niceexample}*[Machtsverzameling]
+    Gegeven de verzameling $A = \{1,2\}$.
+    \nextpart[Dan:]*
+    \begin{equation*}
+        2^{A} = \{\varnothing, \{1\}, \{2\}, \{1,2\}\}
+    \end{equation*}
+\end{niceexample}
+
+\begin{barbox}[SeaGreen][gray!5]
+    \textcolor{SeaGreen}{\textbf{Merk op:}} als $A$ $n$ elementen heeft, dan heeft $2^{A}$ precies $2^n$ elementen.
+\end{barbox}
+
+\colorbox{magenta!66}{TODO: 2 kleine oefeningskes}
+
 
 \subsection{Geordend paar en Cartesisch product}
 
