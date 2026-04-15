@@ -244,7 +244,45 @@ De verzameling van alle deelverzamelingen van $A$ wordt genoteerd als $2^{A}$:
 
 \subsection{Geordend paar en Cartesisch product}
 
+Een \inlinetext{geordend paar} (koppel) is een paar elementen in een vaste volgorde: $(x,y)$.
+
+Belangrijk: de volgorde doet ertoe!
+\begin{equation*}
+    (a,b) = (c,d) \Longleftrightarrow a=c \text{ en } b=d
+\end{equation*}
+Dus $(1,2) \neq (2,1)$, in tegenstelling tot verzamelingen waar $\{1,2\} = \{2,1\}$.
+
+Het \inlinetext{Cartesisch product} van $A$ en $B$:
+\begin{equation}
+    A \times B = \{(x,y) \mid x \in A \text{ en } y \in B\}
+\end{equation}
+
+\begin{niceexample}*[Cartesisch product]
+    Gegeven $A = \{1,2\}$ en $B = \{a,b,c\}$
+    \nextpart[Dan]*
+    \begin{equation*}
+        A \times B = \{(1,a), (1,b), (1,c), (2,a), (2,b), (2,c)\}
+    \end{equation*}
+    Merk op dat $\#(A \times B) = \#A \cdot \#B = 2 \cdot 3 = 6$.
+\end{niceexample}
+$A\times A$ wordt ook genoteerd als \inlinetext{$A^2$}. Uitbreiding naar $n$ factoren: $A^n = A \times A \times \dots \times A$ ($n$ keer), met $n$-koppels $(a_1, a_2, \dots, a_n)$.
+
+\begin{nicetheorem}*[De distrubitiviteit van $\times$ over $\cap$ en $\cup$:]
+    \nextpart[]*
+    \begin{itemize}
+        \item $A \times (B \cap C) = (A \times B) \cap (A \times C)$
+        \item $A \times (B \cup C) = (A \times B) \cup (A \times C)$
+        \item $(A \times B) \cap (C \times D) = (A \cap C) \times (B \cap D)$
+    \end{itemize}
+\end{nicetheorem}
+
+\colorbox{green!66}{TODO: custom "eigenschap" box.}
+
+\colorbox{magenta!66}{TODO: kleine oefening}
+
 \subsection{Relaties}
+
+
 
 \SimpleHeading{Inverse Relatie}
 
