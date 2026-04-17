@@ -282,17 +282,100 @@ $A\times A$ wordt ook genoteerd als \inlinetext{$A^2$}. Uitbreiding naar $n$ fac
 
 \subsection{Relaties}
 
+Als $x \in A$ en $y \in B$ in een bepaald verband staan, spreken we van een \inlinetext{relatie} van $A$ naar $B$. Dit noteer je als:
+\begin{equation}
+    xRy \quad \text{ of } \quad (x, y) \in R
+\end{equation}
 
+De \inlinetext{graaf} van een relatie $R$ is de verzameling koppels $\{(x,y) | xRy\}$. Aangezien de graaf de relatie volledig bepaald (en omgekeerd), identificeren we een relatie met haar graaf:
+\begin{equation}
+    R \subseteq A \times B
+\end{equation}
+
+\begin{niceexample}*
+    \nextpart[Voorbeeld:]
+    $A = \{2,3,4\}$, $B=\{1,2,3,4\}$. De relatie "$x \leq y$" geeft:
+    \begin{equation*}
+        R = \{(2,2), (2,3), (2,4), (3,3), (3,4), (4,4)\}
+    \end{equation*}
+    \begin{center}
+        % This makes it exactly 80% of the page width
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/example_2_5_1.tex}
+        }
+    \end{center}
+\end{niceexample}
 
 \SimpleHeading{Inverse Relatie}
 
+Zij $R \in A \times B$ een relatie en $x \in A$ en $y \in B$, dan is:
+\begin{equation}
+    R^{-1} = \{(x,y) \mid (y,x) \in R\}
+\end{equation}
+Dus als $R=$ "is kleiner dan", dan is $R^{-1}=$ "is groter dan".
+
 \SimpleHeading{Samenstelling van Relaties}
+
+\begin{nicedefinition}*[Samenstelling van Relaties]
+    Zij $\text{R} \subseteq A \times B$ en $S \subseteq B \times C$
+    \nextpart[Dan] is de samenstelling $S \circ R$ ("S na R") gedefinieerd als:
+    \begin{equation*}
+        S \circ R = \{(x,y)\; |\; (\exists z)\left((x,z) \in R \land (z,y) \in S\right)\}
+    \end{equation*}
+\end{nicedefinition}
+
+\begin{niceexample}*
+    Beschouw de volgende familie-relaties:
+    \nextpart[]*
+
+    \begin{equation*}
+        \begin{aligned}
+            &\text{als } &xRz = "x \text{ is de vader van } z" \\
+            &\text{en } &zSy = "z \text{ is getrouwd met } y" \\
+            &\text{dan is } &x(S \circ R)y = "x \text{ is de schoonvader van } y" \\
+        \end{aligned}
+    \end{equation*}
+\end{niceexample}
+
+\newpage
+\begin{niceexample}*
+    Zij $A = \{1,2,3\}$ en $\text{R}=\{(1,2), (2,3)\}$ en $S = \{(2,1), (3,2)\}$, bepaal $S \circ \text{R}$.
+    \nextpart[Oplossing:]*
+    We zoeken koppels $(x,y)$ waarvoor er een $z$ bestaat met:
+    \begin{equation*}
+        (x,z) \in R \text{ en } (z,y) \in S
+    \end{equation*}
+    Dit geldt voor:
+    \begin{itemize}
+        \item $(1,2) \in R$ en $(2,1) \in S \longrightarrow (1,1) \in S \circ R$
+        \item $(2,3) \in R$ en $(3,2) \in S \longrightarrow (2,2) \in S \circ R$
+    \end{itemize}
+    Dus $S \circ R = \{(1,1), (2,2)\}$.
+\end{niceexample}
 
 \SimpleHeading{Belangrijke Eigenschappen}
 
+Zij $R$, $S$ en $T$ relaties zodanig dat de hiernavolgende samenstellingen gedefinieerd zijn, dan geldt:
+\begin{itemize}
+    \item $(T \circ S) \circ R = T \circ (S \circ R)$ $\longrightarrow$ Associativiteit
+    \item $(R^{-1})^{-1} = R$
+    \item $(S \circ R)^{-1} = R^{-1} \circ S^{-1}$ $\longrightarrow$ \textcolor{SeaGreen}{\textbf{Let op}} de omgekeerde volgorde! Analoog aan kousen/shoenen:
+    \begin{center}
+        aankleden = schoenen $\circ$ kousen, uitkleden = $\text{kousen}^{-1} \circ \text{schoenen}^{-1}$
+    \end{center}
+\end{itemize}
+
 \SimpleHeading{Domein en Bereik}
 
-m
+Zij $R \in A \times B$ een relatie en $x \in A$ en $y \in B$, dan is:
+\begin{itemize}
+    \item $\text{dom } R = \{x \; \mid \; \exists y \;:\; (x,y) \in R\}$ --- de "input" elementen
+    \item $\text{Ran } R = \{y \;\mid\; \exists x \;:\; (x,y) \in R\}$ --- de "output" elementen
+\end{itemize}
+
+\begin{barbox}[SeaGreen][gray!5]
+    \textcolor{SeaGreen}{\textbf{Handig:}} Dom $R$ = Ran $\text{R}^{-1}$ en Ran $R$ = Dom $R^{-1}$.
+\end{barbox}
 
 \subsection{Afbeeldingen en Functies}
 
