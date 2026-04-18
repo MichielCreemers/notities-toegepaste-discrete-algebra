@@ -377,7 +377,63 @@ Zij $R \in A \times B$ een relatie en $x \in A$ en $y \in B$, dan is:
     \textcolor{SeaGreen}{\textbf{Handig:}} Dom $R$ = Ran $\text{R}^{-1}$ en Ran $R$ = Dom $R^{-1}$.
 \end{barbox}
 
+\newpage
 \subsection{Afbeeldingen en Functies}
+
+Er is een hiërarchie:
+\begin{equation*}
+    \{\text{afbeeldingen}\} \subset \{\text{functies}\} \subset \{\text{relaties}\}
+\end{equation*}
+
+\begin{nicedefinition}*[Functie]
+    \nextpart[Functie.] 
+    Een \textbf{functie} $f: A \mapsto B$ is een \textbf{relatie} die \textbf{éénwaardig} is: elk element van Dom $f$ wordt naar precies één element afgebeeld.
+
+    \vspace{0.5cm}
+
+    $f$ is een functie van $A$ naar $B$: $f: A \mapsto B$ asa
+    \begin{enumerate}
+        \item $f \subseteq A \times B$ ($f$ is een relatie van $A$ naar $B$)
+        \item $(x, y_1) \in f \; \land \; (x, y_2) \in f \;\Longrightarrow \; y_1 = y_2$ (éénwaardig)
+    \end{enumerate}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Afbeelding]
+    \nextpart[Afbeelding.] 
+    Een \textbf{afbeelding} $f:A\mapsto B$ is een \textbf{functie} waarvoor Dom $f=A$ (de functie is overal op $A$ gedefinieerd).
+
+    \vspace{0.5cm}
+
+    $f$ is een afbeelding van $A$ naar $B$: $f:A \mapsto B$ asa
+    \begin{enumerate}
+        \item $f$ is een functie van $A$ naar $B$
+        \item $\forall x \in A, \; \exists y \in B \text{ zodat } (x,y) \in f$ (dom $f=A$)
+    \end{enumerate}
+\end{nicedefinition}
+
+\begin{niceexample}*
+    Gegeven $f: \mathbb{R} \rightarrow \mathbb{R}: x \mapsto 1/x$, is dit een relatie/functie/afbeelding?
+    \nextpart[Oplossing:]*
+    $f: \mathbb{R} \rightarrow \mathbb{R}: x \mapsto 1/x$ is een functie maar geen afbeelding want het is niet gedefinieerd voor $x=0$. Daarentegen is bijvoorbeeld $g: \mathbb{R} \rightarrow \mathbb{R}: x \mapsto x^2$ wel een afbeelding.
+\end{niceexample}
+
+\begin{barbox}[OrangeRed][gray!5]
+    \textcolor{OrangeRed}{\textbf{Opmerking:}} Vanwege éénwaardigheid shcrijf je meestal gewoon $y = f(x)$ i.p.v. $(x,y) \in f$.
+\end{barbox}
+
+\begin{nicedefinition}*[Vast punt]
+    \nextpart[Vast punt.] 
+    Zij $f: A \rightarrow A$ een functie. Dan noemt een element $x \in A$ een invariant element of \textbf{vast punt} van $f$ indien:
+    \begin{equation}
+        f(x) = x \qedtag
+    \end{equation} 
+\end{nicedefinition}
+
+\begin{niceexample}*
+    Wat zijn de vaste punten voor $f: \mathbb{R} \rightarrow \mathbb{R}: x \mapsto x^2$?
+    \nextpart[Oplossing.]*
+    De vaste punten zijn de oplossingen van $x^2=x$. Dus $x=0$ en $x=1$.
+\end{niceexample}
 
 \subsection{Injectie, Surjectie, Bijectie}
 
