@@ -437,34 +437,356 @@ Er is een hiërarchie:
 
 \subsection{Injectie, Surjectie, Bijectie}
 
-m
-
 \SimpleHeading{Definities}
 
-m
+\begin{nicedefinition}*
+    Zij $f: A \rightarrow B$ een afbeelding. Dan:
+    \nextpart[]*
+
+    \textcolor{PineGreen!75!black}{\textbf{Injectie (1-op-1):}} verschillende inputs geven verschillende outputs.
+    \begin{equation}
+        x_1 \neq x_2 \; \Rightarrow \; f(x_1) \neq f(x_2) \qedtag
+    \end{equation}
+    Of equivalent:
+    \begin{equation}
+        f(x_1) = f(x_2) \; \Rightarrow \; x_1 = x_2 \qedtag
+    \end{equation}
+
+    \vspace{0.5cm}
+
+    \textcolor{PineGreen!75!black}{\textbf{Surjectie (op):}} elk element van $B$ wordt "geraakt".
+    \begin{equation}
+        \forall y \in B, \; \exists x \in A: f(x) = y \qquad
+        \text{ oftewel } \qquad Ran \; f = B \qedtag
+    \end{equation}
+
+    \vspace{0.5cm}
+
+    \textcolor{PineGreen!75!black}{\textbf{Bijectie:}} zowel injectie als surjectie (1-op-1 verband).
+\end{nicedefinition}
 
 \SimpleHeading{Geheugensteun via Venn-diagrammen}
 
-m
+Deze verbanden kan je gemakkelijker onthouden door ze als Venn-diagrammen voor te stellen.
+\begin{itemize}
+    \item \textbf{Afbeelding:} uit elk element van $A$ vertrekt precies één pijl.
+    \begin{center}
+        % This makes it exactly 80% of the page width
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/afbeelding_geheugensteun.tex}
+        }
+    \end{center}
+
+    \item \textbf{Injectie:} in elk element van $B$ komt \textbf{hoogstens} één pijl aan.
+    \begin{center}
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/injectie_geheugensteun.tex}
+        }
+    \end{center}
+
+    \item \textbf{Surjectie:} in elk element van $B$ komt \textbf{minstens} één pijl aan.
+    \begin{center}
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/surjectie_geheugensteun.tex}
+        }
+    \end{center}
+    
+    \item \textbf{Bijectie:} in elk element van $B$ komt \textbf{precies} één pijl aan.
+    \begin{center}
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/bijectie_geheugensteun.tex}
+        }
+    \end{center}
+\end{itemize}
+
+\begin{niceexample}*
+    Geef aan voor de volgende relaties als ze injectief, surjectief, bijectief, of geen van beiden zij.
+    \nextpart[Enkele Voorbeelden:]*
+
+    1) Zij $A = \{1,2,3\}$ en $B = \{a,b,c,d\}$. Ook geldt: $f(1)=a$, $f(2)=a$ en $f(3)=b$.
+    \begin{itemize}
+        \item[\rightarrow] Injectie, maar geen surjectie want niet elk element uit $B$ wordt geraakt ($d$).
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \hrule
+    \vspace{0.5cm}
+
+    2) Zij $A = \{1,2,3\}$ en $B = \{a,b\}$. Ook geldt: $f(1)=a$, $f(2)=a$ en $f(3)=b$.
+    \begin{itemize}
+        \item[\rightarrow] Surjectie, want elke element van $B$ wordt geraakt, maar geen injectie, want $f(1) = f(2)$.
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \hrule
+    \vspace{0.5cm}
+
+    3) Zij $A = \{1,2,3\}$ en $B = \{a,b,c\}$. Ook geldt: $f(1)=b$, $f(2)=c$ en $f(3)=a$.
+    \begin{itemize}
+        \item[\rightarrow] Bijectie
+    \end{itemize}
+\end{niceexample}
 
 \SimpleHeading{Bijzondere Afbeeldingen}
 
+\begin{nicedefinition}*[Bijzondere Afbeeldingen]
+    \nextpart[Enkele voorbeelden van (bijzondere) afbeeldingen:]*
+
+    De \textcolor{PineGreen!75!black}{\textbf{identieke transformatie}} (van een verzameling $A$) is gedefinieerd als
+    \begin{equation}
+        1_A: A \rightarrow A: x \mapsto x, \quad \forall x \in A \qedtag
+    \end{equation}
+    Merk op dat $1_A$ altijd een bijectie is!
+
+    \vspace{0.25cm}
+    \hrule
+
+    \vspace{0.5cm}
+
+    Een \textcolor{PineGreen!75!black}{\textbf{constante afbeelding}} is gedefinieerd als
+    \begin{equation}
+        k_b: A \rightarrow B: x \mapsto b \in B, \quad \forall x \in A \qedtag
+    \end{equation}
+    Als $A$ maar 1 elemente heeft is $k_b$ een injectie. \newline
+    Als $B$ maar 1 element heeft is $k_b$ een surjectie.
+
+    \vspace{0.25cm}
+    \hrule
+
+    \vspace{0.5cm}
+
+    De \textcolor{PineGreen!75!black}{\textbf{inlassing}} (van $A$ in $B$) is gedefinieerd indien $A \subseteq B$ als
+    \begin{equation}
+        i_A: A \rightarrow B: x \mapsto x, \quad \forall x \in A \subseteq B \qedtag
+    \end{equation}
+    Als $A=B$, dan is $i_A = 1_A$.
+    \begin{center}
+        \resizebox{0.5\textwidth}{!}{
+            \input{figures/L2/inlassing_vis.tex}
+        }
+    \end{center}
+
+    \vspace{0.25cm}
+    \hrule
+
+    \vspace{0.5cm}
+
+    De \textcolor{PineGreen!75!black}{\textbf{karakteristieke afbeelding}} van $A$ in $C$ is gedefinieerd voor $A \subseteq C$ en $B = \{0,1\}$ als
+    \begin{equation}
+        E_A : C \rightarrow B : \begin{cases}
+            x \mapsto 1 & \quad \text{ als } x \in A \\
+            x \mapsto 0 & \quad \text{ als } x \notin A
+        \end{cases} \qedtag
+    \end{equation}
+    Dus $E_A(A) = \{1\}$ en $E_A(C \backslash A) = \{0\}$.
+
+    \vspace{0.25cm}
+    \hrule
+
+    \vspace{0.5cm}
+
+    De \textcolor{PineGreen!75!black}{\textbf{Beperking}} van $f$ tot $C$ is gedefinieerd voor $f : A \rightarrow B$ en $C \subseteq A$ als
+    \begin{equation}
+        f_C: C \rightarrow B: x \mapsto f(x), \quad \forall x \in C \qedtag
+    \end{equation}
+    Dus $f_C = f \circ i_C$. Een functie beperkt tot haar domein wordt een afbeelding.
+\end{nicedefinition}
+
 \SimpleHeading{Samenstelling}
+
+\begin{nicetheorem}*[Samenstelling]
+    \nextpart[Samenstelling.]*
+    Als $f:A \rightarrow B$ en $g: B \rightarrow C$ afbeeldingen zijn, dan is $g \circ f : A \rightarrow C$ ook een afbeelding met
+    \begin{equation}
+        (g \circ f)(x) = g(f(x)) \qedtag
+    \end{equation}
+\end{nicetheorem}
+
+\begin{barbox}[OrangeRed][gray!5]
+    \textcolor{OrangeRed}{\textbf{Belangrijk:}} samenstelling bewaart injectiviteit, surjectiviteir en bijectiviteit (als $f$ en $g$ beide injecties zijn, dan is $g \circ f$ ook een injectie, enz.)
+\end{barbox}
 
 \SimpleHeading{Inverse Afbeelding}
 
+\begin{nicedefinition}*[Inverse Afbeelding]
+    \nextpart[Inverse Afbeelding.]*
+    Een functie $f : A \rightarrow B$ is \textbf{inverteerbaar} $\Longleftrightarrow f^{-1} : B \rightarrow A$ ook en functie is. $f^{-1}$ noemen we dan de inverse functie. Een afbeelding $f: A \rightarrow B$ is inverteerbaar $\Longleftrightarrow f^{-1} : B \rightarrow A$ ook een afbeelding is. $f^{-1}$ noemen we dan de inverse afbeelding van $f$.
+
+    \vspace{0.5cm}
+
+    Dit betekent dat voor een inverteerbare afbeelding $y = f(x) \Leftrightarrow f^{-1}(y)$, en dit $\forall x \in A$ en $\forall y \in B$. 
+
+    \vspace{0.5cm}
+
+    Een afbeelding $f : A \rightarrow B$ is \textbf{inverteerbaar} $\Longleftrightarrow f$ een \textbf{bijectie} is en de inverse afbeelding is ook een bijectie.
+\end{nicedefinition}
+
+\begin{nicetheorem}*
+    Zij $f : A \rightarrow B$ en $g : B \rightarrow A$ twee afbeeldingen,
+    \nextpart[Dan is]*
+    \begin{equation}
+        g = f^{-1} \Leftrightarrow g \circ f = 1_A \land f \circ g = 1_B \qedtag
+    \end{equation}
+\end{nicetheorem}
+
+\begin{barbox}[OrangeRed][gray!5]
+    \textcolor{OrangeRed}{\textbf{Let op:}} Als slechts aan één van de twee gelijkheden in het rechterlid van de vorige equivalentie voldaan is, zal $g$ niet noodzakelijk de inverse van $f$ zijn. Men spreekt dan van linker- en rechter inverse. 
+\end{barbox}
+
+\begin{nicedefinition}*[Linker- en Rechter Inverse]
+    \nextpart[Definitie.]*
+    Zij $f : A \rightarrow B$ een afbeelding. Een afbeelding $g : B \rightarrow A$ die voldoet aan
+    \begin{equation*}
+        g \circ f = 1_A
+    \end{equation*}
+    noemt men een \textcolor{PineGreen!75!black}{\textbf{linker inverse}} van $f$, en als ze voldoet aan
+    \begin{equation*}
+        f \circ g = 1_B
+    \end{equation*}
+    noemt men het een \textcolor{PineGreen!75!black}{\textbf{rechter inverse}} van $f$.
+\end{nicedefinition}
+
 \SimpleHeading{Permutaties}
+
+Een \inlinetext{permutatie} is een bijectie van een eindige verzameling naar zichzelf. We werken met indices $\{1,2,\dots,n\}$ en noteren:
+\begin{equation}
+    \pi = \begin{pmatrix}
+        1       & 2       & \cdots & n \\
+        \pi (1) & \pi (2) & \cdots & \pi (n)
+    \end{pmatrix}
+\end{equation}
+
+\textbf{Voorbeeld:} De permutatie $\pi = \left(1 \rightarrow 3, 2 \rightarrow 1, 3 \rightarrow 2, 4 \rightarrow 5, 5 \rightarrow 6, 6 \rightarrow 4\right)$ (zie \Cref{fig:l2_permutatie_en_cycli}):
+\begin{equation*}
+    \pi = \begin{pmatrix}
+        1 & 2 & 3 & 4 & 5 & 6 \\
+        3 & 1 & 2 & 5 & 6 & 4
+    \end{pmatrix}
+\end{equation*}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\linewidth]{L2/permutatie_voorbeeld_cycli.png}
+    \caption{Permutatie en cycli}
+    \label{fig:l2_permutatie_en_cycli}
+\end{figure}
 
 \SimpleHeading{Cycli}
 
+Een \inlinetext{cyclus} $(a_1 \; a_2 \; \dots \; a_r)$ verschuift de elementen cysclisch naar rechts: $a_1 \rightarrow a2$, \dots, $a_r \rightarrow a_1$ en laat alle andere elementen staan.
+
+Een \inlinetext{transpositie} is een 2-cyclus: verwisseling van 2 elementen.
+
 \SimpleHeading{Belangrijke Eigenschappen}
+
+\begin{nicetheorem}*
+    \nextpart[Belangrijke Eigenschappen:]*
+    \begin{enumerate}
+        \item Elke permutatie is te schrijven als een samenstelling van \textbf{disjuncte cycli}.
+        \item Elke cyclus (en dus elke permutatie) is te schrijven als een samenstelling van \textbf{transposities}.
+        \begin{equation}
+            (a_1, a_2, \dots, a_k) = (a_1, a_k) \circ (a_1, a_{k-1}) \circ \dots \circ (a_1, a_2) \qedtag
+        \end{equation}
+    \end{enumerate}
+\end{nicetheorem}
+
+\begin{niceexample}*
+    Neem terug de permutatie van eerder:
+    \nextpart[]*
+    \begin{equation*}
+        \pi = (1 \; 3 \; 2) \circ (4 \; 5 \; 6)
+    \end{equation*}
+    Deze kunnen we volgens bovenstaande eigenschap verder ontbinden:
+    \begin{itemize}
+        \item $(1 \; 3 \; 2) = (1 \; 2) \circ (1 \; 3)$ en 
+        \item $(4 \; 5 \; 6) = (4 \; 6) \circ (4 \; 5)$
+    \end{itemize}
+    $\longrightarrow$ Dus $\pi = (1 \; 2) \circ (1 \; 3) \circ (4 \; 6) \circ (4 \; 5)$. 
+\end{niceexample}
 
 \SimpleHeading{Teken van een Permutatie}
 
+Het \inlinetext{aantal inversies} $I(\pi)$: tel voor elke positie $i$ het aantal posities $j > i$ waarvoor $\pi(j) < \pi(i)$.
+\begin{itemize}
+    \item $I(\pi)$ even $\rightarrow \pi$ is een \inlinetext{even} permutatie, $\text{sign}(\pi) = +1$
+    \item $I(\pi)$ oneven $\rightarrow \pi$ is een \inlinetext{oneven} permutatie, $\text{sign}(\pi) = -1$
+\end{itemize}
+
+\begin{niceexample}*
+    \nextpart[Voorbeeld:]*
+    Beschouw opnieuw de permutatie:
+    \begin{equation*}
+        \pi = \begin{pmatrix}
+            1 & 2 & 3 & 4 & 5 & 6 \\
+            3 & 1 & 2 & 5 & 6 & 4
+        \end{pmatrix}
+    \end{equation*}
+    Wat is het teken van deze permutatie?
+
+    \vspace{0.5cm}
+
+    \textbf{Oplossing:} Beschouw de rij $3, 1, 2, 5, 6, 4$, we tellen het aantal inversies $I(\pi)$:
+    \begin{itemize}
+        \item Na 3: 1 en 2 zijn kleiner dan 3 $\rightarrow$ 2
+        \item Na 1: geen kleiner dan 1 $\rightarrow$ 0
+        \item Na 2: geen kleiner dan 2 $\rightarrow$ 0
+        \item Na 5: enkel 4 kleiner dan 5 $\rightarrow$ 1
+        \item Na 6: 4 kleiner dan 6 $\rightarrow$ 1
+        \item Na 4: geen getallen meer $\rightarrow$ 0
+    \end{itemize}
+    $\longrightarrow$ $I(\pi) = 2 + 0 + 0 + 1 + 1 + 0 = 4$, het is dus een \textbf{even} permutatie. 
+\end{niceexample}
+
 \SimpleHeading{Rekenregels}
 
-njanja
+\begin{nicetheorem}*
+    \nextpart[Rekenregels:]*
+    \begin{itemize}
+        \item $\text{sign}(\pi \circ \rho) = \text{sign}(\pi) \circ \text{sign}(\rho)$
+        \item Een transpositie is \textbf{altijd oneven}
+        \item Een $r$-cyclus is \underline{even} $\Leftrightarrow$ $r$ is \underline{oneven} (en omgekeerd)
+    \end{itemize}
+\end{nicetheorem}
 
-\subsection{kaas}
+\colorbox{magenta!66}{2 oefeningen}
 
+\subsection{Relaties van een verzameling naar zichzelf}
 
+\begin{nicetheorem}*
+    Zij $\text{R} \subseteq A \times A$, dan definiëren we 4 fundamentele eigenschappen:
+    \nextpart[Eigenschappen:]*
+
+    \textcolor{red!75!black}{\textbf{Reflexief:}}
+
+    \vspace{0.5cm}
+    \hrule
+    \vspace{0.5cm}
+
+    \textcolor{red!75!black}{\textbf{Symmetrisch:}}
+
+    \vspace{0.5cm}
+    \hrule
+    \vspace{0.5cm}
+
+    \textcolor{red!75!black}{\textbf{Anti-symmetrish:}}
+
+    \vspace{0.5cm}
+    \hrule
+    \vspace{0.5cm}
+
+    \textcolor{red!75!black}{\textbf{Transitief:}}
+\end{nicetheorem}
+
+\begin{niceexample}*
+    Gegeven de verzameling $A = \{1,2,3\}$.
+    \nextpart[Voorbeeld.]*
+    Controle van enkele relaties $R$ op de verzameling $A$:
+    \begin{center}
+        \begin{tabularx}{\textwidth}{@{}l l l l l@{}}
+            \textbf{Relatie op $R$} & \textbf{Reflexief?} & \textbf{Symmetrisch?} & \textbf{Anti-sym?} & \textbf{Transitief?} \\
+            \midrule
+            $\le$ op $A$ & kaas & kaas & kaas & kaas \\
+            \thinrule
+        \end{tabularx}
+    \end{center}
+\end{niceexample}
