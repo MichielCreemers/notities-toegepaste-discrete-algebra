@@ -25,7 +25,7 @@
 % ]{NotoColorEmoji.ttf}
 
 \setmainjfont[
-  Path      = fonts/Noto Serif CJK/, % note the slash
+  Path      = fonts/Noto Serif CJK/, 
   Extension = .ttf,
   FontWeight = 500,
   AutoFakeBold = 2,      % optional: let bold Chinese work
@@ -75,6 +75,15 @@
 \usepackage{tabularx}
 \usepackage{array}
 
+% Left-aligned wrapping column
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+% Center-aligned wrapping column
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+% Right-aligned wrapping column
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
 % -------- Algorithms & code --------
 \usepackage{listings}
 \lstset{
@@ -116,3 +125,4 @@
 % -------- For Tikz Figures ---------------
 \usepackage{standalone}
 \usepackage{tikz}
+\usetikzlibrary{shapes, arrows.meta, positioning, fit, backgrounds}
