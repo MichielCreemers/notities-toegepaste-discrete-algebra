@@ -756,25 +756,48 @@ Het \inlinetext{aantal inversies} $I(\pi)$: tel voor elke positie $i$ het aantal
     Zij $\text{R} \subseteq A \times A$, dan definiëren we 4 fundamentele eigenschappen:
     \nextpart[Eigenschappen:]*
 
-    \textcolor{red!75!black}{\textbf{Reflexief:}}
+    \textcolor{red!75!black}{\textbf{Reflexief:}} elk element staat in relatie met zichzelf.
+    \begin{equation}
+        \forall x \in A \; : \; xRx \quad\text{of}\quad (x,x) \in R \qedtag
+    \end{equation}
 
     \vspace{0.5cm}
     \hrule
     \vspace{0.5cm}
 
-    \textcolor{red!75!black}{\textbf{Symmetrisch:}}
+    \textcolor{red!75!black}{\textbf{Symmetrisch:}} $R$ is symmetrish \emph{asa} de relatie in de twee richtingen geldt.
+    \begin{equation}
+        xRy \Rightarrow yRx \quad\text{of}\quad (x,y) \in R \Rightarrow (y,x) \in R \qedtag
+    \end{equation}
+    of equivalent geformuleerd:
+    \begin{equation}
+        R = R^{-1} \qedtag
+    \end{equation}
 
     \vspace{0.5cm}
     \hrule
     \vspace{0.5cm}
 
-    \textcolor{red!75!black}{\textbf{Anti-symmetrish:}}
-
+    \textcolor{red!75!black}{\textbf{Anti-symmetrish:}} $R$ is anti-symmetrisch \emph{asa} de relatie slechts in de twee richtingen geldt voor een element in relatie met zichzelf. In andere woorden: de relatie geldt in de twee richtingen alleen voor gelijke elementen.
+    \begin{equation}
+        xRy \;\&\; yRx \Rightarrow x = y \quad \text{of} \quad (x,y) \in R \;\&\; (y,x) \in R \Rightarrow x = y \qedtag
+    \end{equation}
+    of equivalent geformuleerd:
+    \begin{equation}
+        R \cap R^{-1} \subseteq 1_A \qedtag
+    \end{equation}
     \vspace{0.5cm}
     \hrule
     \vspace{0.5cm}
 
-    \textcolor{red!75!black}{\textbf{Transitief:}}
+    \textcolor{red!75!black}{\textbf{Transitief:}} $R$ is transitief \emph{asa} de relatie kan doorgegeven worden (erferlijk is).
+    \begin{equation}
+        xRy \;\&\; yRz \Rightarrow xRz \quad \text{of} \quad (x,y) \in R \;\&\; (y,z) \in R \Rightarrow (x,z) \in R \qedtag
+    \end{equation}
+    of equivalent geformuleerd:
+    \begin{equation}
+        R \circ R \subseteq R \qedtag
+    \end{equation}
 \end{nicetheorem}
 
 \begin{niceexample}*
@@ -782,11 +805,56 @@ Het \inlinetext{aantal inversies} $I(\pi)$: tel voor elke positie $i$ het aantal
     \nextpart[Voorbeeld.]*
     Controle van enkele relaties $R$ op de verzameling $A$:
     \begin{center}
-        \begin{tabularx}{\textwidth}{@{}l l l l l@{}}
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabularx}{\textwidth}{@{} >{\hsize=1.0\hsize}L >{\hsize=1.0\hsize}L >{\hsize=1.0\hsize}L >{\hsize=1.0\hsize}L >{\hsize=1.0\hsize}L @{}}
             \textbf{Relatie op $R$} & \textbf{Reflexief?} & \textbf{Symmetrisch?} & \textbf{Anti-sym?} & \textbf{Transitief?} \\
-            \midrule
-            $\le$ op $A$ & kaas & kaas & kaas & kaas \\
+            \hline
+            $\le$ op $A$ & \emoji{check-mark-button} $1 \leq 1$ enz. & \emoji{cross-mark} $1 \leq 2$ maar $2 \nleq 1$ & \emoji{check-mark-button} & \emoji{check-mark-button} \\
             \thinrule
+            $=$ op $A$  & \emoji{check-mark-button} & \emoji{check-mark-button} & \emoji{check-mark-button} & \emoji{check-mark-button} \\
+            \thinrule
+            "vershilt van" ($\neq$) & \emoji{cross-mark} $1 \neq 1$ is onwaar & \emoji{check-mark-button} & \emoji{cross-mark} & \emoji{cross-mark} $1 \neq 2$, $2 \neq 1$, maar $1=1$? \\
+            \thinrule
+            $R = \{(1,2), (2,1),\newline (1,1), (2,2),\newline (3,3)\}$ & \emoji{check-mark-button} & \emoji{check-mark-button} & \emoji{cross-mark} $1R2$ en $2R1$ maar $1 \neq 2$ & \emoji{check-mark-button} \\
+            \hline
         \end{tabularx}
     \end{center}
 \end{niceexample}
+
+\begin{barbox}[SeaGreen][gray!5]
+    \textcolor{SeaGreen}{\textbf{Let op:}} symmetrisch en anti-symmetrisch sluiten elkaar \textbf{niet} uit!
+\end{barbox}
+
+\SimpleHeading{Twee hoofdtypes}
+
+\begin{nicedefinition}*[equivalentierelatie]
+    Een relatie $R \subseteq A \times A$ is een \textcolor{PineGreen!75!black}{\textbf{equivalentierelatie}}
+    \nextpart[asa]*
+    \begin{enumerate}
+        \item $R$ is reflexief
+        \item $R$ is symmetrisch
+        \item $R$ is transitief
+    \end{enumerate}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[orderelatie]
+    Een relatie $R \subseteq A \times A$ is een \textcolor{PineGreen!75!black}{\textbf{orderelatie}}
+    \nextpart[asa]*
+    \begin{enumerate}
+        \item $R$ is reflexief
+        \item $R$ is anti-symmetrisch
+        \item $R$ is transitief
+    \end{enumerate}
+\end{nicedefinition}
+
+\begin{niceexample}*
+    \nextpart[Voorbeeld:]*
+    TODO
+\end{niceexample}
+
+2 oefeningen TODO
+
+\subsection{Samenvattende oefeningen}
+
+TODO
+
