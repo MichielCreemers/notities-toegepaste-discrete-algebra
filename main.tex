@@ -7,11 +7,124 @@
 % Then load custom macros (depends on preamble packages)
 \input{macros}
 % Then load box definitions (depends on preamble packages like tcolorbox)
+
+% ---------- Language toggle ----------
+% Choose exactly one:
+\newif\ifdutch
+\dutchtrue       % Dutch
+% \dutchfalse    % English
+
+\ifdutch
+  \newcommand{\LangDefinition}{Definitie}
+  \newcommand{\LangTheorem}{Stelling}
+  \newcommand{\LangLemma}{Lemma}
+  \newcommand{\LangCorollary}{Gevolg}
+  \newcommand{\LangAlgorithm}{Algoritme}
+  \newcommand{\LangCode}{Code}
+  \newcommand{\LangExample}{Voorbeeld}
+  \newcommand{\LangExercise}{Oefening}
+  \newcommand{\LangNote}{Opmerking}
+  \newcommand{\LangProperty}{Eigenschap}
+  \newcommand{\LangProof}{Bewijs}
+
+  \newcommand{\LangFigure}{Figuur}
+  \newcommand{\LangFigures}{Figuren}
+  \newcommand{\LangTable}{Tabel}
+  \newcommand{\LangTables}{Tabellen}
+  \newcommand{\LangEquation}{Vergelijking}
+  \newcommand{\LangEquations}{Vergelijkingen}
+  \newcommand{\LangSection}{Sectie}
+  \newcommand{\LangSections}{Secties}
+  \newcommand{\LangChapter}{Hoofdstuk}
+  \newcommand{\LangChapters}{Hoofdstukken}
+\else
+  \newcommand{\LangDefinition}{Definition}
+  \newcommand{\LangTheorem}{Theorem}
+  \newcommand{\LangLemma}{Lemma}
+  \newcommand{\LangCorollary}{Corollary}
+  \newcommand{\LangAlgorithm}{Algorithm}
+  \newcommand{\LangCode}{Code}
+  \newcommand{\LangExample}{Example}
+  \newcommand{\LangExercise}{Exercise}
+  \newcommand{\LangNote}{Note}
+  \newcommand{\LangProperty}{Property}
+  \newcommand{\LangProof}{Proof}
+
+  \newcommand{\LangFigure}{Figure}
+  \newcommand{\LangFigures}{Figures}
+  \newcommand{\LangTable}{Table}
+  \newcommand{\LangTables}{Tables}
+  \newcommand{\LangEquation}{Equation}
+  \newcommand{\LangEquations}{Equations}
+  \newcommand{\LangSection}{Section}
+  \newcommand{\LangSections}{Sections}
+  \newcommand{\LangChapter}{Chapter}
+  \newcommand{\LangChapters}{Chapters}
+\fi
+
 \input{boxes}
 % Load custom environments
 \input{environments.tex}
 % Finally load heading styles (depends on preamble, boxes)
 \input{headings}
+
+\makeatletter
+\AtBeginDocument{%
+  \ifdutch
+    \renewcommand{\figurename}{Figuur}%
+    \renewcommand{\tablename}{Tabel}%
+    \@ifpackageloaded{caption}{%
+      \captionsetup[figure]{name=Figuur}%
+      \captionsetup[table]{name=Tabel}%
+    }{}%
+  \else
+    \renewcommand{\figurename}{Figure}%
+    \renewcommand{\tablename}{Table}%
+    \@ifpackageloaded{caption}{%
+      \captionsetup[figure]{name=Figure}%
+      \captionsetup[table]{name=Table}%
+    }{}%
+  \fi
+}
+\makeatother
+
+\ifdutch
+  \crefname{figure}{figuur}{figuren}
+  \Crefname{figure}{Figuur}{Figuren}
+
+  \crefname{table}{tabel}{tabellen}
+  \Crefname{table}{Tabel}{Tabellen}
+
+  \crefname{equation}{vergelijking}{vergelijkingen}
+  \Crefname{equation}{Vergelijking}{Vergelijkingen}
+
+  \crefname{section}{sectie}{secties}
+  \Crefname{section}{Sectie}{Secties}
+
+  \crefname{subsection}{subsectie}{subsecties}
+  \Crefname{subsection}{Subsectie}{Subsecties}
+
+  \crefname{subsubsection}{subsubsectie}{subsubsecties}
+  \Crefname{subsubsection}{Subsubsectie}{Subsubsecties}
+\else
+  \crefname{figure}{figure}{figures}
+  \Crefname{figure}{Figure}{Figures}
+
+  \crefname{table}{table}{tables}
+  \Crefname{table}{Table}{Tables}
+
+  \crefname{equation}{equation}{equations}
+  \Crefname{equation}{Equation}{Equations}
+
+  \crefname{section}{section}{sections}
+  \Crefname{section}{Section}{Sections}
+
+  \crefname{subsection}{subsection}{subsections}
+  \Crefname{subsection}{Subsection}{Subsections}
+
+  \crefname{subsubsection}{subsubsection}{subsubsections}
+  \Crefname{subsubsection}{Subsubsection}{Subsubsections}
+\fi
 
 % ---------- Document metadata ----------
 \newcommand{\coursename}{Toegepaste Discrete Algebra}
@@ -70,9 +183,12 @@
 \input{chapters/L2.tex}
 
 \newpage
+\input{chapters/L3.tex}
+
+\newpage
 
 
 % ---------- References ----------
-\printbibliography % Requires refs.bib and Biber run
+%\printbibliography % Requires refs.bib and Biber run
 
 \end{document}

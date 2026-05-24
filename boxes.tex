@@ -27,62 +27,78 @@
 
 \newcommand{\manualqed}{\hfill\qedsymbol}
 
-% Factory: #1=base env (lemma), #2=proof env (lemproof), #3=wrapper (nicelemma), #4=color (purple)
-\NewDocumentCommand{\createResEnviornment}{mmmm}{%
-  % Numbered base theorem (resets each section)
-  \newtheorem{#1}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#1}}[section]
-  % Unnumbered base theorem
-  \newtheorem*{#1*}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#1}}
+% Factory: #1=base env, #2=proof/detail env, #3=wrapper, #4=color, #5=printed title
+\NewDocumentCommand{\createResEnviornment}{mmmmm}{%
+  % Numbered base theorem
+  \newtheorem{#1}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#5}}[section]
 
-  % Proof environment with optional title (now bold + colored)
+  % Unnumbered base theorem
+  \newtheorem*{#1*}{\sffamily\bfseries\color{#4!50!black}\MakeUppercase{#5}}
+
+  % Proof/detail environment with optional title.
+  % Proof/detail environment with optional title.
+  % This avoids amsthm proof indentation.
   \NewDocumentEnvironment{#2}{ o }{%
+    \par\noindent
     \IfNoValueTF{##1}{%
-      \renewcommand{\proofname}{\textbf{\color{#4!50!black}Proof}}%
-      \begin{proof}%
+      \textbf{\color{#4!50!black}\LangProof}\quad
     }{%
-      \begingroup
-      \renewcommand{\proofname}{\textbf{\color{#4!50!black}##1}}%
-      \begin{proof}%
+      \IfBlankTF{##1}{%
+        % Empty title: print nothing
+      }{%
+        \textbf{\color{#4!50!black}##1}\quad
+      }%
     }%
-    % Define the symbol but do NOT auto-place it:
     \renewcommand{\qedsymbol}{\textcolor{#4!40!black}{\rule{1.5ex}{1.5ex}}}%
+    \ignorespaces
   }{%
-  \end{proof}%
-  \IfNoValueTF{##1}{}{%
-    \endgroup
+    \par
   }%
-}
 
   % ---------------- Numbered wrapper ----------------
   \NewDocumentEnvironment{#3}{s o}{%
     \IfBooleanTF{##1}{%
       \begin{tcolorbox}[
-        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
-        breakable,after skip=0pt]%
+        enhanced,
+        colback=#4!8,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
+        breakable,
+        after skip=0pt]%
     }{%
       \begin{tcolorbox}[
-        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        enhanced,
+        colback=#4!8,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
         breakable]%
     }%
     \IfNoValueTF{##2}{\begin{#1}}{\begin{#1}[##2]}%
-    % Local helper to split statement/proof
-    % --- FIX 2: Replaced \newcommand with \NewDocumentCommand ---
     \NewDocumentCommand{\nextpart}{ o s }{%
       \end{#1}%
       \end{tcolorbox}%
       \begin{tcolorbox}[
-        enhanced,colback=#4!2,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
-        breakable,before skip=0pt]%
-      % Check if \nextpart was given an argument (####1)
+        enhanced,
+        colback=#4!2,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
+        breakable,
+        before skip=0pt]%
       \IfNoValueTF{####1}{%
-          \begin{#2}% If not, call proof env with no argument
+        \begin{#2}%
       }{%
-          \begin{#2}[####1]% If so, pass argument to proof env
+        \begin{#2}[####1]%
       }%
-      \IfBooleanTF{####2}{\par\noindent}{}%
+      \ignorespaces
     }%
   }{%
     \IfBooleanTF{##1}{\end{#2}}{\end{#1}}%
@@ -93,32 +109,46 @@
   \NewDocumentEnvironment{#3*}{s o}{%
     \IfBooleanTF{##1}{%
       \begin{tcolorbox}[
-        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
-        breakable,after skip=0pt]%
+        enhanced,
+        colback=#4!8,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
+        breakable,
+        after skip=0pt]%
     }{%
       \begin{tcolorbox}[
-        enhanced,colback=#4!8,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
+        enhanced,
+        colback=#4!8,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
         breakable]%
     }%
     \IfNoValueTF{##2}{\begin{#1*}}{\begin{#1*}[##2]}%
-    % Local helper to split statement/proof
-    % --- FIX 2: Replaced \newcommand with \NewDocumentCommand ---
     \NewDocumentCommand{\nextpart}{ o s }{%
       \end{#1*}%
       \end{tcolorbox}%
       \begin{tcolorbox}[
-        enhanced,colback=#4!2,fonttitle=\bfseries,sharp corners,
-        boxrule=0pt,frame hidden,borderline west={2pt}{0pt}{#4!70},
-        breakable,before skip=0pt]%
-      % Check if \nextpart was given an argument (####1)
+        enhanced,
+        colback=#4!2,
+        fonttitle=\bfseries,
+        sharp corners,
+        boxrule=0pt,
+        frame hidden,
+        borderline west={2pt}{0pt}{#4!70},
+        breakable,
+        before skip=0pt]%
       \IfNoValueTF{####1}{%
-          \begin{#2}% If not, call proof env with no argument
+        \begin{#2}%
       }{%
-          \begin{#2}[####1]% If so, pass argument to proof env
+        \begin{#2}[####1]%
       }%
-      \IfBooleanTF{####2}{\par\noindent}{}%
+      \ignorespaces
     }%
   }{%
     \IfBooleanTF{##1}{\end{#2}}{\end{#1*}}%
@@ -127,26 +157,82 @@
 }
 
 % Instantiate
-\createResEnviornment{lemma}{lemproof}{nicelemma}{purple}
-\createResEnviornment{theorem}{theoproof}{nicetheorem}{red}
-\createResEnviornment{corollary}{corproof}{nicecorollary}{orange}
-\createResEnviornment{definition}{defproof}{nicedefinition}{PineGreen}
-\createResEnviornment{Algorithm}{algproof}{nicealgorithm}{NavyBlue}
-\createResEnviornment{code}{codeproof}{nicecode}{Black}
-\createResEnviornment{example}{exampleproof}{niceexample}{orange}
-\createResEnviornment{exercise}{exerciseproof}{niceexercise}{Periwinkle}
-\createResEnviornment{note}{noteproof}{nicenote}{DarkOrchid}
+\createResEnviornment{lemma}{lemproof}{nicelemma}{purple}{\LangLemma}
+\createResEnviornment{theorem}{theoproof}{nicetheorem}{red}{\LangTheorem}
+\createResEnviornment{corollary}{corproof}{nicecorollary}{orange}{\LangCorollary}
+\createResEnviornment{definition}{defproof}{nicedefinition}{PineGreen}{\LangDefinition}
+\createResEnviornment{Algorithm}{algproof}{nicealgorithm}{NavyBlue}{\LangAlgorithm}
+\createResEnviornment{code}{codeproof}{nicecode}{Black}{\LangCode}
+\createResEnviornment{example}{exampleproof}{niceexample}{orange}{\LangExample}
+\createResEnviornment{exercise}{exerciseproof}{niceexercise}{Periwinkle}{\LangExercise}
+\createResEnviornment{note}{noteproof}{nicenote}{DarkOrchid}{\LangNote}
+
+% New property / eigenschap box
+\createResEnviornment{property}{propproof}{niceproperty}{teal}{\LangProperty}
 
 % For referencing using Cleverref
 % Format: \crefname{<env_name>}{<singular>}{<plural>}
-\crefname{lemma}{Lemma}{Lemmas}
-\crefname{theorem}{Theorem}{Theorems}
-\crefname{corollary}{Corollary}{Corollaries}
-\crefname{definition}{Definition}{Definitions}
-\crefname{Algorithm}{Algorithm}{Algorithms}
-\crefname{code}{Code}{Code Blocks}
-\crefname{example}{Example}{Examples}
-\crefname{exercise}{Exercise}{Execises}
+\ifdutch
+  \crefname{lemma}{lemma}{lemma's}
+  \Crefname{lemma}{Lemma}{Lemma's}
+
+  \crefname{theorem}{stelling}{stellingen}
+  \Crefname{theorem}{Stelling}{Stellingen}
+
+  \crefname{corollary}{gevolg}{gevolgen}
+  \Crefname{corollary}{Gevolg}{Gevolgen}
+
+  \crefname{definition}{definitie}{definities}
+  \Crefname{definition}{Definitie}{Definities}
+
+  \crefname{Algorithm}{algoritme}{algoritmes}
+  \Crefname{Algorithm}{Algoritme}{Algoritmes}
+
+  \crefname{code}{codeblok}{codeblokken}
+  \Crefname{code}{Codeblok}{Codeblokken}
+
+  \crefname{example}{voorbeeld}{voorbeelden}
+  \Crefname{example}{Voorbeeld}{Voorbeelden}
+
+  \crefname{exercise}{oefening}{oefeningen}
+  \Crefname{exercise}{Oefening}{Oefeningen}
+
+  \crefname{note}{opmerking}{opmerkingen}
+  \Crefname{note}{Opmerking}{Opmerkingen}
+
+  \crefname{property}{eigenschap}{eigenschappen}
+  \Crefname{property}{Eigenschap}{Eigenschappen}
+\else
+  \crefname{lemma}{lemma}{lemmas}
+  \Crefname{lemma}{Lemma}{Lemmas}
+
+  \crefname{theorem}{theorem}{theorems}
+  \Crefname{theorem}{Theorem}{Theorems}
+
+  \crefname{corollary}{corollary}{corollaries}
+  \Crefname{corollary}{Corollary}{Corollaries}
+
+  \crefname{definition}{definition}{definitions}
+  \Crefname{definition}{Definition}{Definitions}
+
+  \crefname{Algorithm}{algorithm}{algorithms}
+  \Crefname{Algorithm}{Algorithm}{Algorithms}
+
+  \crefname{code}{code block}{code blocks}
+  \Crefname{code}{Code block}{Code blocks}
+
+  \crefname{example}{example}{examples}
+  \Crefname{example}{Example}{Examples}
+
+  \crefname{exercise}{exercise}{exercises}
+  \Crefname{exercise}{Exercise}{Exercises}
+
+  \crefname{note}{note}{notes}
+  \Crefname{note}{Note}{Notes}
+
+  \crefname{property}{property}{properties}
+  \Crefname{property}{Property}{Properties}
+\fi
 
 
 % Stuff for code boxes
