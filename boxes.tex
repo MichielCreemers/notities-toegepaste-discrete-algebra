@@ -168,7 +168,7 @@
 \createResEnviornment{note}{noteproof}{nicenote}{DarkOrchid}{\LangNote}
 
 % New property / eigenschap box
-\createResEnviornment{property}{propproof}{niceproperty}{teal}{\LangProperty}
+\createResEnviornment{property}{propproof}{niceproperty}{RoyalPurple}{\LangProperty}
 
 % For referencing using Cleverref
 % Format: \crefname{<env_name>}{<singular>}{<plural>}
@@ -305,46 +305,43 @@
 }
 
 % ---------- Code for Equation Boxes ------------
+
 \NewDocumentEnvironment{equationbox}{ s O{black} O{} +b }
 {%
-    % 1. Helper: Define the transparency/fill style safely
-    %    (Solves the "white not defined" and opacity issues)
-    \if\relax\detokenize{#3}\relax
-        % No fill color -> Transparent
-        \tcbset{eqfill/.style={opacityback=0, colback=white}}
-    \else
-        % Fill color provided -> Solid
-        \tcbset{eqfill/.style={opacityback=1, colback=#3}}
-    \fi
-    
-    % 2. Define the specific box appearance
-    \tcbset{eqbox/.style={
-        eqfill,                % Apply the fill logic calculated above
-        sharp corners,
-        boxrule=0.8pt,
-        colframe=#2,           % Line color from argument
-        % Dimensions (Tight fit)
-        top=3pt, bottom=3pt, left=5pt, right=5pt, boxsep=1pt,
-        % Alignment properties
-        nobeforeafter,         % Ensures it behaves like a word, not a paragraph
-        tcbox raise base,      % Aligns the math baseline correctly
-        enhanced               % Required for 'standard jigsaw' transparency
-    }}
-
-    % 3. Output the Environment
-    %    We wrap a \tcbox INSIDE standard math environments.
-    \IfBooleanTF{#1}
-    {% Starred version: Unnumbered \[ ... \]
-        \[
-            \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle #4}}
-        \]
-    }
-    {% Standard version: Numbered \begin{equation} ...
-        \begin{equation}
-            \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle #4}}
-        \end{equation}
-    }
-}{}
+\begingroup%
+\setlength{\abovedisplayskip}{4pt}%
+\setlength{\belowdisplayskip}{4pt}%
+\setlength{\abovedisplayshortskip}{4pt}%
+\setlength{\belowdisplayshortskip}{4pt}%
+\if\relax\detokenize{#3}\relax%
+    \tcbset{eqfill/.style={opacityback=0, colback=white}}%
+\else%
+    \tcbset{eqfill/.style={opacityback=1, colback=#3}}%
+\fi%
+\tcbset{eqbox/.style={%
+    eqfill,%
+    sharp corners,%
+    boxrule=0.8pt,%
+    colframe=#2,%
+    top=3pt, bottom=3pt, left=5pt, right=5pt, boxsep=1pt,%
+    nobeforeafter,%
+    tcbox raise base,%
+    enhanced%
+}}%
+\IfBooleanTF{#1}%
+{%
+    \[%
+        \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle\ignorespaces #4\unskip}}%
+    \]%
+}%
+{%
+    \begin{equation}%
+        \tcbox[eqbox, standard jigsaw]{\ensuremath{\displaystyle\ignorespaces #4\unskip}}%
+    \end{equation}%
+}%
+\endgroup%
+}
+{\ignorespacesafterend}
 
 % barbox environment: \begin{barbox}[<barcolor>][<bgcolor>] ... \end{barbox}
 \NewDocumentEnvironment{barbox}{ O{gray} o }{%
