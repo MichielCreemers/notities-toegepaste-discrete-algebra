@@ -1,0 +1,734 @@
+\section{Les 3: equivalentierelaties, monoïden en groepen}
+
+Dit hoofdstuk bevat alles wat besproken is in les 3, alsook de ontbrekende delen van hoofdstuk 2 uit de cursustekst.
+
+\subsection{Equivalentierelaties en partities}
+
+\SimpleHeading{Het kernidee}
+
+Er bestaat een \textbf{1-op-1 verband} tussen equivalentierelaties op een verzameling en partities van die verzameling. Dit is misschien wel het belangrijkste idee van dit hoofdstuk.
+
+\textbf{Intuïtief:} een equivalentierelatie zegt "deze elementen tellen voor mij als hetzelfde". Een partitie deelt de verzameling op in vakjes. Deze twee dingen zijn fundamenteel dezelfde structuur, vanuit twee perspectieven bekeken.
+
+\textbf{\underline{Voorbeelden:}}
+\begin{itemize}
+    \item \inlinetext{$=$} is een equivalentierelatie, want:
+    \begin{equation*}
+        \begin{cases}
+            a=a \\
+            a=b \Rightarrow b=a \\
+            a=b \text{ en } b=c \Rightarrow a=c
+        \end{cases}
+    \end{equation*}
+    \item $A = \{\text{mensen}\}$ "hebben dezelfde moeder"
+    \item Zij $m \in \mathbb{Z}_{\ge 1}$ en $A=\mathbb{Z}$, dan is de volgende relatie een equivalentierelatie:
+    \begin{equation*}
+        R = \{(a,b) \in \mathbb{Z}^2 \mid a \equiv b \;\text{ mod }\;m\}
+    \end{equation*}
+    Ter verduidelijking van de notatie:
+    \begin{equation*}
+        \begin{gathered}
+            a \equiv b \;\text{ mod }\;m \\
+            \Updownarrow \\
+            m\text{ is een deler van } a - b\\
+            \text{of}\\
+            m \mid a - b \\
+            \Updownarrow \\
+            a \text{ en } b \text{ hebben dezelfde rest bij deling door }m
+        \end{gathered}
+    \end{equation*}
+\end{itemize}
+
+\begin{barbox}[ProcessBlue][gray!1]
+    \textcolor{ProcessBlue}{\textbf{Notatie:}} Voor een equivalentierelatie schrijven we meestal \inlinetext{$\sim$} ipv. $R$.
+
+    $\to$ dus $a \sim a$, enz.
+\end{barbox}
+
+\begin{nicedefinition}*[Equivalentieklasse]\label{def:l3_equivalentieklasse}
+    Zij $A$ een verzameling en $\sim$ een equivalentierelatie op $A$.\newline
+    Zij $a \in A$, dan geldt:
+    \nextpart[]*
+    \begin{equation}
+        \bar{a} = \{x \in A \mid x \sim a\} \qedtag
+    \end{equation}
+    $\bar{a}$ wordt de \textcolor{PineGreen!75!black}{\textbf{equivalentieklasse}} van $a$ genoemd.
+\end{nicedefinition}
+Elke $b \in \bar{a}$ wordt een \inlinetext{representant}[Goldenrod!66] (= "vertegenwoordiger" in de cursustekst) van $\bar{a}$ genoemd.
+
+Door reflexiviteit is het element $a$ zelf ook een vertegenwoordiger van $\bar{a}$ want:
+\begin{equation*}
+    a \in A \qquad \text{en} \quad \underbrace{a \sim a}_{reflexiviteit} \Rightarrow \quad a \in \bar{a}
+\end{equation*}
+
+\textbf{\underbar{Merk op:}} als $b \in \bar{a}$ geldt steeds:
+\begin{equation}\label{eq:l3_bar_b_is_bar_a}
+    \bar{b} = \bar{a}
+\end{equation}
+want omdat $b \in \bar{a}$, geldt per definitie van de equivalentieklasse (\Cref{def:l3_equivalentieklasse}) dat
+\begin{equation*}
+    b \sim a
+\end{equation*}
+We tonen nu aan dat $\bar{a} = \bar{b}$. Neem eerst $x \in \bar{b}$. Dan geldt:
+\begin{equation*}
+    x \sim b
+\end{equation*}
+Aangezien $b \sim a$, volgt uit transitiviteit:
+\begin{equation*}
+    \begin{gathered}
+        x \sim b \quad \text{en} \quad b \sim a \\
+        \Downarrow \\
+        x \sim a
+    \end{gathered}
+\end{equation*}
+Dus $x \in \bar{a}$. Hieruit volgt dan dat: $\quad \bar{b} \subseteq \bar{a}$ (1).
+
+Omgekeerd, neem $x \in \bar{a}$. Dan geldt:
+\begin{equation*}
+    x \sim a
+\end{equation*}
+Omdat $b \sim a$, geldt door symmetrie ook:
+\begin{equation*}
+    a \sim b
+\end{equation*}
+Uit transitiviteit volgt dan:
+\begin{equation*}
+    \begin{gathered}
+        x \sim a \quad \text{en} \quad a \sim b \\
+        \Downarrow \\
+        x \sim b
+    \end{gathered}
+\end{equation*}
+Dus $x \in \bar{b}$. Hieruit volgt dat: $\quad \bar{a} \subseteq \bar{b}$ (2).
+
+Uit (1) en (2) volgt dan $\bar{b} = \bar{a}$.
+
+\begin{niceexample}*
+    \nextpart[]*
+    Voor $\ldots \equiv \dots \text{ mod } m$, zijn de equivalentieklassen van de vorm:
+    \begin{equation*}
+        \bar{a} = \{\;a + km \mid k \in \mathbb{Z}\;\}
+    \end{equation*}
+    Dit zijn alle gehele getallen die dezelfde rest hebben bij deling door $m$.
+
+    \vspace{0.25cm}
+
+    Elke element van deze vorm ($a+km$) is een \textcolor{orange!75!black}{\textbf{representant}}.
+
+    \vspace{0.25cm}
+
+    \textcolor{orange!75!black}{\textbf{\underbar{Meer nog:}}} elke equivalentieklasse heeft een unieke representant in $\{0,1,\dots,m-1\}$. Inderdaad: bij deling door $m$ heeft elk geheel getal een unieke rest $r$ met $0 \le r < m$, en deze rest $r$ is de unieke representant van de equivalentieklasse binnen deze verzameling.
+
+    \vspace{0.25cm}
+
+    Bijvoorbeeld voor modulo 5:
+    \begin{equation*}
+        \bar{2} = \{\dots, -8, -3, 2, 7, 12, \dots\}
+    \end{equation*}
+\end{niceexample}
+
+\begin{niceproperty}*
+    \nextpart[Representanten]*
+    kunnen nooit tot dezelfde equivalentieklasse behoren.
+\end{niceproperty}
+
+\SimpleHeading{Partitie}
+
+\begin{nicelemma}
+    Zij $A$ een verzameling en "$\sim$" een equivalentierelatie op $A$. Dan vormen de equivalentieklassen een \textcolor{purple!50!black}{\textbf{partitie}} van $A$.
+\end{nicelemma}
+
+\begin{center}
+\resizebox{0.5\textwidth}{!}{%
+    \input{figures/L3/partitie_disjunct.tex}
+}
+\end{center}
+
+\begin{nicedefinition}*[Partitie]
+    \nextpart[Definitie:]*
+    $P \subset 2^A$ ($2^A$ is de verzameling van alle deelverzamelingen van $A$) is een partitie van $A$ \emph{asa}
+    \begin{enumerate}
+        \item $\emptyset \notin P$ -- geen enkele klasse is leeg
+        \item $\forall \; c_1, c_2 \in P \;:\; c_1 \cap c_2 = \emptyset$ of $c_1 = c_2$ -- verschillende klassen overlappen niet
+        \item $\bigcup_{c \in P}c = A$ -- de unie van alle klassen is $A$
+    \end{enumerate}
+\end{nicedefinition}
+
+\textbf{\underbar{Bewijs:}}
+\begin{enumerate}
+    \item $\forall \; a \in A \;:\; \underbrace{a \sim a}_{\text{reflexiviteit}} \Rightarrow a \in \bar{a}$ Dus geen lege equivalentieklassen.
+    \item \begin{equation*}
+        \begin{gathered}
+            \text{Stel } x \in \bar{a} \cap \bar{b} \\
+            \Downarrow \\
+            x \in \bar{a} \quad \text{en} \quad x \in \bar{b} \\
+            \Downarrow \\
+            \bar{x} = \bar{a} \quad \text{en} \quad \bar{x} = \bar{b} \\
+            \Downarrow \\
+            \bar{x} = \bar{a} = \bar{b}
+        \end{gathered}
+    \end{equation*}
+
+    \item idem aan 1.
+\end{enumerate}
+
+\SimpleHeading{Van partitie naar equivalentierelatie en omgekeerd}
+
+\begin{nicetheorem}*
+    \nextpart[]*
+    Elke equivalentierelatie "$\sim$" ($R$ in cursus) op $A$ geeft een partitie $P=\{\bar{a}\}$ ($P=\{R_x\}$ in cursus) waarbij $\bar{a} = \{y \in A \mid y \sim a\}$ de \textcolor{red!66!black}{\textbf{equivalentieklass}} van $a$ is. Let op: $\{\bar{a}\}$ is de verzameling van alle equivalentieklassen, en dus een verzameling van deelverzamelingen, wat de partitie is, niet $\bar{a}$!
+    
+    \vspace{0.5cm}
+
+    Omgekeerd: Zij $P$ een partitie van $A$. Elke partitie geeft dan een equivalentierelatie via "$a \sim y \Leftrightarrow a$ en $y$ zitten in dezelfde equivalentieklasse".
+\end{nicetheorem}
+
+\textbf{\underbar{Voorbeeld:}} Zij $A = \{1,2,3,4,5,6\}$. Dan is $\{\{1, 2\}, \{3,4,5\}, \{6\}\}$ ee, partitie van $A$. Maar \newline $\{\{1,2\}, \{2,3\}, \{4,5,6\}\}$ is \textbf{geen} partitie want de 2 zit in twee klassen.
+
+\textbf{\underbar{Voorbeeld:}} Op $A = \{1,2,3,4,5,6\}$ definiëren we:
+\begin{equation*}
+    x \sim y \Leftrightarrow x \text{ en } y \text{ hebben dezelfde pariteit (even/oneven)}
+\end{equation*}
+Verifieer:
+\begin{itemize}
+    \item Reflexief: $x$ heeft dezelfde pariteit als $x$ \emoji{check-mark-button} 
+    \item Symmetrisch: als $x$ dezelfde pariteit heeft als $y$, dan ook andersom \emoji{check-mark-button}
+    \item Transitief: duidelijk \emoji{check-mark-button}
+\end{itemize}
+Dit geeft de partitie $\{\;\{1,3,5\}, \;\{2,4,6\}\;\}$. De equivalentieklasse van 1 is $\bar{1} = \{1,3,5\}$ (of $R_1$). We kunnen $1$ een representant van die klasse noemen, maar net zo goed kunnen we $3$ or $5$ als representant nemen.
+
+\SimpleHeading{Quotientverzameling}
+
+\begin{nicedefinition}*[Quotientverzameling]
+    \nextpart[]*
+    De verzameling equivalentieklassen (i.e., de partitie P) wordt genoteerd als
+    \begin{equation}
+        A/_{\sim} \;\;= \{\bar{a} \mid a \in A\} \qedtag
+    \end{equation}
+    Of zoals in de cursustekst. De quotiëntverzameling $A/R$ is de verzameling van alle equivalentieklassen:
+    \begin{equation}
+        A/R = \{R_x \mid x \in A\} \qedtag
+    \end{equation}
+    waar $R_x$ de equivalentieklasse is van $x$.
+\end{nicedefinition}
+
+\textbf{\underbar{Terug naar voorbeeld:}} $\ldots \equiv \dots \text{ mod } m \text{ op } \mathbb{Z}$
+
+$\to$ In dit geval schrijven we
+\begin{equationbox}[PineGreen]
+    \mathbb{Z}_m = \mathbb{Z}/_{\equiv \text{ mod } m}
+\end{equationbox}
+
+voor deze verzameling. De notatie van het rechterlid is omslachting en wordt niet gebruikt.
+
+Dus $\mathbb{Z}_m = \{\bar{0}, \bar{1}, \dots, \overline{m-1}\}$ bevat $m$ elementen. "Alle mogelijke resten bij deling door $m$."
+
+\SimpleHeading{Belangrijk voorbeeld: restklassen modulo $m$}
+
+Verdeel $\mathbb{Z}$ in $m$ klassen volgens de rest bij deling door $m$:
+\begin{equation*}
+    \bar{k} = \{\; mn + k \mid n \in \mathbb{Z} \;\}
+\end{equation*}
+De equivalentierelatie is: $x \sim y \Leftrightarrow (x-y)$ deelbaar door $m$, oftewel $x \equiv y$ mod $m$.
+
+\textbf{\underbar{Voorbeeld (m=3):}} $\mathbb{Z}_3 = \{\bar{0}, \bar{1}, \bar{2}\}$ met:
+\begin{itemize}
+    \item $\bar{0} = \{\; \dots, -6, -3, 0, 3, 6, \dots \;\}$
+    \item $\bar{1} = \{\; \dots, -5, -2, 1, 4, 7, \dots \;\}$
+    \item $\bar{2} = \{\; \dots, -4, -1, 2, 5, 8, \dots \;\}$
+\end{itemize}
+Dus bv. $17 \in \bar{2}$ want $17 = 5 \cdot 3 + 2$, en $17 \equiv 2 \text{ mod } 3$.
+
+\SimpleHeading{Verband met afbeeldingen}
+
+Elke afbeelding $f:A \to B$ definieert een equivalentierelatie op $A$:
+\begin{equation}
+    x \sim y \Leftrightarrow f(x) = f(y)
+\end{equation}
+We noemen deze $R_f$, de equivalentierelatie gedefinieerd door $f$. Twee elementen zijn equivalent als ze "hetzelfde beeld krijgen onder $f$".
+
+\begin{nicetheorem}*
+    \nextpart[]*
+    Zij $f\;:\; A \to B$ een afbeelding, dan is de relatie $R_f$ gedefinieerd als
+    \begin{equation}
+        R_f = \{\; (x,y) \mid f(x) = f(y) \;\} \qedtag
+    \end{equation}
+    een equivalentierelatie voor $A$.
+
+    \vspace{0.25cm}
+
+    Omgekeerd, als $S$ een equivalentierelatie is voor de verzameling $A$, dan is $c_S \;:\; A \to A/S$ gedefinieerd door
+    \begin{equation}
+        c_S(x) = S_x, \qquad \forall x \in A \qedtag
+    \end{equation}
+    een afbeelding. Deze afbeelding heet de canonieke afbeelding van de equivalentierelatie $S$.
+\end{nicetheorem}
+
+De canonieke afbeelding van de equivalentierelatie gedefinieerd door $f$, namelijk $p_f = c_{R_f}$ noemt men een projectie voor $f$ op $A/R_f$.
+
+\textbf{\underbar{Voorbeeld:}} Voor $f:\mathbb{Z} \to \{0,1\}$ met $f(n) = n \text{ mod } 2$ (pariteitsfunctie) is $R_f$ precies "dezelfde pariteit". De klassen zijn de even en oneven getallen. De projectie $p_f$ voor $f$ op $\mathbb{Z}/R_f = \{\bar{0}, \bar{1}\}$ is de afbeelding die met elk geheel getal $n$ één van de klassen $\bar{0}$ of $\bar{1}$ associeert.
+
+
+\subsubsection{Ontbindingsstelling voor afbeeldingen}
+
+Vooraleer we tot een finale stelling komen, even een opsomming van wat we al weten.
+
+\textbf{1.} Gegeven een afbeelding $f : A \to B$, dan is de relatie
+\begin{equation*}
+    R_f = \{\; (x,y) \mid f(x) = f(y) \;\}
+\end{equation*}
+de equivalentierelatie gedefinieerd door $f$.
+
+\begin{center}
+\resizebox{0.55\textwidth}{!}{%
+    \input{figures/L3/er_door_f.tex}
+}
+\end{center}
+
+\textbf{2.} Gegeven de equivalentierelatie $S$ voor $A$, dan is $c_S : A \to A/S$ een afbeelding: de canonieke afbeelding van de equivalentierelatie $S$.
+
+\begin{center}
+\resizebox{0.75\textwidth}{!}{%
+    \input{figures/L3/canonieke_afbeelding.tex}
+}
+\end{center}
+
+\textbf{3.} De vorige 2 kunnen we nu combineren:\newline
+$\to$ De canonieke afbeelding $c_{R_f}$ van de equivalentierelatie $R_f$ gedefinieerd door de afbeelding $f$ noemt men de projectie van $f$ op $A/R_f$.
+
+\begin{center}
+\resizebox{0.65\textwidth}{!}{%
+    \input{figures/L3/er_en_canoniek.tex}
+}
+\end{center}
+
+\begin{nicetheorem}*[ontbindingsstelling voor afbeeldingen]
+    \nextpart[]*
+    Iedere afbeelding $f:A \to B$ is te schrijven als een samenstelling
+    \begin{equation}
+        f = i \circ b \circ p \qedtag
+    \end{equation}
+    met
+    \begin{itemize}
+        \item $i = i_{\text{Ran }f}$ de inlassing van $\text{Ran }f = f(A)$ in $B$
+        \item $b$ is een bijectie tussen $A/R_f = \text{Ran }p_f = p_f(A)$ en $f(A)$. Meer concreet; ze is gedefinieerd door $b(p_f(x)) = y \Leftrightarrow f(x) = y$
+        \item $p = p_f$ is de projectie voor $f$ op $A/R_f$
+    \end{itemize}
+\end{nicetheorem}
+
+\begin{center}
+\resizebox{0.65\textwidth}{!}{%
+    \input{figures/L3/ontbindingsstelling.tex}
+}
+\end{center}
+
+Dus elke afbeelding $f:A \to B$ is te schrijven als $f = i \circ b \circ p$ met:
+\begin{itemize}
+    \item $p =$ de \textbf{projectie} $A \to A/R_f : x \mapsto R_x$ (stuurt elk element naar zijn klasse)
+    \item $b =$ een \textbf{bijectie} $A/R_f \to f(A) : R_x \mapsto f(x)$ (verbindt klassen met beelden)
+    \item $i =$ de \textbf{inlassing} $f(A) \to B$ (vergeet dat we in $f(A)$ zaten en zie het als element van $B$)
+\end{itemize}
+Intuïtief doet elke afbeelding dus 3 dingen:
+\begin{enumerate}
+    \item Ze identificeert elementen die hetzelfde beeld krijgen (de projectie "collapsed" gelijksoortige elementen)
+    \item Ze geeft elk verschillend "type" een uniek beeld (de bijectie)
+    \item Ze plaatst dat beeld in het codomein $B$ (de inlassing)
+\end{enumerate}
+
+\begin{niceexample}*
+    Beschouw de afbeelding $f : \mathbb{Z} \to \mathbb{Z} : n \mapsto n^2$.
+    \nextpart[]*
+    We analyseren de afbeelding $f$ volgens de ontbindingsstelling. $f$ definieert een equivalentierelatie want neem bijvoorbeeld $f(-3) = f(3) = 9$, dus $-3 \sim 3$.
+    \begin{itemize}
+        \item $R_f$ heeft equivalentieklassen $\bar{0}, \bar{1}, \bar{2}, \bar{3}, \dots$, waar elke equivalentieklasse bestaat uit de elementen $\{n, -n\}$ met $n \ge 0$. Dus $\mathbb{Z}/R_f = \{\bar{0}, \bar{1}, \bar{2}, \bar{3}, \dots\}$. We hebben hier $n \ge 0$ als representant gekozen want $\bar{3} = \overline{-3}$ zijn dezelfde equivalentieklasse.
+        \item $p : \mathbb{Z} \to \mathbb{Z}/R_f$ "collapses" alle elementen met zelfde beeld samen. Hier dus: "collapses" $-n$ en $n$ samen.
+        \item $b : \mathbb{Z}/R_f \to f(\mathbb{Z}) : \bar{n} \mapsto n^2$ met $f(\mathbb{Z}) = \{0, 1, 4, 9, 16, \dots\}$ geeft elke equivalentieklasse een uniek beeld $n^2$
+        \item $i : f(\mathbb{Z}) \to \mathbb{Z}$ is gewoon "vergeet dat dit kwadraten zijn"
+        \item Controle van de ontbinding, neem bv. $n= -3$:
+        \begin{equation*}
+            -3 \xlongrightarrow{p} \bar{3} \xlongrightarrow{b} 9 \xlongrightarrow{i} 9 = f(-3) \text{ \emoji{check-mark-button}}
+        \end{equation*}
+    \end{itemize}
+\end{niceexample}
+
+\subsection{Geordende Verzamelingen}
+
+We schrijven $xRy$ meestal als $x \le y$ wanneer $R$ een orderelatie is (reflexief, anti-symmetrisch, transitief).
+
+\textbf{Let op:} de notatie "$\le$" misleidt. "Is deler van" op $\mathbb{Z}$ is ook een orderelatie (we kunnen schrijven: $3 \le 12$ in de zin "3 deelt 12"), maar 5 en 7 zijn dan \textbf{niet vergelijkbaar} ($5 \nmid 7$) dus kan je niet schrijven $5 \le 7$.
+
+\SimpleHeading{Partieel vs volledig (totaal) geordend}
+
+\textbf{Volledig (totaal) geordend:} voor elke twee elementen geldt $x \le y$ of $y \le x$. Bijvoorbeeld $\mathbb{R}$ met de gewone "$\le$".
+
+\textbf{Partieel geordend:} dat hoeft niet, sommige elementen zijn onvergelijkbaar. Bijvoorbeeld $\mathbb{N}$ met deelbaarheid, of $2^A$ met $\subseteq$.
+
+\begin{niceexample}*
+    \nextpart[]*
+    \underline{Gegeven:} Beschouw de verzameling
+    \begin{equation*}
+        A = \{1,2,3\}
+    \end{equation*}
+    We bekijken nu de machtsverzameling van $A$:
+    \begin{equation*}
+        2^A = 2^{\{1,2,3\}}
+    \end{equation*}
+    Dit is de verzameling van alle deelverzamelingen van $A$:
+    \begin{equation*}
+        2^A = 
+        \{\;
+        \emptyset,
+        \{1\},
+        \{2\},
+        \{3\},
+        \{1,2\},
+        \{1,3\},
+        \{2,3\},
+        \{1,2,3\}
+        \;\}
+    \end{equation*}
+    Op $2^A$ bekijken we de relatie $\subseteq$, dus "is een deelverzameling van".
+
+    \vspace{0.25cm}
+
+    \underbar{Vraag:} Zijn de verzamelingen 
+    \begin{equation*}
+        \{1,2\} \qquad \text{en} \qquad \{2,3\}
+    \end{equation*}
+    vergelijkbaar voor de orde $\subseteq$? Met andere woorden: geldt één van de volgende 2 uitspraken?
+    \begin{equation*}
+        \{1,2\} \subseteq \{2,3\} \qquad \text{of} \qquad \{2,3\} \subseteq \{1,2\}
+    \end{equation*}
+    \underbar{Oplossing:} We controleren eerst of $\{1,2\} \subseteq \{2,3\}$ geldt. Dit zou betekenen dat elk element van $\{1,2\}$ ook een element is van $\{2,3\}$. Maar:
+    \begin{equation*}
+        1 \in \{1,2\} \qquad \text{en} \qquad 1 \notin \{2,3\}
+    \end{equation*}
+    Dus: $\{1,2\} \nsubseteq \{2,3\}$. (1)
+
+    \vspace{0.25cm}
+
+    We controleren nu omgekeerd of $\{2,3\} \subseteq \{1,2\}$ geldt. Dit zou betekenen dat elk element van $\{2,3\}$ ook een element is van $\{1,2\}$. Maar:
+    \begin{equation*}
+        3 \in \{2,3\} \qquad \text{en} \qquad 3 \notin \{1,2\}
+    \end{equation*}
+    Dus: $\{2,3\} \nsubseteq \{1,2\}$. (2)
+
+    \vspace{0.25cm}
+
+    Uit (1) en (2) volgt dan dat $\{1,2\}$ en $\{2,3\}$ niet vergelijkbaar zijn voor de orde $\subseteq$.
+
+    \vspace{0.25cm}
+
+    \underbar{Conclusie:} De relatie $\subseteq$ op $2^{\{1,2,3\}}$ is een partiële orde, maar geen totale orde. Ze is een partiële orde omdat $\subseteq$ reflexief, antisymmetrisch en transitief is. Ze is geen totale orde, omdat niet elk paar elementen vergelijkbaar is.
+\end{niceexample}
+
+\SimpleHeading{Bijzondere elementen voor een deelverzameling $B \subseteq A$}
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    %\arrayrulecolor{gray!20}  % Change this to your desired color
+    % \setlength{\arrayrulewidth}{1pt}  % Change this value (default is 0.4pt)
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=1.0\hsize}L >{\hsize=0.4\hsize}L >{\hsize=1.6\hsize}L @{}}
+        \textbf{Begrip} & \textbf{Moet in $B$ zitten?} & \textbf{Wat is het?} \\
+        \hline
+        \textbf{Initieel element} van $B$ & Ja & Geen enkel ander element van $B$ gaat het strikt vooraf \\
+        \thinrule
+        \textbf{Terminaal element} van $B$ & Ja & Geen enkel ander element van $B$ komt er strikt na \\
+        \thinrule
+        \textbf{Ondergrens} van $B$ & Nee & Element van $A$ dat $\le$ is dan alle elementen van $B$ \\
+        \thinrule
+        \textbf{Bovengrens} van $B$ & Nee & Element van $A$ dat $\ge$ is dan alle elementen van $B$ \\
+        \thinrule
+        \textbf{Kleinste element} van $B$ & Ja & Ondergrens die in $B$ zelf zit \\
+        \thinrule
+        \textbf{Grootste element} van $B$ & Ja & Bovengrens die in $B$ zelf zit \\
+        \thinrule
+        \textbf{Infimum} van $B$ (grootste ondergrens) & Nee & Grootste van de ondergrenzen \\
+        \thinrule
+        \textbf{Supremum} van $B$ (kleinste bovengrens) & Nee & Kleinste van de bovengrenzen \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\begin{barbox}[red!66][red!1]
+    \emoji{double-exclamation-mark} \textbf{Cruciaal onderscheid:} een kleinste element moet in $B$ zitten, een infimum niet.
+\end{barbox}
+
+\textbf{\underbar{Voorbeeld:}} In $\mathbb{R}$, beschouw $B = [0,1) \subset \mathbb{R}$
+\begin{itemize}
+    \item Kleinste element van $B$: 0 (zit in $B$ en is ondergrens)
+    \item Grootste element van $B$: bestaat niet! (1 zit niet in $B$, en geen ander element is groter dan alle andere)
+    \item Infimum van $B$: 0 (zelfde als kleinste, want het zit in $B$)
+    \item Supremum van $B$: 1 (kleinste bovengrens, maar zit niet in $B$)
+\end{itemize}
+
+\subsubsection{Hasse-diagrammen}
+
+Je kan een partieel geordende verzameling grafisch voorstellen door de pijlen van de relatie te tekenen. De pijlen die het gevolg zijn van transitiviteit en de lussen die het gevolg zijn van reflexiviteit laat je weg. 
+
+\textbf{\underbar{Voorbeeld:}} Beschouw de verzameling $\{1,2,3,6\}$ met deelbaarheid. 
+
+\noindent
+\begin{minipage}[t]{0.55\textwidth}
+\vspace{0pt} % Dwingt de absolute top-uitlijning af
+\begin{itemize}
+    \item 1 deelt alles $\to$ onderaan
+    \item 2 deelt 6, 3 deelt 6 $\to$ 2 en 3 staan op gelijke hoogte boven 1, met lijn naar 6 erboven
+\end{itemize}
+\end{minipage}% <--- Dit procentteken is belangrijk om ongewenste witruimte te voorkomen!
+\hfill
+\begin{minipage}[t]{0.35\textwidth}
+\vspace{0pt} % Zorgt dat de bovenkant van de figuur hier op gelijke hoogte start
+\begin{center}
+\resizebox{0.65\textwidth}{!}{%  % Schalen naar de breedte van deze minipage zelf
+    \input{figures/L3/hasse_makkelijk.tex}
+}
+\end{center}
+\end{minipage}
+
+\textbf{\underbar{Voorbeeld:}} Beschouw een iets complexer voorbeeld. De deelbaarheidsrelatie voor de verzameling $\{2,4,8,64,40,12,6,30,60\}$.
+
+$\to$ We gebruiken \Cref{alg:l3_hasse} om dit op te lossen.
+
+\textbf{1.} Deelbare paren $(a \prec b)$:
+\begin{equation*}
+    \begin{gathered}
+        2 \prec 4, \quad 2 \prec 8, \quad 2 \prec 64, \quad 2 \prec 40, \quad 2 \prec 12, \quad 2 \prec 6, \quad 2 \prec 30, \quad 2 \prec 60 \\[1ex]
+        4 \prec 8, \quad 4 \prec 64, \quad 4 \prec 40, \quad 4 \prec 12, \quad 4 \prec 60 \\[1ex]
+        8 \prec 64, \quad 8 \prec 40 \\[1ex]
+        6 \prec 12, \quad 6 \prec 30, \quad 6 \prec 60 \\[1ex]
+        12 \prec 60, \quad 30 \prec 60
+    \end{gathered}
+\end{equation*}
+
+\textbf{2. + 3.} Verwijder transitieve paren:
+\begin{itemize}
+    \item $2 \prec 8$ want $2 \prec 4 \prec 8$
+    \item $2 \prec 12$ want $2 \prec 4 \prec 12$ of $2 \prec 6 \prec 12$
+    \item $2 \prec 60$ want $2 \prec 6 \prec 30 \prec 60$
+    \item \dots
+\end{itemize}
+
+\textbf{4. + 5.}
+\begin{center}
+\resizebox{0.50\textwidth}{!}{%
+    \input{figures/L3/hasse_moeilijk.tex}
+}
+\end{center}
+
+Uit dit Hasse diagram kan je nu gemakkelijk dingen aflezen:
+\begin{itemize}
+    \item 2 is het kleinste element, er is geen grootste element.
+    \item 2 is een initieel element
+    \item 64, 40 en 64 zijn terminale elementen.
+    \item 2, 4, 6 en 12 zijn ondergrenzen voor de deelverzameling $\{12, 60\}$. Deze verzameling ondergrenzen heeft een grootste element nl. 12. 12 is daarom het infimum van de deelverzameling $\{12, 60\}$.
+    \item $\{12, 60\}$ heeft slechts 1 bovengrens nl. 60. Dit is tegelijk het grootste element en het supremum van $\{12, 60\}$. (Er moet gelden $12 \mid x$ en $60 \mid x$ dus niet 64 maar 60 als bovengrens!)
+\end{itemize}
+
+\begin{nicealgorithm}*[Hasse-diagram]\label{alg:l3_hasse}
+    Een algemeen algoritme om een Hasse-diagram te maken.
+    \nextpart[Algoritme.]*
+    Gegeven een verzameling $A$ en een relatie $R$ zodat $A$ een partieel geordende verzameling is voor de relatie $R$:
+    \begin{enumerate}
+        \item Vindt alle paren $(a,b)$ waar $aRb$ en $a \neq b$.
+        \item Voor elk paar $(a,b)$, controleer als er een $c \in A$ bestaat zodat
+        \begin{equation*}
+            aRc \quad \text{en} \quad cRb \qquad \text{ met } \quad c \neq a,b \qquad \text{(transitiviteit)}
+        \end{equation*}
+        \item Als zo een $c$ bestaat, verwijder dan $(a,b)$.
+        \item De paren die overblijven zijn de \emph{edges} van het Hasse diagram.
+        \item Teken van boven naar onder, geordend.
+    \end{enumerate}
+\end{nicealgorithm}
+
+\subsection{Recursiviteit}
+
+\emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin} 
+
+\subsection{Tellen en meten}
+
+\begin{nicedefinition}*[Equipotentie]
+    \nextpart[]*
+    Twee verzamelingen zijn \textcolor{PineGreen!75!black}{\textbf{equipotent}} indien er een bijectie tussen hen bestaat. Intuïtief: ze hebben "evenveel" elementen.
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeeld:}}
+\begin{itemize}
+    \item $\mathbb{N}$ en de even getallen zijn equipotent ($n \mapsto 2n$ is een bijectie).
+    \item $\mathbb{N} \text{ en } \mathbb{Q}$ zijn equipotent. (zie diagonaalargument in de cursustekst: rangschik breuken eerst op "teller+noemer" som en dan map elk natuurlijk getal naar een rationaal getal uit deze oneindige rij)
+    \item $\mathbb{N}$ en $\mathbb{R}$ zijn niet equipotent (Cantor) (Je kan de reële getallen niet op een rij zetten, je kan er steeds eentje tussen blijven steken)
+\end{itemize}
+
+\begin{nicenote}*
+    Waarom zijn $\mathbb{N}$ en de even getallen een bijectie? Heeft $\mathbb{N}$ niet dubbel zoveel getallen?
+    \nextpart[]*
+    Dit voelt tegenintuïtief. Bij \textbf{eindige} verzamelingen klopt dit:
+    \begin{equation*}
+        \{1,2,3,4,5,6\}
+    \end{equation*}
+    heeft dubbel zoveel elementen als
+    \begin{equation*}
+        \{2,4,6\}
+    \end{equation*}
+    Maar bij \textbf{oneindige} verzamelingen werkt "dubbel zoveel" anders. Daar kijk je niet naar dichtheid of verhouding, maar naar: "\textbf{kunnen we elk element van de ene verzameling precies koppelen aan één element van de andere?}"
+
+    \vspace{0.25cm}
+
+    Voor $\mathbb{N}$ en de even getallen kan dat:
+    \begin{equation*}
+        f(n) = 2n
+    \end{equation*}
+    Bijvoorbeeld, als $\mathbb{N} = \{1,2,3,4,\dots\}$, dan:
+    \begin{equation*}
+        \begin{aligned}
+            1 &\mapsto 2 \\
+            2 &\mapsto 4 \\
+            3 &\mapsto 6 \\
+            4 &\mapsto 8 
+        \end{aligned}
+    \end{equation*}
+    enzovoort. Elke natuurlijk getal krijgt precies één getal, en elk even getal komt precies één keer voor.
+\end{nicenote}
+
+\begin{nicedefinition}*[Aftelbaarheid]
+    \nextpart[]*
+    $A$ is \textcolor{PineGreen!75!black}{\textbf{aftelbaar}} als er een bijectie bestaat met $\mathbb{N}$ of een eindig deel ervan.
+
+    \vspace{0.25cm}
+
+    Als er een bijectie bestaat tussen de verzameling $A$ en $\{1,2,\dots,m\}$, dan zegt men dat $A$ $m$ elementen heeft.
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Cardinaliteit]
+    \nextpart[]*
+    $\#A$ = aantal elemten van $A$. Deze functie voldoet aan de volgende eigenschappen:
+    \begin{itemize}
+        \item $\#\emptyset = 0$
+        \item $A \cap B = \varnothing \quad \Rightarrow \quad \#(A \cup B) = \#A + \#B$
+        \item $\#(2^A) = 2^{\#A}$
+    \end{itemize}
+\end{nicedefinition}
+
+\subsection{Samenstellingswetten}
+
+Dit is de brug naar de algebra. We gaan elementen "combineren".
+
+\begin{nicedefinition}*
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{inwendige samenstellingswet}} of \textcolor{PineGreen!75!black}{\textbf{bewerking}} onder de elementen van $A$ is een afbeelding van $B \subseteq A \times A \to A:$
+    \begin{equation*}
+        (x,y) \mapsto z = f((x,y))
+    \end{equation*}
+    Ze combineert dus 2 elementen van $A$ tot één element van $A$.
+
+    \vspace{0.25cm}
+
+    Notatie:
+    \begin{itemize}
+        \item $x \top y$ (algemeen)
+        \item $x + y$ (additief)
+        \item $x \cdot y$ of $xy$ (multiplicatief)
+    \end{itemize}
+    De verzameling $A$ die voorzien is van de bewerking $\top$ noteren we als $\langle A, \top \rangle$.
+\end{nicedefinition}
+
+\begin{niceproperty}*
+    Eigenschappen die een wet $\top$ kan hebben
+    \nextpart[]*
+    \begin{center}
+        \renewcommand{\arraystretch}{1.5}
+        \arrayrulecolor{gray!20}
+        \setlength{\arrayrulewidth}{1pt}
+        \begin{tabularx}{\linewidth}{@{} | >{\hsize=0.6\hsize}L | >{\hsize=1.4\hsize}L | @{}}
+            \hline
+            \cellcolor{RoyalPurple!75!black}\textcolor{white}{\textbf{Eigenschap}} & \cellcolor{RoyalPurple!75!black}\textcolor{white}{\textbf{Definitie}} \\
+            \hline
+            \cellcolor{RoyalPurple!5} Overal bepaald & $\top$ gedefinieerd voor alle $(x,y) \in A \times A$ \\
+            \hline
+            \cellcolor{RoyalPurple!5} Associatief & $x \top (y \top z) = (x \top y) \top z$ \\
+            \hline
+            \cellcolor{RoyalPurple!5} Commutatief & $x \top y = y \top x$ \\
+            \hline
+            \cellcolor{RoyalPurple!5} Neutraal element $e$ & $x \top e = e \top x = x$ voor alle $x$ \\
+            \hline
+            \cellcolor{RoyalPurple!5} $E \subseteq A$ is \textbf{stabiel} voor $\top$ & $x, y \in E \Rightarrow x \top y \in E$ \\
+            \hline
+        \end{tabularx}
+    \end{center}
+\end{niceproperty}
+
+\begin{nicetheorem}*
+    Als een neutraal element bestaat is het \textcolor{red!75!black}{\textbf{uniek}}!
+    \nextpart[Bewijs.]*
+    Stel dat $e_1$ en $e_2$ beide neutrale elementen zijn, dan is, omdat $e_1$ een neutraal element is
+    \begin{equation*}
+        e_2 \top e_1 = e_1 \top e_2 = e_2
+    \end{equation*}
+    en omdat $e_2$ een neutraal element is
+    \begin{equation*}
+        e_1 \top e_2 = e_2 \top e_1 = e_1
+    \end{equation*}
+    Vanwege het 1-waardig zijn is dus $e_1 = e_2$.
+\end{nicetheorem}
+
+\SimpleHeading{Regulariteit en Symmetriseerbaarheid}
+
+\begin{nicedefinition}*
+    \nextpart[]*
+    $l \in A$ heet \textcolor{PineGreen!75!black}{\textbf{links-regulier}} voor $\top$ \emph{asa}
+    \begin{equation}
+        l \top x = l \top y \Rightarrow x = y, \qquad \forall x, y \in A \qedtag
+    \end{equation}
+    Dit wil zeggen dat $x \mapsto l \top x$ een \textbf{injectie} is. Het schrappen van $l$ is een linker inverse afbeelding voor deze injectie.
+
+    \vspace{0.5cm}
+
+    $r \in A$ heet \textcolor{PineGreen!75!black}{\textbf{rechts-regulier}} voor $\top$ \emph{asa}
+    \begin{equation}
+        x \top r = t \top r \Rightarrow x = y, \qquad \forall x, y \in A \qedtag
+    \end{equation}
+    Dit wil zeggen dat $x \mapsto x \top r$ een injectie is. Het schrappen van $r$ is een \textbf{\underbar{linker}} inverse afbeelding voor deze injectie.
+
+    \vspace{0.5cm}
+
+    Een element heet regulier als het zowel links- als rechts-regulier is.
+\end{nicedefinition}
+
+\begin{nicedefinition}*
+    \nextpart[]*
+    Zij $e$ het neutraal element van $\langle A, \top \rangle$, dan is $x\in A$ symmetriseerbaar voor $\top$ \emph{asa}
+    \begin{equation}
+        \exists y \in A \qquad \text{zodat} \qquad x \top y = e \quad \text{en} \quad y \top x = e
+    \end{equation}
+    $y$ heet dan het symmetrische element van $x$ voor $\top$. Notatie: $y = sym(x)$.
+\end{nicedefinition}
+
+\begin{nicetheorem}*
+    \nextpart[]*
+    Als $\top$ associatief is, dan is
+    \begin{enumerate}
+        \item $sym(x)$ is uniek (het symmetrische element van $x \in A$ is enig)
+        \item Symmetriseerbare elementen zijn regulier
+        \item $sym(x \top y) = sym(y) \;\top\; sym(x)$ (\textcolor{red!75!black}{\textbf{Let op de volgorde!}})
+    \end{enumerate}
+\end{nicetheorem}
+
+
+
+\subsection{Algebras}
+
+\subsection{Morfismen}
+
+\subsection{Monoïden en Groepen}
+
+
+
+
+
+
+
+
+
+
+
+
