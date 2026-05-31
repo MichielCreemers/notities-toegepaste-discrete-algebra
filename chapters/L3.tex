@@ -81,7 +81,7 @@ Aangezien $b \sim a$, volgt uit transitiviteit:
         x \sim a
     \end{gathered}
 \end{equation*}
-Dus $x \in \bar{a}$. Hieruit volgt dan dat: $\quad \bar{b} \subseteq \bar{a}$ (1).
+Dus $x \in \bar{a}$. Hieruit volgt dan dat: $\quad \bar{b} \subseteq \bar{a}\qquad$ (1).
 
 Omgekeerd, neem $x \in \bar{a}$. Dan geldt:
 \begin{equation*}
@@ -99,7 +99,7 @@ Uit transitiviteit volgt dan:
         x \sim b
     \end{gathered}
 \end{equation*}
-Dus $x \in \bar{b}$. Hieruit volgt dat: $\quad \bar{a} \subseteq \bar{b}$ (2).
+Dus $x \in \bar{b}$. Hieruit volgt dat: $\quad \bar{a} \subseteq \bar{b} \qquad$ (2).
 
 Uit (1) en (2) volgt dan $\bar{b} = \bar{a}$.
 
@@ -174,9 +174,9 @@ Uit (1) en (2) volgt dan $\bar{b} = \bar{a}$.
 
 \SimpleHeading{Van partitie naar equivalentierelatie en omgekeerd}
 
-\begin{nicetheorem}*
+\begin{nicetheorem}* \label{theorem:ER_naar_E_klassen}
     \nextpart[]*
-    Elke equivalentierelatie "$\sim$" ($R$ in cursus) op $A$ geeft een partitie $P=\{\bar{a}\}$ ($P=\{R_x\}$ in cursus) waarbij $\bar{a} = \{y \in A \mid y \sim a\}$ de \textcolor{red!66!black}{\textbf{equivalentieklass}} van $a$ is. Let op: $\{\bar{a}\}$ is de verzameling van alle equivalentieklassen, en dus een verzameling van deelverzamelingen, wat de partitie is, niet $\bar{a}$!
+    Elke equivalentierelatie "$\sim$" ($R$ in cursus) op $A$ geeft een partitie $P=\{\bar{a}\}$ ($P=\{R_x\}$ in cursus) waarbij $\bar{a} = \{y \in A \mid y \sim a\}$ de \textcolor{red!66!black}{\textbf{equivalentieklasse}} van $a$ is. Let op: $\{\bar{a}\}$ is de verzameling van alle equivalentieklassen, en dus een verzameling van deelverzamelingen, wat de partitie is, niet $\bar{a}$!
     
     \vspace{0.5cm}
 
@@ -613,7 +613,7 @@ Uit dit Hasse diagram kan je nu gemakkelijk dingen aflezen:
 
 Dit is de brug naar de algebra. We gaan elementen "combineren".
 
-\begin{nicedefinition}*
+\begin{nicedefinition}*\label{def:inwendige_samenstellingswet}
     \nextpart[]*
     Een \textcolor{PineGreen!75!black}{\textbf{inwendige samenstellingswet}} of \textcolor{PineGreen!75!black}{\textbf{bewerking}} onder de elementen van $A$ is een afbeelding van $B \subseteq A \times A \to A:$
     \begin{equation*}
@@ -713,15 +713,653 @@ Dit is de brug naar de algebra. We gaan elementen "combineren".
     \end{enumerate}
 \end{nicetheorem}
 
+\textbf{\underbar{Notatie:}}
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=1.8\hsize}L >{\hsize=0.7\hsize}C >{\hsize=0.5\hsize}C >{\hsize=0.5\hsize}C >{\hsize=0.5\hsize}C @{}}
+        \textbf{Soort wet} & \textbf{Bewerking} & \textbf{Neutraal} & \textbf{Sym$(x)$} & \textbf{Iteratie} \\
+        \hline
+        \textbf{Additief} (associatief + commutatief) & $x+y$ & 0 & $-x$ & $nx$ \\
+        \thinrule
+        \textbf{Multiplicatief} (associatief, niet noodzakelijk commutatief) & $xy$ & 1 & $x^{-1}$ & $x^n$ \\
+        \hline
+    \end{tabularx}
+\end{center}
 
+\SimpleHeading{Distrubitiviteit}
+
+$\top_1$ is links-distrubitief over $\top_2$: $\quad x\; \top_1\; (y\; \top_2\; z) = (x\; \top_1\; y)\; \top_2\; (x\; \top_1\; z)$
+
+\textbf{\underbar{Voorbeeld:}} In $\mathbb{R}$ is \inlinetext{$\cdot$} links-distrubitief over \inlinetext{$+$}: $\quad x(y+z) = xy + xz$
+
+\SimpleHeading{Uitwendinge samenstellingswet}
+
+Herinner \Cref{def:inwendige_samenstellingswet}: een \textbf{inwendige samenstellingswet} op een verzameling $A$ is een bewerking die 2 elementen van $A$ neemt en opnieuw een element van $A$ geeft.
+\begin{equation*}
+    \top : A \times A \to A
+\end{equation*}
+of concreet:
+\begin{equation*}
+    (x,y) \mapsto x\; \top\; y
+\end{equation*}
+\textbf{\underbar{Voorbeelden:}} 2 inwendige samenstellingswetten op $\mathbb{R}$:
+\begin{itemize}
+    \item 2 reële getallen optellen geeft opnieuw een reëel getal:
+    \begin{equation*}
+        + : \mathbb{R} \times \mathbb{R} \to \mathbb{R}
+    \end{equation*}
+    \item 2 reële getallen vermenigvuldigen geeft opnieuw een reëel getal:
+    \begin{equation*}
+        \cdot : \mathbb{R} \times \mathbb{R} \to \mathbb{R}
+    \end{equation*}
+\end{itemize}
+
+\begin{nicedefinition}*{Uitwendinge Samenstellingswet}
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{Uitwendinge samenstellingswet}} combineert één element uit een andere verzameling $\Omega$ met één element uit $A$.
+    \begin{equation*}
+        \begin{gathered}
+            \Omega \times A \to A \\
+            (\alpha, x) \mapsto \alpha \perp x
+        \end{gathered}
+    \end{equation*}
+    $\Omega$ noemt men het \textbf{operatorengebied}: de verzameling van dingen die "werken op" elementen van $A$.
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeeld:}} Neem
+\begin{equation*}
+    \Omega = \mathbb{R} \qquad \text{en} \qquad A = \mathbb{R}^2
+\end{equation*}
+Dan is:
+\begin{equation*}
+    \begin{gathered}
+        \mathbb{R} \times \mathbb{R}^2 \to \mathbb{R}^2 \\
+        (\alpha, (x,y)) \mapsto \alpha \cdot (x,y) = (\alpha x, \alpha y)
+    \end{gathered}
+\end{equation*}
+Bijvoorbeeld:
+\begin{equation*}
+    3 \cdot (2,5) = (6, 15)
+\end{equation*}
+Hier combineer je dus $3 \in \mathbb{R}$ met $(2,5) \in \mathbb{R}^2$ en het resultaat is opnieuw een element uit $\mathbb{R}^2$.
+
+\subsubsection{Verenigbaarheid en Quotiëntwetten}
+
+Dit is een belangrijk stuk. Stel dat je een equivalentierelatie $R$ hebt op een verzameling $A$. Dan deelt $R$ de verzameling $A$ op in equivalentieklassen. (\Cref{theorem:ER_naar_E_klassen}).
+
+Je wilt soms een bewerking $\top$ op $A$ gebruiken om een nieuwe bewerking op de equivalentieklassen te definieëren. Dus als je equivalentieklassen hebt:
+\begin{equation*}
+    \bar{x} \qquad \text{en} \qquad \bar{y},
+\end{equation*}
+dan wil je zeggen:
+\begin{equationbox}[NavyBlue]
+    \bar{x} \overline{\top} \bar{y} = \overline{x \top y}
+\end{equationbox}
+Maar dit mag alleen als het resultaat \inlinetext{niet afhangt van de gekozen representanten!}[Goldenrod!55]
+
+Want $\bar{x}$ en $\bar{y}$ kunnen meerdere representanten hebben. Stel je neemt
+\begin{equation*}
+    x'\in \bar{x} \qquad \text{en} \qquad y' \in \bar{y},
+\end{equation*}
+dan geldt automatisch:
+\begin{equation*}
+    \bar{x} = \bar{x}' \qquad \text{en} \qquad \bar{y} = \bar{y}'
+\end{equation*}
+Dan zou je ook kunnen rekenen met $x'$ en $y'$:
+\begin{equation*}
+    \overline{x'\;\top\;y'}
+\end{equation*}
+Opdat de bewerking op equivalentieklassen goed gedefinieerd is, moet je altijd hetvolgende resultaat krijgen:
+\begin{equation*}
+    \overline{x\;\top\;y} = \overline{x'\;\top\;y'}
+\end{equation*}
+Dit is wat \inlinetext{verenigbaarheid}[Goldenrod!55] garandeert.
+
+\SimpleHeading{Rechts-verenigbaar}
+
+\begin{nicedefinition}*[Rechts-verenigbaar]
+    \nextpart[]*
+    Zij $A$ een verzameling met inwendige samenstellingswet $\top$ en een equivalentierelatie $R$. Dan is $R$ \textcolor{PineGreen!75!black}{\textbf{rechts-verenigbaar}} met $\top$ als
+    \begin{equation*}
+        xRy \Rightarrow (x\;\top\;a)\;R\;(y\;\top\;a), \qquad \forall a \in A
+    \end{equation*}
+    In woorden: als $x$ en $y$ verenigbaar zijn, dan blijven ze equivalent wanneer je an de rechterkant met hetzelfde element $a$ combineert.
+\end{nicedefinition}
+
+Dus: 
+\begin{equation*}
+    x \sim y
+\end{equation*}
+impliceert:
+\begin{equation*}
+    x\;\top\;a \;\sim\; y\;\top\;a
+\end{equation*}
+\textbf{\underbar{Voorbeeld:}} Als 
+\begin{equation*}
+    x \equiv y \quad \text{mod } m
+\end{equation*}
+dan geldt ook:
+\begin{equation*}
+    x+a \equiv y+a \quad \text{mod } m
+\end{equation*}
+Dit noem je rechts-verenigbaarheid van \inlinetext{congruentie modulo $m$} met optelling.
+
+\SimpleHeading{Links-verenigbaar}
+
+Analoog geldt dan:
+\begin{nicedefinition}*[Links-verenigbaar]
+    \nextpart[]*
+    Zij $A$ een verzameling met inwendige samenstellingswet $\top$ en een equivalentierelatie $R$. Dan is $R$ \textcolor{PineGreen!75!black}{\textbf{links-verenigbaar}} met $\top$ als
+    \begin{equation*}
+        xRy \Rightarrow (a\;\top\;x) \;R\; (a\;\top\;y), \qquad \forall a \in A
+    \end{equation*}
+    In woorden: als $x$ en $y$ equivalent zijn, dan blijven ze equivalent wanneer je aan de linkerkant met hetzelfde element $a$ combineert.
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeeld:}} Bij optelling modulo $m$:
+\begin{equation*}
+    x \equiv y \quad \text{mod } m \Rightarrow a + x \equiv a + y \quad \text{mod } m
+\end{equation*}
+
+\SimpleHeading{Quotiëntwet}
+
+\begin{nicetheorem}*[Quotiëntwet]\label{theo:H2_quotientwet}
+    \nextpart[]*
+    Zij $A$ een verzameling, $\top$ een inwendige samenstellingswet voor $A$ en $R$ een equivalentierelatie voor $A$ die verenigbaar is met $\top$, dan is $\overline{\top}$ gedefinieerd in de quotiëntverzameling $A/R$ als
+    \begin{equation*}
+        \overline{\top} : A/R \times A/R \to A/R : (\bar{x}, \bar{y}) \mapsto \bar{x}\;\overline{\top}\;\bar{y} = \overline{x\;\top\;y}
+    \end{equation*}
+    een inwendige samenstellingswet voor $A/R$.
+\end{nicetheorem}
+
+De quotiëntverzameling is de verzameling van alle equivalentieklassen:
+\begin{equation*}
+    A/R = \{\bar{x} \mid x \in A\}
+\end{equation*}
+De nieuwe bewerking op equivalentieklassen wordt:
+\begin{equation*}
+    \bar{x}\;\overline{\top}\; \bar{y} = \overline{x\;\top\;y}
+\end{equation*}
+Of zoals in de cursustekst genoteerd:
+\begin{equation*}
+    R_x \;\overline{\top}\; R_y = R_{x \top y}
+\end{equation*}
+
+\begin{barbox}[SeaGreen][gray!5]
+    \textcolor{SeaGreen}{\textbf{Merk op:}} Je kan rekenen met representanten en de keuze van de representanten maakt niet uit!
+\end{barbox}
+
+\SimpleHeading{Motivatie: waarom is dit belangrijk}
+
+Omdat een klasse meerdere representanten heeft. Neem bijvoorbeeld modulo 5:
+\begin{equation*}
+    \bar{2} = \{\dots, -3, 2, 7, 12, \dots\}
+\end{equation*}
+Dus $\bar{2}$ kan worden voorgesteld door 2, maar ook door 7, 12, -3, enzovoort. Als je nu wil definiëren:
+\begin{equation*}
+    \bar{2} + \bar{3} = \overline{2+3} = \bar{5} = \bar{0}
+\end{equation*}
+dan moet dit hetzelfde resultaat geven als je andere representanten kiest. Bijvoorbeeld:
+\begin{equation*}
+    7 \in \bar{2} \qquad \text{en} \qquad 8 \in \bar{3}
+\end{equation*}
+Dan:
+\begin{equation*}
+    7+8=15 \qquad \text{en} \qquad \bar{15} = 0
+\end{equation*}
+Dus inderdaad:
+\begin{equation*}
+    \overline{2+3} = \overline{7+8}
+\end{equation*}
+$\longrightarrow$ optellen modulo 5 is dus goed gedefinieerd op equivalentieklassen.
+
+\textbf{\underbar{Voorbeeld: rekenen modulo $m$}}\newline
+Neem de equivalentierelatie:
+\begin{equation*}
+    a \sim b \Leftrightarrow a \equiv b \text{ mod } m
+\end{equation*}
+De equivalentieklassen zijn:
+\begin{equation*}
+    \bar{0}, \bar{1}, \bar{2}, \dots, \overline{m-1}
+\end{equation*}
+Definieër nu de optelling op deze equivalentieklassen door:
+\begin{equation*}
+    \bar{a} + \bar{b} = \overline{a + b}
+\end{equation*}
+Dit mag omdat we net hebben gezien dat volgens \Cref{theo:H2_quotientwet}, als $\top$ een inwendige samenstellingswet voor $A$ is en $R$ een equivalentierelatie voor $A$ die verenigbaar baar is met $\top$, dan is $\overline{\top}$ gedefinieerd in de quotiëntverzameling $A/R$ en is dit een inwendige samenstellingswet voor $A/R$.
+
+Bijvoorbeeld modulo 5:
+\begin{equation*}
+    \bar{3} + \bar{4} = \overline{3+4} = \bar{7} = \bar{2}
+\end{equation*}
+Dit mag, want congruentie modulo $m$ is verenigbaar met optelling.
+
+Ook vermenigvuldiging werkt:
+\begin{equation*}
+    \bar{a} \cdot \bar{b} = \overline{ab}
+\end{equation*}
+Bijvoorbeeld modulo 5:
+\begin{equation*}
+    \bar{3} \cdot \bar{4} = \bar{12} = \bar{2}
+\end{equation*}
+Ook dit is goed gedefinieerd, want congruentie modulo $m$ is verenigbaar met vermenigvuldiging.
+
+\textbf{\underbar{Voorbeeld:}} Gegeven het volgende stelsel:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+    2x_1 & - & 2x_2 & + & 3x_3 & = & 7 \pmod{5} \\
+     x_1 & + &  x_2 &   &      & = & 3 \pmod{5} \\
+    2x_1 & - &  x_2 & + & 2x_3 & = & 1 \pmod{5}
+\end{array}
+\right.
+\end{equation*}
+We lossen het op in $\mathbb{Z_5}$:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+    \bar{2}\bar{x}_1 & - & \bar{2}\bar{x}_2 & + & \bar{3}\bar{x}_3 & = & \bar{2} \\
+     \bar{x}_1 & + &  \bar{x}_2 &   &            & = & \bar{3} \\
+    \bar{2}\bar{x}_1 & - &  \bar{x}_2 & + & \bar{2}\bar{x}_3 & = & \bar{1}
+\end{array}
+\right.
+\end{equation*}
+Doe Gauss-eliminatie. Mer op dat je \textbf{niet kan delen}. Vermenigvuldig (1) met 3:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+     \bar{x}_1 & - &  \bar{x}_2 & +  & \bar{4}\bar{x}_3 & = & \bar{1} \\
+     \bar{x}_1 & + &  \bar{x}_2 &    &            & = & \bar{3} \\
+    \bar{2}\bar{x}_1 & - &  \bar{x}_2 & +  & \bar{2}\bar{x}_3 & = & \bar{1}
+\end{array}
+\right.
+\xLongrightarrow[(3) + \bar{3}(1)]{(2) + \bar{4}(1)}
+\left\{
+\begin{array}{rcrcrcl}
+     \bar{x}_1 & - & \bar{x}_2 & + & 4\bar{x}_3 & = & \bar{1} \\
+               & - & \bar{3}\bar{x}_2 & + & \bar{x}_3 & = & \bar{2} \\
+               & - & \bar{4}\bar{x}_2 & + & \bar{4}\bar{x}_3 & = & \bar{4}
+\end{array}
+\right.
+\end{equation*}
+Vermenigvuldig (2) met $\bar{2}$:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+     \bar{x}_1 & - & \bar{x}_2 & + & 4\bar{x}_3 & = & \bar{1} \\
+               & - & \bar{x}_2 & + & \bar{2}\bar{x}_3 & = & \bar{4} \\
+               & - & \bar{4}\bar{x}_2 & + & \bar{4}\bar{x}_3 & = & \bar{4}
+\end{array}
+\right.
+\xLongrightarrow{(3) + (2)}
+\left\{
+\begin{array}{rcrcrcl}
+     \bar{x}_1 & - & \bar{x}_2 & + & 4\bar{x}_3       & = & \bar{1} \\
+               & - & \bar{x}_2 & + & \bar{2}\bar{x}_3 & = & \bar{4} \\
+               &   &           &   & \bar{x}_3        & = & \bar{3}
+\end{array}
+\right.  
+\end{equation*}
+Dan vind je:
+\begin{equation*}
+    x_3 = 3 \pmod{5}, \qquad x_2 = 2 \pmod{5}, \qquad x_1 = 1 \pmod{5}     
+\end{equation*}
+
+\begin{barbox}[red!66][red!1]
+    \emoji{double-exclamation-mark} \textbf{Merk op:} $m$ is hier een priemgetal
+\end{barbox}
+
+Laten we nu eens hetzelfde doen voor $\mathbb{Z}_6$:
+
+\textbf{\underbar{Voorbeeld:}} Gegeven het volgende stelsel:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+    2x_1 & - & 2x_2 & + & 3x_3 & = & 7 \pmod{6} \\
+     x_1 & + &  x_2 &   &      & = & 3 \pmod{6} \\
+    2x_1 & - &  x_2 & + & 2x_3 & = & 1 \pmod{6}
+\end{array}
+\right.
+\end{equation*}
+We lossen het op in $\mathbb{Z_6}$:
+\begin{equation*}
+\left\{
+\begin{array}{rcrcrcl}
+    \bar{2}\bar{x}_1 & - & \bar{2}\bar{x}_2 & + & \bar{3}\bar{x}_3 & = & \bar{1} \\
+     \bar{x}_1       & + & \bar{x}_2 &      &            & = & \bar{3} \\
+    \bar{2}\bar{x}_1 & - & \bar{x}_2 & +    & \bar{2}\bar{x}_3 & = & \bar{1}
+\end{array}
+\right.
+\xLongrightarrow[(1) - \bar{2}(2)]{(1) - (3)}
+\left\{
+\begin{array}{rcrcrcl}
+    \bar{x}_1        & + & \bar{x}_2        & + &                  & = & \bar{3} \\
+                     & - & \bar{x}_2        & + & \bar{x}_3        & = & \bar{0} \\
+                     & - & \bar{4}\bar{x}_2 & + & \bar{3}\bar{x}_3 & = & \bar{1}
+\end{array}
+\right.
+\end{equation*}
+$(3) - \bar{3}(2)$ geeft $-\bar{x}_2 = \bar{1}$. Invullen in $(1)$ geeft $\bar{x}_1 = \bar{4}$. Invullen in $(3)$ geeft dan $\bar{3}\bar{x}_3 = \bar{3}$.
+\begin{barbox}[red!66][red!1]
+    \emoji{double-exclamation-mark} \textbf{Merk op:} $m$ De laatste vergelijking heeft 3 oplossingen voor $\bar{x}_3$: $\bar{1}$, $\bar{3}$ of $\bar{5}$. Als je ter controle de gevonden oplossingen invult zie je dat enkel $\bar{x}_3 = \bar{5}$ een echte oplossing is.
+
+    \vspace{0.25cm}
+
+    \emoji{double-exclamation-mark} 6 is niet priem! Dit resulteert in dingen zoals $\bar{2} \cdot \bar{3} = \bar{6} = \bar{0}$, hoewel $\bar{2} \neq \bar{0}$ en $\bar{3} \neq \bar{0}$. Dit zijn \textbf{\underbar{nuldelers}} en die zorgen voor problemen. De bewerkingen die we deden zorgden voor extra oplossingen. We zullen later zien dat dit komt doordat $\mathbb{Z}_6$ \textbf{\underbar{geen veld}} is. Er zijn geen inverse voor de vermenigvuldiging met $\bar{2}$ en $\bar{3}$ in $\mathbb{Z}_6$. Modulo een priemgetal heb je geen nuldelers en werkt alles netjes.
+\end{barbox}
 
 \subsection{Algebras}
 
+\begin{nicedefinition}*
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{algebra}} of \textcolor{PineGreen!75!black}{\textbf{algebraïsche structuur}} is een verzameling $A$ voorzien van een aantal inwendige en eventueel een aantal uitwendige wetten, elk met hun operatorengebied.
+    \begin{equation*}
+        \langle A,\ \top_1,\ \top_2, \dots,\ \perp_1,\ \perp_2, \dots \rangle
+    \end{equation*}
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeelden:}}
+\begin{itemize}
+    \item $\langle 2^U,\ \cup,\ \cap,\ '\rangle$ --- Booleaanse algebra 
+    \item $\langle \mathbb{Z},\ + \rangle$ --- een groep 
+    \item $\langle \mathbb{R},\ +,\ \cdot \rangle$ --- een veld (later) 
+\end{itemize}
+
+\begin{nicedefinition}*[Deelagebra]
+    \nextpart[]*
+    Een algebra $B$ is een deelalgebra van alebra $A$ als:
+    \begin{enumerate}
+        \item $B \subseteq A$
+        \item $B$ is uitgerust met dezelfde samenstellingswetten als $A$ en dezelfde operatorengebieden in geval van uitwendige samenstellingswetten 
+        \item $B$ is stabiel voor de samenstellingswetten van $A$. ($\forall x,y \in B: x * y \in B$)
+    \end{enumerate}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Quotiëntalgebra $A/R$]
+    \nextpart[]*
+    Zij $A$ een algebra en $R$ een equivalentierelatie verenigbaar met alle samenstellingswetten van $A$, dan noemt men de quotiëntverzameling $A/R$, voorzien van de quotiëntwetten de quotiëntalgebra van $A$ door $R$.
+\end{nicedefinition}
+
 \subsection{Morfismen}
 
+Dit is een belangrijk concept. Een morfisme is een afbeelding die de structuur bewaart.
+
+\begin{nicedefinition}*
+    \nextpart[]*
+    Twee algebras $A$ en $B$ noemt men \textcolor{PineGreen!75!black}{\textbf{homoloog}} als
+    \begin{enumerate}
+        \item met iedere inwendige samenstellingswet voor $A$ een inwendige samenstellingswet voor $B$ overeenkomt.
+        \item met iedere uitwendige samenstellingswet voor $A$ een uitwendige samenstellingswet voor $B$ overeenkomt.
+        \item de operatorengebieden voor $A$ dezelfde zijn als de operatorengebieden voor $B$.
+    \end{enumerate}
+\end{nicedefinition}
+
+Voor homologe algebras kan je dan nog een sterkere overeenkomts definiëren:
+
+\begin{nicedefinition}*[Homomorfisme]
+    \nextpart[]*
+    Zij $\langle A,\ \top,\dots,\ \perp,\dots \rangle$ en $\langle B,\ \underline{\top}, \dots,\ \underline{\perp}, \dots  \rangle$ twee \textbf{homologe algebras}. Een afbeelding $f : A \to B$ heet een \textcolor{PineGreen!75!black}{\textbf{homomorfisme}} \emph{asa} het beeld van een samenstelling in $A$ de overeenkomstige samenstelling is van de overeenkomstige beelden in $B$.
+
+    Dus als voor een inwendige wet geldt:
+    \begin{equation*}
+        f(x\ \top\ y) = f(x)\ \underline{\top}\ f(y)
+    \end{equation*}
+    en voor een uitwendige wet geldt:
+    \begin{equation*}
+        f(\alpha\ \perp\ z) = \alpha\ \underline{\perp}\ f(z)
+    \end{equation*}
+\end{nicedefinition}
+
+\textbf{Intuïtief} kan je dit zien als: "eerst combineren in $A$, dan afbeelden" geeft hetzelfde resultaat als "eerst afbeelden, dan combineren in $B$".
+
+\begin{center}
+\resizebox{0.99\textwidth}{!}{%
+    \input{figures/L3/homomorfisme.tex}
+}
+\end{center}
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.7\hsize}L >{\hsize=1.3\hsize}L @{}}
+        \textbf{Soort morfisme} & \textbf{Voorwaarde} \\
+        \hline
+        \textbf{Homomorfisme} & $f$ bewaart de samenstellingswetten \\
+        \thinrule
+        \inlinetext{\textbf{Isomorfisme}}[Goldenrod!55] & homomorfisme + bijectie \\
+        \thinrule
+        \textbf{Endomorfisme} & homomorfisme van $A$ naar zichzelf ($A \to A$) \\
+        \thinrule
+        \textbf{Automorfisme} & isomorfisme van $A$ naar zichzelf \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\SimpleHeading{Motivatie: Het belang van isomorfismen}
+
+Als $A$ en $B$ isomorf zijn, gedragen ze zich \textbf{algebraïsch identiek}. Elke stelling die je in $A$ bewijst geldt automatisch in $B$. Je bekijkt hetzelfde object in een ander jasje.
+
+\SimpleHeading{Voorbeelden}
+
+\textbf{\underbar{Voorbeeld:}}
+
+\textbf{\underbar{Voorbeeld:}}
+
+\textbf{\underbar{Voorbeeld:}}
+
+\tocdecorline{Hoofdstuk 3}
 \subsection{Monoïden en Groepen}
 
+\subsubsection{Halfgroepen en Monoïden}
 
+We klimmen langs een hiërarchie omhoog. Vergelijk:
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.7\hsize}L >{\hsize=1.3\hsize}L @{}}
+        \textbf{Structuur} & \textbf{Eigenschappen} \\
+        \hline
+        \textbf{Halfgroep} & $\top$ is overal bepaald + associatief \\
+        \thinrule
+        \inlinetext{\textbf{Monoïde}}[Goldenrod!55] & halfgroep + neutraal element \\
+        \thinrule
+        \textbf{Groep} & monoïde + elke $x$ is symmetriseerbaar \\
+        \thinrule
+        \textbf{Abelse groep} & groep + commutatief \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+Elke groep is een monoïde, elke monoïde is een halfgroep.
+
+\begin{equationbox}[NavyBlue]
+    \{\text{groepen}\} \subseteq \{\text{monoïden}\} \subseteq \{\text{halfgroep}\}
+\end{equationbox}
+
+\SimpleHeading{Halfgroep}
+
+\begin{nicedefinition}*[Halfgroep]
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{halfgroep}} is een algebra met een inwendige samenstellingswet die overal bepaald is en associatief is. Dus $\langle A,\ \top \rangle$ is een halfgroep \emph{asa}:
+    \begin{itemize}
+        \item H1: $\top$ is overal bepaald -- elk paar elementen uit $A$ moet je kunnen samenstellen, hieraan is automatisch voldaan want een inwendige samenstellingswet is een afbeelding $A \times A \to A$ (\Cref{def:inwendige_samenstellingswet})
+        \item H2: $\top$ is associatief $\to \qquad x\ \top\ (y\ \top\ z) = (x\ \top\ y)\ \top\ z$
+    \end{itemize}
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeeld:}} $\langle \mathbb{N}_0,\ + \rangle$ is een halfgroep. \inlinetext{$+$} is overal bepaald en associatief, maar $0$ is niet inbegrepen dus geen neutraal element aanwezig.
+
+\SimpleHeading{Monoïde}
+
+\begin{nicedefinition}*[Monoïde]
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{monoïde}} is een halfgroep met een neutraal element. Dus $\langle A,\ \top \rangle$ is een monoïde \emph{asa}:
+    \begin{itemize}
+        \item H1: $\top$ is overal bepaald
+        \item H2: $\top$ is associatief
+        \item \textcolor{Green}{M3:} $\exists e \in A : \forall x \in A : x\ \top\ e = e\ \top\ x = x$ -- (neutraal element)
+    \end{itemize}
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeelden:}}
+\begin{itemize}
+    \item $\langle \mathbb{N},\ + \rangle$ -- Dit is een monoide want de bewerking (optelling) is associatief en het neutraal element is $0 \in \mathbb{0}$.
+    \item $\langle \mathbb{N},\ \cdot \rangle$ -- Dit is een monoide want de bewerking (vermenigvuldiging) is associatief en het neutraal element is $1 \in \mathbb{N}$.
+    \item $\langle 2^U,\ \cup \rangle$ -- Hier is $2^U$ de machtsverzameling van $U$, dus de verzameling van alle deelverzameling van $U$. De bewerking is unie, deze is associatief:
+    \begin{equation*}
+        (A \cup B) \cup C = A \cup (B \cup C)
+    \end{equation*}
+    En het neutraal element is $\emptyset$ want $A \cup \emptyset = A$ en $\emptyset \cup A = A$. Dus het is een monoide.
+
+    \item $\langle 2^U,\ \cap$ -- De bewerking is de doorsnede, deze is associatief:
+    \begin{equation*}
+        (A \cap B) \cap C = A \cap (B \cap C)
+    \end{equation*}
+    Het neutraal element is $U$ want:
+    \begin{equation*}
+        A \cap U = A \qquad \text{ en } \qquad U \cap A = A
+    \end{equation*}
+    Dus het is een monoide.
+
+    \item Strings met concatenatie. Neem bijvoorbeeld de verzameling van alle strings over een alfabet, bijvoorbeeld:
+    \begin{equation*}
+        \{\text{alle woorden met letters } a,\ b,\ c,\ \dots\}
+    \end{equation*}
+    De bewerking is concatenatie, bijvoorbeeld:
+    \begin{equation*}
+        "\text{ab}" \cdot "\text{cd}" = "\text{abcd}"
+    \end{equation*}
+    Concatenatie is associatief:
+    \begin{equation*}
+        ("\text{ab}" \cdot "\text{cd}") \cdot "\text{ef}" = "\text{ab}" \cdot ("\text{cd}" \cdot "\text{ef"})
+    \end{equation*}
+    Het neutraal element is de lege string $\epsilon$, want:
+    \begin{equation*}
+        w\epsilon = w \qquad \text{en} \qquad \epsilon w = w
+    \end{equation*}
+    Dus de strings met concatenatie is een monoide.
+
+    \item $A^A$ met samenstellingswet $\circ$. Hier betekent:
+    \begin{equation*}
+        A^A = \{t \mid t : A \to A\}
+    \end{equation*}
+    Dus $A^A$ is de verzameking van alle functions van $A$ naar zichzelf. Zulke functies zijn transformaties van $A$. De bewerking is de samenstelling van functies:
+    \begin{equation*}
+        s \circ t
+    \end{equation*}
+    wat betekent:
+    \begin{equation*}
+        (s \circ t)(x) = s(t(x))
+    \end{equation*}
+    De samenstelling van functies is associatief want:
+    \begin{equation*}
+        (r \circ s) \circ t = r \circ (s \circ t)
+    \end{equation*}
+    Het neutraal element is de identieke functie:
+    \begin{equation*}
+        1_A : A \to A : 1_A(x) = x
+    \end{equation*}
+    want:
+    \begin{equation*}
+        t \circ 1_A = t \qquad \text{en} \qquad 1_A \circ t = t
+    \end{equation*}
+    Dus $\langle A^A,\ \circ \rangle$ is een monoide.
+\end{itemize}
+
+\textbf{\underbar{Voorbeeld:}} \newline
+Herneem terug $A^A = \{t \mid t : A \to A\}$, met nu
+\begin{equation*}
+    A = \{0,\ 1\}
+\end{equation*}
+Een transformatie $t : A \to A$ moet aan elk element van $A$ opnieuw een element van $A$ koppelen. Omdat $A$ twee elementen heeft, zijn er 4 mogelijke functies $A \to A$:
+\begin{equation*}
+    e,\ f,\ g,\ h
+\end{equation*}
+Deze worden gegeven door:
+\begin{equation*}
+    \begin{array}{c|cc}
+          & 0 & 1 \\
+        \hline  
+        e & 0 & 1 \\
+        f & 0 & 0 \\
+        g & 1 & 0 \\
+        h & 1 & 1  
+    \end{array}
+\end{equation*}
+Dus:
+
+$e$: de \textbf{identiteit} want
+\begin{equation*}
+    e(0) = 0 \qquad \text{en} \qquad e(1) = 1
+\end{equation*}
+Deze functie verandert niets.
+\begin{equation*}
+    e = 1_A
+\end{equation*}
+
+$f$: constante functie naar $0$
+\begin{equation*}
+    f(0) = 0 \qquad \text{en} \qquad f(1) = 0
+\end{equation*}
+
+$g$: verwisseling van $0$ en $1$
+\begin{equation*}
+    g(0) = 1 \qquad \text{en} \qquad g(1) = 0
+\end{equation*}
+
+$h$: constante functie naar $1$
+\begin{equation*}
+    h(0) = 1 \qquad \text{en} \qquad h(1) = 1
+\end{equation*}
+
+De bewerkingstabel (zie later \textbf{Cayley-tabel}) is dan:
+\begin{equation*}
+    \begin{array}{c|cccc}
+        \circ & e & f & g & h \\
+        \hline
+        e     & e & f & g & h  \\
+        f     & f & f & f & f \\
+        g     & g & h & e & f \\
+        h     & h & h & h & h 
+    \end{array}
+\end{equation*}
+want $(e \circ e)(x) = e(e(x))$ geeft:
+\begin{equation*}
+    e(e(0)) = 0 \qquad \text{en} \qquad e(e(1)) = 1 
+\end{equation*}
+dit is gewoon de functie $e$. Analoog vul je de rest in. Merk op dat $f$ en $h$ geen iverse hebben want $\nexists y : f \circ y = e$, dus dit is geen groep, maar wel een monoïde.
+
+\subsubsection{Groepen}
+
+\begin{nicedefinition}*[Groep]
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{groep}} is een monoïde waarvoor elk element symmetriseerbaar is. Dus $\langle A,\ * \rangle$ is een groep \emph{asa}:
+    \begin{itemize}
+        \item H1: $*$ is overal bepaald
+        \item H2: $x*(y*z) = (x*y)*z$ -- (associatief)
+        \item M3: $\exists e \in A : \forall x \in A : x * e = e * x = x$ -- (neutraal element)
+        \item \textcolor{Green}{G4}: $\forall x : \exists x^{-1} \in A : x * x^{-1} = x^{-1} * x = e$ -- (\textbf{symmetriseerbaar})
+    \end{itemize}
+\end{nicedefinition}
+
+\textbf{\underbar{Notatie:}} De \inlinetext{orde}[Goldenrod!55] van een groep $G$ is het aantal elementen in $G$ Dit noteer je als
+\begin{equationbox}[NavyBlue]
+    \#G
+\end{equationbox}
+
+
+
+TODO: herdefinieer morfismen voor groepen
+
+\begin{niceexercise}*
+    \nextpart[]*
+    kaas
+\end{niceexercise}
 
 
 

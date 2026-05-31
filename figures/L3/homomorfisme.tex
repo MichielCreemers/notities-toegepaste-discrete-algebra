@@ -1,0 +1,75 @@
+\begin{tikzpicture}[
+    >={Latex[length=2mm]},
+    line cap=round,
+    line join=round,
+    setA/.style={fill=blue!5, draw=blue!70, thick},
+    setB/.style={fill=red!5, draw=red!70, thick},
+    setS/.style={fill=purple!5, draw=purple!70, thick},
+    labelA/.style={text=blue!80!black, font=\large\bfseries},
+    labelB/.style={text=red!80!black, font=\large\bfseries},
+    labelS/.style={text=purple!80!black, font=\large\bfseries},
+    dot/.style={circle, fill=black, inner sep=1.25pt},
+    internal/.style={->, draw=black!45, thin, shorten <=2pt, shorten >=2pt},
+    map/.style={->, draw=black!60, thin, shorten <=2pt, shorten >=2pt},
+    mainmap/.style={->, draw=black!75, very thick, shorten <=2pt, shorten >=2pt},
+    lab/.style={font=\small, inner sep=1pt}
+]
+
+% Left Omega
+\draw[setS] (-5.4,-1.0) ellipse (0.65cm and 1.25cm);
+\node[labelS] at (-5.4,0.55) {$\Omega$};
+\node[dot,label={[lab]above:$\alpha$}] (aL) at (-5.4,-1.0) {};
+
+% Set A
+\draw[setA] (0,0) ellipse (2.3cm and 3.55cm);
+\node[labelA] at (0.45,3.75) {$A$};
+
+\node[dot,label={[lab]above:$x$}] (Ax) at (-0.75,1.35) {};
+\node[dot,label={[lab]above:$y$}] (Ay) at (0.45,1.75) {};
+\node[dot,label={[lab]below:$x\top y$}] (Axy) at (-0.20,-0.20) {};
+
+\draw[internal] (Ax) -- (Axy);
+\draw[internal] (Ay) -- (Axy);
+
+\node[dot,label={[lab]above:$z$}] (Az) at (-0.60,-1.75) {};
+\node[dot,label={[lab]below:$\alpha\perp z$}] (Aaz) at (-0.60,-2.90) {};
+
+\draw[internal] (Az) -- (Aaz);
+
+% Set B
+\draw[setB] (6.6,0) ellipse (2.3cm and 3.55cm);
+\node[labelB] at (7.05,3.75) {$B$};
+
+\node[dot,label={[lab]above:$f(y)$}] (Bfy) at (6.25,1.75) {};
+\node[dot,label={[lab]above:$f(x)$}] (Bfx) at (7.35,1.35) {};
+\node[dot,label={[lab]below:$f(x)\underline{\top} f(y)$}] (Bxy) at (6.85,-0.20) {};
+
+\draw[internal] (Bfy) -- (Bxy);
+\draw[internal] (Bfx) -- (Bxy);
+
+\node[dot,label={[lab]above:$f(z)$}] (Bfz) at (6.25,-1.75) {};
+\node[dot,label={[lab]below:$\alpha\underline{\perp} f(z)$}] (Baz) at (6.85,-2.90) {};
+
+\draw[internal] (Bfz) -- (Baz);
+
+% Right Omega
+\draw[setS] (11.6,-1.0) ellipse (0.65cm and 1.25cm);
+\node[labelS] at (11.6,0.55) {$\Omega$};
+\node[dot,label={[lab]above:$\alpha$}] (aR) at (11.6,-1.0) {};
+
+% Omega arrows
+\draw[map] (aL) -- (Aaz);
+\draw[map] (aR) -- (Baz);
+
+% f : A -> B
+\draw[mainmap] (2.45,0) -- (4.10,0)
+    node[midway,below=3pt,lab] {$f$};
+
+% Element maps
+\draw[map] (Ay) -- (Bfy);
+\draw[map] (Ax) -- (Bfx);
+\draw[map] (Axy) -- (Bxy);
+\draw[map] (Az) -- (Bfz);
+\draw[map] (Aaz) -- (Baz);
+
+\end{tikzpicture}

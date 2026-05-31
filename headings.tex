@@ -148,6 +148,58 @@
 }
 \makeatother
 
+% --- Decorative ToC-only divider line ---
+\makeatletter
+
+% How the custom line looks inside the ToC
+\newcommand{\tocdecorlineentry}[1]{%
+  \par\addvspace{0.8em}%
+  \noindent
+  \begin{tcolorbox}[
+    colback=\SubsectionBackColor,
+    colframe=\SubsectionFrameColor,
+    coltext=\SubsectionTextColor,
+    boxrule=0.5pt,
+    sharp corners,
+    rounded corners,
+    arc=\HeadingCornerRadius,
+    left=6pt,
+    right=6pt,
+    top=3pt,
+    bottom=3pt,
+    width=\linewidth,
+    nobeforeafter
+  ]
+    \centering\small\bfseries #1
+  \end{tcolorbox}%
+  \par\addvspace{0.5em}%
+}
+
+% Main command:
+%   \tocdecorline{...}  = only decorative line, no hyperlink
+%   \tocdecorline*{...} = decorative line with hyperlink to this position
+\newcommand{\tocdecorline}{%
+  \@ifstar{\tocdecorline@star}{\tocdecorline@plain}%
+}
+
+% Non-clickable version
+\newcommand{\tocdecorline@plain}[1]{%
+  \addtocontents{toc}{\protect\tocdecorlineentry{#1}}%
+}
+
+% Clickable version
+\newcommand{\tocdecorline@star}[1]{%
+  \phantomsection
+  \addcontentsline{toc}{tocdecor}{#1}%
+}
+
+% Formatting for the clickable ToC entry type
+\newcommand*\l@tocdecor[2]{%
+  \tocdecorlineentry{#1}%
+}
+
+\makeatother
+
 % Custom `SimpleHeading`
 
 % ---- Public style hook for the simple text heading ----
