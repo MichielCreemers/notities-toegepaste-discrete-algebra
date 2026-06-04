@@ -1,12 +1,8 @@
-
-\documentclass[11pt, oneside, parskip=half]{scrartcl} % MUST BE FIRST
+\documentclass[11pt, oneside, parskip=half]{scrartcl} 
 
 % ---------- Base setup ----------
-% Load packages and base settings first
 \input{preamble}
-% Then load custom macros (depends on preamble packages)
 \input{macros}
-% Then load box definitions (depends on preamble packages like tcolorbox)
 
 % ---------- Language toggle ----------
 % Choose exactly one:
@@ -63,9 +59,7 @@
 \fi
 
 \input{boxes}
-% Load custom environments
 \input{environments.tex}
-% Finally load heading styles (depends on preamble, boxes)
 \input{headings}
 
 \makeatletter
@@ -187,6 +181,12 @@
 
 \newpage
 \input{chapters/L4.tex}
+
+\newpage
+\input{chapters/L5.tex}
+
+\newpage
+\input{chapters/L6.tex}
 
 % ---------- References ----------
 %\printbibliography % Requires refs.bib and Biber run
