@@ -1,0 +1,619 @@
+\tocdecorline{Hoofdstuk 4 -- Ringen en velden}
+\section{Les 5 -- ringen, idealen, algoritme van Euclides}
+
+\subsection{Ringen}
+
+\SimpleHeading{Waarom ringen?}
+
+In een groep heb je maar één bewerking. Maar bij gewone getallen heb je er twee: optellen én vermenigvuldigen, en je wil de \textbf{interactie} tussen die twee vatten (denk aan: distrubitiviteit of "deeltal = deler $\times$ quotiënt $+$ rest"). Een groep is daar te eenvoudig voor. Daarom: een \textbf{ring} = een verzameling met twee bewerkingen die de minimale eigenschappen hebben die je van $+$ en $\cdot$ verwacht. Een \textbf{veld} is een bijzonder mooie ring waarin je door elk element $\neq 0$ kunt delen.
+
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{De grote rode draad van dit hoofdtuk:}} we bouwen de hele deelbaarheidstheorie (delers, ggd, priemgetallen, factorisatie) op vanuit ringen, zodat ze niet alleen voor $\mathbb{Z}$ werkt maar ook voor veeltermen, matrices, restklassen, enz.
+\end{barbox}
+
+\subsubsection{Definities}
+
+\begin{nicedefinition}*[Ring]
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{ring}} $\langle A, +, \cdot \rangle$ is een verzameling $A$ uitgerust met afbeeldingen
+    \begin{itemize}
+        \item[] $A \times A \to A : (a,b) \mapsto a+b$
+        \item[] $A \times A \to A : (a,b) \mapsto a\cdot b$
+    \end{itemize}
+    Die aan de volgende eigenschappen voldoet:
+    \begin{enumerate}
+        \item $\langle A,+ \rangle$ is een commutatieve groep (= abelse groep)
+        \item \inlinetext{$\cdot$} is associatief
+        \item \inlinetext{$\cdot$} is distributief t.o.v. \inlinetext{+}, d.w.z. 
+        \begin{equation*}
+            \begin{aligned}
+                \forall a,b,c \in A : &\; a\cdot(b+c) = ab +ac \\
+                &\;(b+c)\cdot a = ba + ca
+            \end{aligned}
+        \end{equation*}
+    \end{enumerate}
+\end{nicedefinition}
+
+Een \textbf{ring} $\langle A, +, \cdot \rangle$ is dus een abelse groep onder \inlinetext{$+$}, plus een tweede bewerking \inlinetext{$\cdot$} die associatief en distributief is. Concreet:
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.4\hsize}L >{\hsize=1.6\hsize}L @{}}
+        \textbf{Axioma} & \textbf{Eigenshap (van $+$)} \\
+        \hline
+        \textbf{R1} & $+$ is overal bepaald  \\
+        \thinrule
+        \textbf{R2} & $+$ is associatief  \\
+        \thinrule
+        \textbf{R3} & $+$ is commutatief  \\
+        \thinrule
+        \textbf{R4} & 0-element bestaat \\
+        \thinrule
+        \textbf{R5} & elk element heeft een tegengestelde $-a$ \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.4\hsize}L >{\hsize=1.6\hsize}L @{}}
+        \textbf{Axioma} & \textbf{Eigenshap (van $\cdot$)} \\
+        \hline
+        \textbf{R6} & $\cdot$ is overal bepaald  \\
+        \thinrule
+        \textbf{R7} & $\cdot$ is associatief  \\
+        \thinrule
+        \textbf{R8} & links-distrubitief: $a(b+c) = ab+ac$  \\
+        \thinrule
+        \textbf{R9} & rechts-distributief: $(b+c)a = ba + ca$ \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+Daarbovenop kunnen extra eigenschappen gelden:
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.7\hsize}L >{\hsize=1.3\hsize}L @{}}
+        \textbf{Extra axioma} & \textbf{Naam} \\
+        \hline
+        \textbf{R10}: $ab = ba$ & \textbf{commutatieve} ring  \\
+        \thinrule
+        \textbf{R11}: eenheidselement 1 bestaat & ring \textbf{met eenheidselement}: $\exists 1 : \forall a \in A : a \cdot 1 = 1 \cdot a = a$  \\
+        \thinrule
+        \textbf{R12}: elke $\neq 0$ inverteerbaar & (samen met R11:) \textbf{lichaam} / scheef veld  \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\begin{barbox}[PineGreen][gray!3]
+    \textbf{\underbar{Merk op:}} Het 0-element kan nooit inverteerbaar zijn voor \inlinetext{$\cdot$} want $a\cdot 0 = 0$ voor alle $a$. Daarom kan je nooit een groep maken onder $\cdot$ over de hele ring -- hooguit over de elementen $\neq 0$!
+\end{barbox}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44] Stel $0$ is inverteerbaar, dan geldt:
+\begin{equation*}
+    \exists 0^{-1} : 0 \cdot 0^{-1} = 0^{-1} \cdot 0 = 1
+\end{equation*}
+Maar dan zou gelden dat $\forall a \in A: a = 0$! Want
+\begin{equation*}
+    \begin{aligned}
+        a \cdot 0 &= a \cdot (0+0) \\
+                  &= a \cdot 0 + a \cdot 0 \\
+        &\Downarrow \textcolor{Green}{ \text{ieder element inverteerbaar voor optelling}} \\
+        a \cdot 0 \textcolor{Green}{ - a \cdot 0} &= a \cdot 0 + a \cdot 0 \textcolor{Green}{- a \cdot 0} \\
+        &\Downarrow \\
+        a \cdot 0 &= 0 \qquad \forall a
+    \end{aligned}
+\end{equation*}
+Dus i.h.b. ook voor $0^{-1} \cdot 0 = 0$ MAAR we hebben aangenomen dat $0 \cdot 0^{-1} = 1$!
+
+De volledige hiërarchie:
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.7\hsize}L >{\hsize=1.3\hsize}L @{}}
+        \textbf{Structuur} & \textbf{Axioma's} \\
+        \hline
+        \textbf{Ring} & R1-R9  \\
+        \thinrule
+        \textbf{Commutatieve ring} & R1-R10  \\
+        \thinrule
+        \textbf{Ring met eenheidselement} & R1-R9, R11  \\
+        \thinrule
+        \textbf{Lichaam} (Scheef veld) & R1-R9, R11, R12  \\
+        \thinrule
+        \textbf{Veld} & R1-R12 (= commutatief lichaam)  \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\subsubsection{Voorbeelden, nuldelers en deelringen}
+
+\SimpleHeading{Voorbeelden}
+
+\begin{itemize}
+    \item $\langle \mathbb{Z}, +, \cdot \rangle$: commutatieve ring met eenheidselement, maar geen veld (bv. 2 heeft geen inverse in $\mathbb{Z}$).
+    \item $\langle \mathbb{Q}, +, \cdot \rangle$: een veld
+    \item $n \times n$-matrices met matrix-optelling en -vermenigvuldiging: het is een niet-commutatieve ring met eenheidselement (de eenheidsmatrix). Niet elke matrix $\neq0$ is inverteerbaar $\Rightarrow$ geen lichaam.
+    \item $\langle \mathbb{N}, +, \cdot \rangle$: geen ring (geen tegengestelde elementen, dus zelfs geen groep onder $+$).
+    \item $\langle 2^X, \triangle, \cap \rangle$ (machtsverzameling met symmetrisch vershil en doorsnede): commutatieve ring met 0-element $\varnothing$ en eenheidselement $X$. Geen lichaam.
+    \item $\langle n\mathbb{Z}, +, \cdot \rangle$ met $n \ge 2$: commutatieve ring, geen eenheidselement want $1 \notin n\mathbb{Z}$.
+    \item $\langle \mathbb{Z}_m, +, \cdot \rangle$ voor $m \ge 2$: commutatieve ring met eenheidselement.
+    \item $\langle R[x], +, \cdot \rangle$ is een commutatieve ring. 
+\end{itemize}
+
+$R[x] = \{\text{veeltermen } a_nx^n + \dots + a_1x^1 + a_0 \mid n \in \mathbb{N},\ a_i \in \mathbb{R}\}$
+
+\begin{nicedefinition}*[Nuldelers]
+    \nextpart[]*
+    Als $ab=0$ terwijl $a\neq0$ én $b\neq0$, dan noemt men $a$ een \textcolor{PineGreen!75!black}{\textbf{linkse nuldeler}} en $b$ een \textcolor{PineGreen!75!black}{\textbf{rechtse nuldeler}}.
+
+    $\to$ in een commutatieve context laat je links/rechts weg.
+\end{nicedefinition}
+
+\textbf{\underbar{Voorbeeld:}} In $\langle \mathbb{Z}_6,+,\cdot \rangle$: $\bar{2}\cdot \bar{3} = \bar{6} = \bar{0}$, terwijl $\bar{2} \neq \bar{0}$ en $\bar{3} \neq \bar{0}$. Dus $\bar{2}$ en $\bar{3}$ zijn nuldelers.
+
+Ook bij matrices:
+\begin{equation*}
+    \begin{psmallmatrix}1&0\\0&0\end{psmallmatrix}\begin{psmallmatrix}0&0\\0&1\end{psmallmatrix} = \begin{psmallmatrix}0&0\\0&0\end{psmallmatrix}
+\end{equation*}
+
+\begin{barbox}[PineGreen][gray!3]
+    Optellen schrappen mag altijd: $a+c = B+c \Rightarrow a=b$ (want $\langle A,+ \rangle$ is een groep). Maar \textbf{vermenigvuldigen} schrappen mag niet zomaar: uit $ac = bc$ volgt niet noodzakelijk $a=b$. Voorbeeld in $\mathbb{Z}_6$: $\bar{2} \cdot \bar{1} = \bar{2}$ en $\bar{2} \cdot \bar{4} = \bar{8} = \bar{2}$, dus $\bar{2} \cdot \bar{1} = \bar{2} \cdot \bar{4}$, maar $\bar{1} \neq \bar{4}$. De boosdoener is nuldeler $\bar{2}$.
+\end{barbox}
+
+\begin{nicedefinition}*[Deelring]
+    \nextpart[]*
+    Een deelagebra van een ring die zelf een ring is heet een deelring.
+    Dus $B \subseteq A$ is een \textcolor{PineGreen!75!black}{\textbf{deelring}} $\iff$
+    \begin{itemize}
+        \item[] $B \neq \varnothing$
+        \item[] $a,b \in B \implies (a-b \in B \;\&\; ab \in B)$
+    \end{itemize}
+\end{nicedefinition}
+
+\textbf{\underbar{Merk op:}} Deze voorwaarden zijn nodig en voldoende. Omdat $B$ een deelverzameling is van een al bestaande ring $A$, erft $B$ automatisch een heleboel eigenschappen zoals associativiteit, commutativiteit van de optelling en distributieve wetten, want deze gelden al in $A$. 
+\begin{itemize}
+    \item[$\rightarrow$] $a,b \in B \implies a-b \in B$: Omdat $B$ een groep moet zijn onder de optelling, moet elk element $b$ een inverse $-b$ hebben, en moet de optelling gesloten zijn. Dus als $a$ en $b$ erin zitten, moet $a + (-b) = a - b$ er ook in zitten.
+\end{itemize}
+
+\begin{nicedefinition}*[Ring-homomorfismen]
+    \nextpart[]*
+    Een \textcolor{PineGreen!75!black}{\textbf{homomorfisme}} tussen $\langle A, \textcolor{Green}{+_A, \cdot_A}\rangle$ en $\langle B, \textcolor{Red}{+_B, \cdot_B}\rangle$ is een afbeelding die beide bewerkingen bewaart.
+    \begin{equation*}
+        \varphi : A \to B
+    \end{equation*}
+    zodat $\varphi$ compatibel is met de bewerkingen, d.w.z. $\forall x,y \in A$:
+    \begin{equation*}
+        \begin{cases}
+             \varphi(x\; \textcolor{Green}{+_A}\; y) = \varphi(x)\; \textcolor{Red}{+_B}\; \varphi(y) \\ 
+             \varphi(x\; \textcolor{Green}{\cdot_A}\; y) = \varphi(x)\; \textcolor{Red}{\cdot_B}\; \varphi(y) \\
+        \end{cases}
+    \end{equation*}
+\end{nicedefinition}
+
+\subsubsection{Integriteitsring -- een ring zonder nuldelers}
+
+We weten al dat een veld nooit nuldelers zal hebben want axioma R12 zegt dat elke $\neq0$ inverteerbaar is. Maar je kan ook een ring hebben \textbf{zonder nuldelers} waarin de elementen toch niet inverteerbaar zijn -- denk aan $\mathbb{Z}$ (niet elk element inverteerbaar, maar ook geen nuldelers). Zulke ringen zijn extra aangenaam om mee te werken.
+
+\begin{nicedefinition}*[Integriteits-ring en -domein]
+    \nextpart[]*
+    \begin{center}
+        \renewcommand{\arraystretch}{1.5}
+        \arrayrulecolor{black}
+        %\setlength{\arrayrulewidth}{1pt}
+        \begin{tabularx}{\linewidth}{@{} >{\hsize=0.6\hsize}L >{\hsize=1.4\hsize}L @{}}
+            \textbf{Begrip} & \textbf{Definitie} \\
+            \hline
+            \textcolor{PineGreen}{\textbf{Integriteits-ring}} & commutatieve ring \textbf{zonder nuldelers}\\
+            \thinrule
+            \textcolor{PineGreen}{\textbf{Integriteits-domein}} & integriteitsring \textbf{met eenheidselement}\\
+            \hline
+        \end{tabularx}
+    \end{center}
+\end{nicedefinition}
+
+We voeren een nieuw axioma in als voorwaarde opdat er geen nuldelers zijn:
+\begin{center}
+    \textbf{R13: }$\quad ab = 0 \implies a = 0 \lor b = 0$
+\end{center}
+\textbf{\underbar{Merk op:}} $R12 \implies R13$. Dus \textbf{elk veld / lichaam heeft geen nuldelers}. De hiërarchie wordt dan:
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.7\hsize}L >{\hsize=1.3\hsize}L @{}}
+        \textbf{Structuur} & \textbf{Axioma's} \\
+        \hline
+        \textbf{Integriteitsring} & R1-R10 en R13 (R12 niet perse nodig) \\
+        \thinrule
+        \textbf{Integriteitsdomein} & R1-R11 en R13 (R12 niet perse nodig)  \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\newpage
+\begin{nicetheorem}*[Geen nuldelers $\implies$ schrappen mag]
+    In een integriteitsring is \textbf{elk element $\neq$ 0 regulier} voor de vermenigvuldiging. Je mag dus schrappen \textbf{zonder} dat het daarom inverteerbaar hoeft te zijn.
+    \nextpart[Bewijs.] Stel:
+        \begin{align*}
+            ax &= ay \\
+            &\Downarrow \textcolor{Green}{\text{ voor optelling heb je de tegengestelde}} \\
+            ax - ay &= 0 \\
+            &\Downarrow \textcolor{Green}{\text{ distrubitiviteit vermenigvuldiging tov. de optelling}} \\
+            a(x-y) &= 0 \\
+            &\Downarrow \textcolor{Green}{\;a\neq 0} \\
+            x-y &= 0 \\
+            &\Downarrow \\
+            x&=y \qedtag
+        \end{align*}
+\end{nicetheorem}
+
+\begin{nicenote}*[Veld vs Integriteitsdomein]
+    \nextpart[]*
+    Het fundamentele verschil tussen een \textbf{integriteitsdomein} en een \textbf{veld} (lichaam) zit in de aanwezigheid van multiplicatieve inversen. In beide structuren mag je de \textit{schrappingswet} ($ca = cb \implies a = b$ voor $c \neq 0$) toepassen, maar de \textbf{manier waarop} dit gebeurt is wezenlijk anders:
+
+    \begin{itemize}
+        \item \textbf{In een Veld (bvb. $\mathbb{Q}, \mathbb{R}$):} Elk element $c \neq 0$ heeft een \textbf{inverse} $c^{-1}$. Je schrapt $c$ door er \textit{actief door te delen}:
+        $$ ca = cb \implies c^{-1}(ca) = c^{-1}(cb) \implies 1 \cdot a = 1 \cdot b \implies a = b $$
+        
+        \item \textbf{In een Integriteitsdomein (bvb. $\mathbb{Z}$):} Elementen hebben over het algemeen \textit{geen} inverse (bvb. $5^{-1} = \frac{1}{5} \notin \mathbb{Z}$). Je schrapt $c$ hier niet door te delen, maar op basis van \textbf{logica en de afwezigheid van nuldelers}:
+        $$ ca = cb \implies ca - cb = 0 \implies c(a - b) = 0 $$
+        Omdat er geen nuldelers zijn en $c \neq 0$, \textit{moet} de factor $(a-b)$ wel $0$ zijn. Dit dwingt af dat $a = b$.
+    \end{itemize}
+
+    \textbf{Conclusie:} Elk element $\neq 0$ is in beide structuren \textit{regulier} (schrapbaar). Een veld doet dit via een \textit{aanwezig instrument} (de inverse), een integriteitsdomein doet dit via een \textit{passieve garantie} (geen nuldelers). 
+    $$\text{Veld} \implies \text{Integriteitsdomein} \quad (\text{maar } \mathbb{Z} \text{ bewijst dat de omgekeerde pijl niet geldt!})$$
+\end{nicenote}
+
+\textbf{\underbar{Voorbeeld:}} $\langle \mathbb{Z}_m, +, \cdot \rangle$ is een quotiëntring (van $\mathbb{Z}$ modulo $m$), commutatief en met eenheidselement $\bar{1}$. Maar:
+\begin{equation*}
+    \mathbb{Z}_m \text{ geeft géén nuldelers} \iff m \text{ m is priem}
+\end{equation*}
+Want als $m$ geen priemgetal is, kun je $m$ opsplitsen in twee kleinere getallen $r$ en $s$ (die allebei groter zijn dan $1$). Omdat deze getallen kleiner zijn dan $m$, zijn hun restklassen $\bar{r}$ en $\bar{s}$ in $\mathbb{Z}_m$ niet nul. Maar hun product is $\bar{r} \cdot \bar{s} = \bar{m} = \bar{0}$, wat betekent dat het nuldelers zijn.
+
+\subsection{Idealen -- "normaaldelers" van ringen}
+
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{Het parallel om te onthouden:}} wat normaaldelers zijn voor groepen, dat zijn idealen voor ringen. Het is de juiste deelstructuur om een quotiënt mee te bouwen.
+\end{barbox}
+
+Dit is exact hetzelfde probleem als bij quotiëntgroepen, maar nu wil je niet alleen \textbf{optellen met restklassen}, maar ook \textbf{vermenigvuldigen met restklassen}. De kernvraag is:
+\begin{center}
+    Wanneer kunnen we van $A/I$ opnieuw een ring maken?
+\end{center}
+Daarvoor zal $I$ een ideaal moeten zijn.
+
+\subsubsection{Ideaal}
+
+\SimpleHeading{Startpunt: een ring $A$}
+
+Stel $A$ is een ring, dan heb je twee bewerkingen: \inlinetext{+} en \inlinetext{$\cdot$}. Bijvoorbeeld: $A = \mathbb{Z}$.
+
+Uit de definitie van een ring weten we al dat een ring steeds onder de optelling een abelse groep heeft:
+\begin{equation*}
+    \langle A,+ \rangle
+\end{equation*}
+En dan weten we ook dat als $I$ een deelgroep is van $\langle A,+ \rangle$, dan kan je al optellen met nevenklassen.
+\begin{equation*}
+    A/I = \{a + I \mid a \in A\}
+\end{equation*}
+Omdat optelling in een ring commutatief is, is elke additieve deelgroep automatisch normaal. Dus de optelling op $A/I$ is goed gedefinieerd:
+\begin{equation*}
+    (a_1 + I) + (a_2 + I) = (a_1 + a_2) + I
+\end{equation*}
+Tot hier is er geen probleem.
+
+\SimpleHeading{Probleem: de vermenigvuldiging}
+
+We willen nu ook definiëren:
+\begin{equation*}
+    (a_1 + I) \cdot (a_2 + I) = a_1a_2 + I
+\end{equation*}
+Dit lijkt natuurlijk: vermenigvuldig de representanten en neem daarna de klasse.
+
+\emoji{double-exclamation-mark} MAAR: een klasse heeft meerdere representanten \emoji{double-exclamation-mark}
+
+In plaats van $a_1$ en $a_2$ mag je ook nemen:
+\begin{equation*}
+    a_1 + i_1 \qquad \text{en} \qquad a_2 + i_2 \qquad \text{met } i_1,i_2 \in I
+\end{equation*}
+Dus de vermenigvuldiging zou ook kunnen geven:
+\begin{equation*}
+    (a_1 + i_1)(a_2 + i_2)
+\end{equation*}
+We willen dat dit in dezelfde klasse zit als $a_1a_2$, dus we willen:
+\begin{equation*}
+    (a_1 + i_1)(a_2 + i_2) + I = a_1a_2 + I
+\end{equation*}
+Wat equivalent is met:
+\begin{equation*}
+    (a_1 + i_1)(a_2 + i_2) - a_1a_2 \in I
+\end{equation*}
+
+Dit werken we nu verder uit:
+\begin{equation*}
+    \begin{aligned}
+        (a_1 + i_1)(a_2 + i_2) &= a_1a_2 + a_1i_2 + i_1a_2 + i_1i_2 \\
+        &\Downarrow \\
+        (a_1 + i_1)(a_2 + i_2) - a_1a_2 &= \underbrace{a_1i_2 + i_1a_2 + i_1i_2}_{\in I ?}
+    \end{aligned}
+\end{equation*}
+We willen dus dat:
+\begin{equation*}
+    a_1i_2 + i_1a_2 + i_1i_2 \in I
+\end{equation*}
+Omdat $I$ een additieve deelgroep is, is het genoeg dat elk van deze termen in $I$ zit:
+\begin{equation*}
+    \begin{aligned}
+        a_1i_2 &\in I,\\
+        i_1a_2 &\in I,\\
+        i_1i_2 &\in I
+    \end{aligned}
+\end{equation*}
+De term $i_1i_2 \in I$ volgt eigenlijk al als $I$ stabiel is onder vermenigvuldiging met willekeurige elementen uit $A$, want $i_1 \in I$ en $i_2 \in I$. Maar de belangrijke voorwaarden zijn:
+\begin{equation*}
+    a \cdot i \in I \qquad \forall a \in A, i \in I,
+\end{equation*}
+en
+\begin{equation*}
+    i \cdot a \in I \qquad \forall a \in A, i \in I.
+\end{equation*}
+\emoji{right-arrow} Dat is nu precies de definitie van een \inlinetext{ideaal}[Goldenrod!44] 
+
+\SimpleHeading{Definitie van een ideaal}
+
+\begin{nicedefinition}*[Ideaal]
+    \nextpart[]*
+    Zij $\langle A, +, \cdot \rangle$ een ring. Een deelverzameling $I \subseteq A$ is een \textcolor{PineGreen!75!black}{\textbf{ideaal}} als:
+    \begin{enumerate}
+        \item $I$ is een deelgroep van $\langle A, + \rangle$
+        \item $I$ absorbeert vermenigvuldiging met elementen uit $A$:
+        \begin{itemize}
+            \item[] $ai \in A \qquad \forall a \in A, i \in I$
+            \item[] $ia \in A \qquad \forall a \in A, i \in I$
+        \end{itemize}
+    \end{enumerate}
+\end{nicedefinition}
+
+\textbf{\underbar{Merk op:}} In een commutatieve ring hoef je links en rechts niet apart te zeggen, want:
+\begin{equation*}
+    ai = ia
+\end{equation*}
+
+\SimpleHeading{Absorberen?}
+
+Zodra één facot in $I$ zit, valt het hele product terug in $I$. Dus:
+\begin{equation*}
+    i \in I, a \in A \implies ai \in I \text{ en } ia \in I
+\end{equation*}
+Je kan $I$ zien als een soort "nulachtige" verzameling: in de quotiëntring $A/I$ wordt alles in $I$ gelijk aan nul. Want:
+\begin{equation*}
+    i+I = 0+I \qquad \forall i \in I
+\end{equation*}
+Dus als $i \in I$, dan is $i$ nul modulo $I$.
+
+\SimpleHeading{Waarom zorgt ideaal voor goed gedefinieerde vermenigvuldiging?}
+
+Stel:
+\begin{equation*}
+    a_1 + I = a_1' + I \qquad \text{en} \qquad a_2 + I = a_2' + I
+\end{equation*}
+Dan bestaan er $i_1,i_2 \in I$ zodat:
+\begin{equation*}
+    a_1' = a_1 + i_1 \qquad \text{en} \qquad a_2' = a_2 + i_2
+\end{equation*}
+Dan:
+\begin{equation*}
+    a_1'a_2' = (a_1 + i_1)(a_2 + i_2) = a_1a_2 a_1i_2 + i_1a_2 + i_1i_2
+\end{equation*}
+Maar omdat $I$ nu een ideaal is geldt:
+\begin{equation*}
+    \begin{gathered}
+        a_1i_1 \in I,\\
+        i_1a_2 \in I,\\
+        i_1i_2 \in I
+    \end{gathered}
+\end{equation*}
+En omdat $I$ ook een additieve deelgroep is, is de som ook in $I$:
+\begin{equation*}
+    a_1i_2 + i_1a_2 + i_1i_2 \in I
+\end{equation*}
+Dus:
+\begin{equation*}
+    a_1'a_2' - a_1a_2 \in I
+\end{equation*}
+Daarom:
+\begin{equation*}
+    a_1'a_2' + I = a_1a_2 + I
+\end{equation*}
+\emoji{right-arrow} Dus het product hangt niet af van de gekozen representanten. De vermenigvuldiging is dus goed gedefinieerd.
+
+\begin{roundbox}[CornflowerBlue!10][RoyalPurple]
+    Ananlogie valkuil: zodra je een willekeurig element uit de hele ring ($a$) vermenigvuldigt met iets uit het ideaal ($i$), wordt het resultaat direct geabsorbeerd en wordt het óók een onderdeel van het ideaal. Vergelijk: in $\mathbb{Z}$is "even $\times$ om-het-even = even". De even getallen slokken op.
+\end{roundbox}
+
+\subsubsection{Quotiëntring}
+
+Omdat $\langle A, + \rangle$ abels is, is een ideaal automatisch een normaaldeler van de additieve groep. De nevenklassen noemen we nu \inlinetext{restklassen}[Goldenrod!44], en we vormen de \inlinetext{quotiëntring}[Goldenrod!44] $A/I$ met:
+\begin{equationbox}*[NavyBlue]
+    \bar{x} + \bar{y} = \overline{x+y} \qquad \text{en} \qquad \bar{x} \cdot \bar{y} = \overline{xy}
+\end{equationbox}
+Hieronder een overzicht.
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=1.6\hsize}L >{\hsize=0.7\hsize}L >{\hsize=0.7\hsize}L @{}}
+        \textbf{Vertreksituatie} & \textbf{Levert} & \textbf{Quotiënt} \\
+        \hline
+        Verzameling $A$ + equivalentierelatie $R$ & equivalentieklassen & $A/R$ \\
+        \thinrule
+        Groep $G$ + normaaldeler $H$ & nevenklassen & $G/H$ (quotiëntgroep) \\
+        \thinrule
+        Ring $A$ + ideaal $I$ & restklassen & $A/I$ (quotiëntring) \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\textbf{\underbar{Voorbeeld:}} In $\mathbb{Z}$ vormen de even getallen een ideaal $I$. Er zijn twee restklassen, namelijk $\bar{0} = 0 + I$ (even) en $\bar{1} = 1 + I$ (oneven). Dit is de nieuwe, kleinere wereld die je bouwt. Omdat elk getal in het universum óf even ($\bar{0}$) óf oneven ($\bar{1}$) is, heeft deze nieuwe wereld in totaal maar twee elementen:
+\begin{equation*}
+    I = \{\dots,\ -4,\ -2,\ 0,\ 2,\ 4,\ \dots\}
+\end{equation*}
+en de quotiëntring is dus:
+\begin{equation*}
+    \mathbb{Z}/I = \mathbb{Z}_2 = \{\bar{0},\ \bar{1} \}
+\end{equation*}
+
+\subsubsection{Ring-homomorfismen en de isomorfiestelling}
+
+\begin{barbox}[PineGreen][gray!3]
+    \textcolor{PineGreen}{\textbf{Herken het patroon:}} Dit is de exacte ring-theoretische tegenhanger van de eerste isomorfiestelling voor groepen. Alles verloopt volledig parallel!
+\end{barbox}
+
+Zij $\psi: R \to S$ een ring-homomorfisme. Dan gelden de volgende drie fundamentele eigenschappen:
+
+\begin{enumerate}
+    \item \textbf{De kern} $\ker\psi = \{r \in R \mid \psi(r) = 0_S\}$ is een \textbf{ideaal} van $R$.
+    \item \textbf{Het beeld} $\operatorname{Ran}\psi = \{\psi(r) \mid r \in R\}$ is een \textbf{deelring} van $S$.
+    \item \textbf{De Isomorfiestelling:} De quotiëntring modulo de kern is isomorf met het beeld:
+    \begin{equation*}
+        R/\ker\psi \;\cong\; \operatorname{Ran}\psi
+    \end{equation*}
+\end{enumerate}
+
+% idealen:
+% deelgroep I van A,+ (commutatief => automatisch normaaldeler??)
+% bijgevolg hebben we een goed gedefinieerde optelling op de verzameling:
+% \begin{equation*}
+%     A/I = \{a + I \mid a \in A\}
+% \end{equation*}
+% Wat nu met vermenigvuldiging G*H?
+
+% Je wil betekenis geven aan $(a_1 + I) \cdot (a_2 + I)$ op een ondubbelzinnige manier:
+% \begin{equation*}
+%     \begin{gathered}
+%         (a_1 + I) \cdot (a_2 + I) \\
+%         =? \\
+%         a_1a_2 + I
+%     \end{gathered}
+% \end{equation*}
+% Maar als we daar de vermenigvuldiging van bekeijken zou je graag op dezelfde nevenklaasen uitkopmen want dan heb je een goed gedefinieerde vermenigvuldiging. 
+
+% Ipv $a_1$ zou je ook een ander element kunnen nemen:
+% \begin{equation*}
+%     (a_1 + i_1) \cdot (a_2 + i_2) = a_1a_2 + i_1a_2 + a_1 i_2 + i_1i_2
+% \end{equation*}
+% -> niet perse commutatief!
+
+% Is dit nu een representant van $a_1a_2 + I$?? maw. is $i_1a_2 + a_1 i_2 + i_1i_2 \in I$??
+
+% Over het algemeen niet, dit leidt tot de def van een ideaal!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Velden}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Deelbaarheid -- van \texorpdfstring{$\mathbb{Z}$}{Z} naar willekeurige integriteitsdomeinen}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Rode draad van deze les}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Oefeningen}
