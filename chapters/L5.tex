@@ -490,130 +490,507 @@ Zij $\psi: R \to S$ een ring-homomorfisme. Dan gelden de volgende drie fundament
     \end{equation*}
 \end{enumerate}
 
-% idealen:
-% deelgroep I van A,+ (commutatief => automatisch normaaldeler??)
-% bijgevolg hebben we een goed gedefinieerde optelling op de verzameling:
-% \begin{equation*}
-%     A/I = \{a + I \mid a \in A\}
-% \end{equation*}
-% Wat nu met vermenigvuldiging G*H?
-
-% Je wil betekenis geven aan $(a_1 + I) \cdot (a_2 + I)$ op een ondubbelzinnige manier:
-% \begin{equation*}
-%     \begin{gathered}
-%         (a_1 + I) \cdot (a_2 + I) \\
-%         =? \\
-%         a_1a_2 + I
-%     \end{gathered}
-% \end{equation*}
-% Maar als we daar de vermenigvuldiging van bekeijken zou je graag op dezelfde nevenklaasen uitkopmen want dan heb je een goed gedefinieerde vermenigvuldiging. 
-
-% Ipv $a_1$ zou je ook een ander element kunnen nemen:
-% \begin{equation*}
-%     (a_1 + i_1) \cdot (a_2 + i_2) = a_1a_2 + i_1a_2 + a_1 i_2 + i_1i_2
-% \end{equation*}
-% -> niet perse commutatief!
-
-% Is dit nu een representant van $a_1a_2 + I$?? maw. is $i_1a_2 + a_1 i_2 + i_1i_2 \in I$??
-
-% Over het algemeen niet, dit leidt tot de def van een ideaal!
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \subsection{Velden}
 
+\SimpleHeading{Wanneer is een integriteitsdomein een veld?}
 
+Elke veld is een integriteitsdomein. Het omgekeerde geldt niet altijd ($\mathbb{Z}$!). \textbf{tenzij de voel EINDIG is}. Dit leidt tot de volgende stelling:
 
+\begin{nicetheorem}*
+    \nextpart[]*
+    Een eindig integriteitsdomein is een veld \emoji{glowing-star}\newline
+    Dus als $D$ een ring is die:
+    \begin{enumerate}
+        \item eindig is;
+        \item geen nuldelers heeft;
+        \item een integriteitsdomein is;
+    \end{enumerate}
+    dan heeft elk niet-nul element een multiplicatieve inverse.
+\end{nicetheorem}
 
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44]
+Om te bewijzen dat $D$ een veld is, moeten we aantonen dat:
+\begin{equation*}
+    \forall a \in D, a \neq 0 : \exists b \in D \text{ zodat } ab=1
+\end{equation*}
+Dus neem een willekeurig niet-nul element:
+\begin{equation*}
+    a \in D, \qquad a \neq 0
+\end{equation*}
+We willen dan aantonen dat $a$ een inverse heeft. Bekijk de afbeelding
+\begin{equation*}
+    f_a : D \to D : x \mapsto ax
+\end{equation*}
+Dat is vermenigvuldigen met $a$.
 
+\textbf{Stap 1: $f_a$ is injectief:} Stel
+\begin{equation*}
+    \begin{aligned}
+        f_a(x) &= f_a(y) \\
+        &\Downarrow \\
+        ax &= ay \\
+        &\Downarrow \\
+        ax - ay &= 0 \\
+        &\Downarrow \\
+        a(x-y) &= 0
+    \end{aligned}
+\end{equation*}
+Omdat $D$ een integriteitsdomein domein is, heeft $D$ geen nuldelers. Dus $a=0$ of $x-y=0$, maar we hadden een $a \neq 0$ gekozen, dus moet wel gelden dat:
+\begin{equation*}
+    x-y = 0 \Rightarrow x=y
+\end{equation*}
+Dus $f_a$ is injectief.
 
+\textbf{Stap 2: omdat $D$ eindig is, is $f_a$ ook sutjectief.} Het is logisch om in te zien dat voor eindige verzamelingen (\underbar{naar zichzelf of als $A$ en $B$ evenveel elementen}!) geldt dat:
+\begin{equationbox}*[Goldenrod][Goldenrod!10]
+    \text{injectief} \iff \text{surjectief}
+\end{equationbox}
+voor afbeeldingen van een eindige verzameling naar zichzelf. Dus omdat:
+\begin{equation*}
+    f_a : D \to D
+\end{equation*}
+injectief is en $D$ eindig is, is $f_a$ ook surjectief. Dit betekent dus:
+\begin{equation*}
+    f_a(D) = D \qquad \text{maw.} \qquad aD = D
+\end{equation*}
+Dus de verzameling is gewoon heel $D$:
+\begin{equation*}
+    aD = \{ax \mid x \in D\}
+\end{equation*}
 
+\textbf{Stap 3: omdat $1\in D$, wordt $1$ bereikt.} Omdat $D$ een integriteitsdomein is, heeft $D$ een multiplicatief neutraal element $1$. Aangezien $f_a$ surjectief is, wordt elk element van $D$ bereikt. Dus ook $1$. Daarom bestaat er een $b\in D$ zodat:
+\begin{equation*}
+    f_a(b) = 1
+\end{equation*}
+Maar:
+\begin{equation*}
+    f_a(b) = ab
+\end{equation*}
+Dus
+\begin{equation*}
+    ab = 1
+\end{equation*}
+Daarmee heeft $a$ een inverse. Omdat $a\neq 0$ willekeurig gekozen was, heeft elk niet-nul element van $D$ een inverse. Dus $D$ is een veld.
 
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{Let op:}} dit werkt enkel omdat $D$ eindig is. Bij oneindige verzamelingen kan een injectie strikt verkleinen (bv. $n \mapsto 2n$ op $\mathbb{Z}$), dus daar faalt het argument. Vandaar dat $\mathbb{Z}$ geen veld is.
+\end{barbox}
 
+\textbf{\underbar{Voorbeeld:}} $\mathbb{Z}_p$ met $p$ priem is een integriteitsdomein én eindig, dus een veld. Men noteert dit ook als $\mathbb{F}_p$ of $GF(p)$ ("Galois Field"). Bijvoorbeeld $\mathbb{Z}_5 = \{\bar{0},\ \bar{1},\ \bar{2},\ \bar{3},\ \bar{4}\}$ is een veld: $\bar{2}^{-1} = \bar{3}$ (want $\bar{2}\cdot \bar{3} = \bar{6} = \bar{1}$). En $\mathbb{Z}$ is een oneindig integriteitsdomein, maar geen veld.
 
+\subsubsection{Karakteristiek van een veld}
 
+\begin{nicedefinition}*[Karakteristiek van een veld]
+    \nextpart[]*
+    Zij $K$ een veld. Als er een kleinste strikt positief natuurlijk getal $n \in \mathbb{N}_0$ bestaat zodanig dat je het eenheidselement $1$ in totaal $n$ keer bij zichzelf moet optellen om het nulelement $0$ te krijgen:
+    \begin{equation*}
+        \underbrace{1 + 1 + \dots + 1}_{n \text{ keer}} = 0
+    \end{equation*}
+    dan noemen we $n$ de \textcolor{PineGreen!75!black}{\textbf{karakteristiek}} van het veld $K$, genoteerd als $\operatorname{char}(K) = n$.
+    
+    Als zo'n getal $n$ niet bestaat (de som wordt nooit nul), dan zeggen we dat het veld \textcolor{PineGreen!75!black}{\textbf{karakteristiek 0}} heeft ($\operatorname{char}(K) = 0$).
+\end{nicedefinition}
 
+\begin{nicetheorem}*[Uniciteit van de Additieve Orde]
+    \nextpart[]*
+    In elk veld $K$ hebben \textbf{alle} elementen $x \in K$ met $x \neq 0$ exact dezelfde additieve orde. Deze unieke gemeenschappelijke orde is gelijk aan de karakteristiek van het veld.
+\end{nicetheorem}
 
+\textbf{\underbar{Alternatief:}} In een veld hebben alle elementen $\neq 0$ dezelfde additieve orde. Die unieke orde heet de karakteristiek van het veld. 
 
+\textbf{\underbar{Intuïtief:}} De karakteristiek is "hoe vaak je 1 bij zichzelf moet optellen om 0 te krijgen". In $\mathbb{Q},\mathbb{R},\mathbb{C}$ word je nooit 0 $\implies$ karakteristiek 0. In $\mathbb{Z}_5$ is $1+1+1+1+1=\bar{0} \implies$ karakteristiek $5$.
 
+\begin{nicecorollary}*
+    \nextpart[]*
+    De karakteristiek van een veld is \textbf{altijd} $0$ of een \textbf{priemgetal}. (Als het een samengesteld getal zou zijn, zou het veld namelijk stuiten op nuldelers, wat onmogelijk is binnen een veld).
+\end{nicecorollary}
 
+\textbf{\underbar{Voorbeeld -- De complexe getallen:}}\newline
+$\mathbb{C}$ is een veld dat je kunt opvatten als $\mathbb{R}^2$ met componentsgewijze optelling en een \textbf{speciale} vermenigvuldiging:
+\begin{equation*}
+    (x_1,\ y_1) + (x_2,\ y_2) = (x_1 + x_2,\ y_1 + y_2)
+\end{equation*}
+\begin{equation*}
+    (x_1,\ y_1)(x_2,\ y_2) = (x_1x_2 - y_1y_2,\ x_1y_2 + x_2y_1)
+\end{equation*}
+Schrijf je $(x,\ y)$ als $z = jy$ met $j^2 = -1$, dan vind je dit product gewoon doot haakjes uit te werken:
+\begin{equation*}
+    (x_1 + jy_1)(x_2 + jy_2) = (x_1x_2 - y_1y_2) + j(x_1y_2 + x_2y_1)
+\end{equation*}
 
-
-
-
-
-
-
-
-
+\textbf{Notatie:}
+\begin{itemize}
+    \item $x = \Re(z)$ (reëel deel), $y=\Im(z)$ (imaginair deel)
+    \item \textbf{Modulus} $|z| = \sqrt{x^2 + y^2} = r$ (afstand tot oorsprong). \textbf{Argument} $\theta$ (de hoek, op $2\pi$ na bepaald).
+    \item \textbf{Poolvorm:} $z = re^{j\theta} = r(\cos \theta + j \sin \theta)$, met $e^{j\pi} = -1$.
+    \item \textbf{Toegevoegde:} $\bar{z} = x - jy = re^{-j\theta}$, en $z\bar{z} = x^2 + y^2 = |z|^2$.
+\end{itemize}
+\begin{center}
+    \begin{minipage}{0.43\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{%
+            \input{figures/L5/complex_optelling.tex}
+        }
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{0.35\textwidth}
+        \centering
+        \resizebox{\textwidth}{!}{%
+            \input{figures/L5/complex_vermenigvuldiging.tex}
+        }
+    \end{minipage}
+\end{center}
+\textbf{Formule van de Moivre:} $n$ keer roteren over $\theta$ = één keer over $n\theta$:
+\begin{equation*}
+    (\cos \theta + j\sin \theta)^n = \cos n\theta + j\sin n\theta
+\end{equation*}
+\textbf{Eenheidswortels:} de oplossingen van $z^n=1$ zijn
+\begin{equation*}
+    w_k = e^{2k\pi j / n}, \quad k = 0,1,\dots,n-1,
+\end{equation*}
+$n$ punten gelijkmatig verdeeld op de eenheidscirkel. Ze vormen een \textbf{cyclische groep} $\langle W_n,\cdot \rangle$ onder vermenigvuldiging -- isomorf met de groep der bijhorende rotaties (en dus met $\mathbb{Z}_n$!). Een mooie brug terug naar Hoofdstuk 3. Hieronder zijn de wortels van de eenheid $n=6$ geïllustreerd.
+\begin{center}
+\resizebox{0.62\textwidth}{!}{%
+    \input{figures/L5/complex_eenheidswortels.tex}
+}
+\end{center}
 
 \subsection{Deelbaarheid -- van \texorpdfstring{$\mathbb{Z}$}{Z} naar willekeurige integriteitsdomeinen}
 
+Vanaf hier vertalen we de gekende begrippen van een \inlinetext{deler}, \inlinetext{ggd}, en \inlinetext{priem} naar een algemeen integriteitsdomein $D$, zodat ze ook voor veeltermen en dergelijke werken.
 
+\textbf{\underbar{Notatie:}} $D_0 = D\backslash \{0\}$
 
+\subsubsection{Delers en veelvouden}
 
+\begin{nicedefinition}*
+    \nextpart[]*
+    Voor $a,b,q \in D$ met $a = qb$ en $b \neq 0$ zeggen we: $b$ is een \textcolor{PineGreen!75!black}{\textbf{deler}} van $a$, noteer
+    \begin{equation*}
+        b \mid a
+    \end{equation*}
+    en $a$ is een \textcolor{PineGreen!75!black}{\textbf{veelvoud}} van $b$. ($b=0$ sluiten we uit want delen door $0$ kan niet.)
+\end{nicedefinition}
 
+\begin{niceproperty}*[basiseigenschappen]
+    \nextpart[]*
+    \begin{enumerate}
+        \item $a \mid b \;\; \& \;\; a \mid c \implies a \mid (b+c)$
+        \item $a \mid b \implies a \mid br \quad \forall r \in D$
+        \item $a \mid b \;\; \& \;\; b \mid c \implies a \mid c \qquad (\text{transitiviteit})$
+    \end{enumerate}
+\end{niceproperty}
 
+\subsubsection{Eenheden en geassocieerde elementen}
 
+De \textbf{inverteerbare elementen} (de \textbf{eenheden}) zijn de sleutel tot deelbaarheid.
+\begin{itemize}
+    \item in $\mathbb{Z}$: enkel +1 en -1
+    \item in $\mathbb{R}[x]$ (veeltermen over $\mathbb{R}$): enkel de niet-nul constante veeltermen.
+\end{itemize}
 
+\textbf{Eenhedengroep}: De eenheden van een ring met eenheidselement vormen samen een \textbf{groep onder de vermenigvuldiging} (product van twee eenheden is een eenheid, en de inverse van een eenheid is er een). Dit is de \textbf{eenhedengroep}, notatie $R^{\times}$.
+\begin{equation*}
+    \langle A^{\times}, \cdot \rangle = \langle \{a \in A \mid \exists a^{-1},\cdot\} \rangle
+\end{equation*}
+Bijvoorbeeld $\mathbb{Z}^{\times} = \{1,\ -1\} \cong \mathbb{Z}_2$. (De gedetailleerde studie van $\mathbb{Z}_n^{\times}$ en de Euler-$\varphi$ functie volgt in de volgende les.)
 
+\begin{nicedefinition}*[Geassocieerd]
+    \nextpart[]*
+    \begin{equation*}
+        a \sim b \iff a = ub \quad \text{ met } u \text{ eenheid}
+    \end{equation*}
+    Let op! $\sim$ betekent hier $a$ is geassocieerd met $b$, niet de equivalentierelatie-notatie!
+\end{nicedefinition}
 
+\begin{nicetheorem}*
+    \nextpart[]*
+    \begin{equation*}
+        a \sim b \iff (a \mid b \;\; \& \;\; b \mid a)
+    \end{equation*}
+\end{nicetheorem}
 
+\textbf{\underbar{Merk op:}} Geassocieerde elementen zijn "\underbar{in essentie dezelfde deler}". In $\mathbb{Z}$ zijn $3$ en $-3$ geassocieerd; bij veeltermen zijn $x-1$ en $2x-2$ geassocieerd. Een ggd is daarom maar bepaald \textbf{op een eenheid na} -- vandaar dat we afspreken:
+\begin{itemize}
+    \item in $\mathbb{Z}$ nemen we de positieve ggd
+    \item bij veeltermen nemen we de monische veelterm (leidende coëfficiënt $1$) 
+\end{itemize}
 
+\subsubsection{GGD en KGV}
 
+In het middelbaar heb je waarschijnlijk geleerd dat de $\operatorname{ggd}$ de grootste is in de zin van het hoogste getal. Maar in een algemeen integriteitsdomein (zoals bij veeltermen) betekent "groter" niet meer dat een getal hoger is op de getallenas, maar dat het \textbf{het meest deelbaar} is. De definite deelt de $\operatorname{ggd}$ daarom op in twee logische eisen:
+\begin{enumerate}
+    \item $g$ moet überhaubt een deler zijn van $a$ en $b$ (gemeenschappelijke deler).
+    \item Elke andere deler $c$ moet ook een deler zijn van $g$. $g$ zit bovenaan in de hiërarchie van de delers.
+\end{enumerate}
 
+\begin{nicedefinition}*[GGD en KGV]
+    \nextpart[]*
+    Zij $A$ een integriteitsdomein en $a, b \in A$. Een element $g \in A$ is een \textcolor{PineGreen!75!black}{\textbf{grootste gemeenschappelijke deler}} van $a$ en $b$, genoteerd als $g = \operatorname{ggd}(a,b)$, als voldaan is aan twee voorwaarden:
+    \begin{enumerate}
+        \item \textbf{Het is een gemeenschappelijke deler:} $g$ deelt zowel $a$ als $b$.
+        \begin{equation*}
+            g \mid a \quad \text{en} \quad g \mid b
+        \end{equation*}
+        \item \textbf{Het is de ''grootste'':} Elke andere gemeenschappelijke deler $c$ deelt op zijn beurt weer $g$.
+        \begin{equation*}
+            c \mid a \text{ en } c \mid b \implies c \mid g
+        \end{equation*}
+    \end{enumerate}
 
+    \vspace{0.25cm}
 
+    Analoog is een element $k \in A$ een \textcolor{PineGreen!75!black}{\textbf{kleinste gemeen veelvoud}} van $a$ en $b$, genoteerd als $k = \operatorname{kgv}(a,b)$, als:
+    \begin{enumerate}
+        \item \textbf{Het is een gemeenschappelijk veelvoud:} Zowel $a$ als $b$ delen $k$.
+        \begin{equation*}
+            a \mid k \quad \text{en} \quad b \mid k
+        \end{equation*}
+        \item \textbf{Het is de ''kleinste'':} Elk ander gemeenschappelijk veelvoud $m$ wordt op zijn beurt gedeeld door $k$.
+        \begin{equation*}
+            a \mid m \text{ en } b \mid m \implies k \mid m
+        \end{equation*}
+    \end{enumerate}
+\end{nicedefinition}
 
+\begin{nicetheorem}*
+    \nextpart[]*
+    De $\operatorname{ggd}$ is \textbf{uniek op een eenheid (associatie) na}. Twee ggd's van hetzelfde paar zijn altijd geassocieerd.
+\end{nicetheorem}
 
+\subsubsection{Priemelementen}
+
+\begin{nicedefinition}*[Irreduceerbaar element]
+    \nextpart[]*
+    Zij $D$ een integriteitsdomein. Een element $p \in D$ (met $p \neq 0$ en $p$ niet inverteerbaar) heet \textcolor{PineGreen!75!black}{\textbf{irreduceerbaar}} als geldt:
+    \begin{equation*}
+        \text{Als } p = ab \text{ (met } a,b \in D\text{), dan is } a \text{ inverteerbaar of } b \text{ inverteerbaar.}
+    \end{equation*}
+    Als een element wel kan worden opgesplitst in twee niet-inverteerbare factoren, heet het \textcolor{PineGreen!75!black}{\textbf{reduceerbaar}} (of samengesteld).
+\end{nicedefinition}
+
+\textbf{\underbar{Merk op:}} Niet-inverteerbaar $\neq$ reduceerbaar! In $\mathbb{Z}$ is $5$ niet inverteerbaar, want er bestaat geen $x\in\mathbb{Z}$ zodat $5x=1$. Toch is $5$ irreduceerbaar, want elke ontbinding van $5$ in $\mathbb{Z}$ is van de vorm
+\begin{equation*}
+    5=1\cdot 5
+    \quad \text{of} \quad
+    5=(-1)\cdot(-5),
+\end{equation*}
+dus telkens is minstens één factor inverteerbaar.
+
+Maar neem nu $6$. $6$ is ook niet inverteerbaar, maar $6 = 2\cdot 3$, en zowel $2$ als $3$ is niet inverteerbaar. Dus $6$ is reduceerbaar!
+
+\begin{nicedefinition}*[Priemelement]
+    \nextpart[]*
+    Zij $D$ een integriteitsdomein. Een element $p \in D$ (met $p \neq 0$ en $p$ niet inverteerbaar) heet een \textcolor{PineGreen!75!black}{\textbf{priemelement}} als geldt:
+    \begin{equation*}
+        p \text{ is priem} \iff \forall a,b \in D: p \mid (ab) \implies p \mid a \quad \text{of} \quad p \mid b.
+    \end{equation*}
+\end{nicedefinition}
+
+\begin{nicenote}*[\emoji{warning} Belangrijke Waarschuwing]
+    \nextpart[]*
+    In de gewone getallen $\mathbb{Z}$ vallen deze twee begrippen toevallig samen. Maar in een algemeen integriteitsdomein is dit \textbf{niet} het geval! Onthoud:
+    \begin{equation*}
+        \text{Priem} \implies \text{Irreduceerbaar} \quad (\text{maar de omgekeerde pijl geldt algemeen NIET!})
+    \end{equation*}
+\end{nicenote}
+
+\subsubsection{Euclidische Ring}
+
+\begin{nicedefinition}*[Euclidische ring]
+    \nextpart[]*
+    Een integriteitsdomein $D$ heet een \textcolor{PineGreen!75!black}{\textbf{Euclidische ring}} als er een functie bestaat
+    \begin{equation*}
+        d:D\setminus\{0\}\to \mathbb{N}
+    \end{equation*}
+    die aan elk niet-nul element een soort ``grootte'' toekent, zodanig dat:
+    \begin{enumerate}
+        \item Voor alle $a,b\in D\setminus\{0\}$ geldt:
+        \begin{equation*}
+            d(a)\leq d(ab).
+        \end{equation*}
+
+        \item Voor alle $a\in D$ en alle $b\in D\setminus\{0\}$ bestaan er $q,r\in D$ zodat
+        \begin{equation*}
+            a=qb+r,
+        \end{equation*}
+        waarbij
+        \begin{equation*}
+            r=0 \qquad \text{of} \qquad d(r)<d(b).
+        \end{equation*}
+    \end{enumerate}
+\end{nicedefinition}
+
+\textbf{\underline{Intuïtief:}} Een Euclidische ring is een ring waarin een vorm van staartdeling met rest mogelijk is.
+
+De functie $d$ meet hoe ``groot'' een element is. Bij deling door $b$ moet de rest $r$ strikt kleiner zijn dan $b$ volgens deze groottefunctie.
+
+\textbf{\underline{Voorbeelden:}}
+\begin{itemize}
+    \item In $\mathbb{Z}$ nemen we
+    \[
+        d(a)=|a|.
+    \]
+    Dan is de deling met rest de gewone Euclidische deling:
+    \[
+        a=qb+r,
+        \qquad
+        r=0 \text{ of } |r|<|b|.
+    \]
+
+    \item Voor veeltermen over een veld $K$, dus in $K[x]$, nemen we
+    \[
+        d(f)=\deg(f).
+    \]
+    Dan is de deling met rest de gewone veeltermendeling:
+    \[
+        f=qg+r,
+        \qquad
+        r=0 \text{ of } \deg(r)<\deg(g).
+    \]
+\end{itemize}
+
+\newpage
+\begin{nicetheorem}*[Stelling van Bézout]
+    \nextpart[]*
+    Zij $D$ een Euclidische ring en zij $a,b\in D$, niet allebei nul. Dan bestaat er een grootste gemene deler $g=\gcd(a,b)$, en bovendien bestaan er $s,t\in D$ zodat
+    \begin{equation*}
+        g = sa + tb
+    \end{equation*}
+    Met andere woorden: de grootste gemene deler van $a$ en $b$ kan geschreven worden als een lineaire combinatie van $a$ en $b$.
+\end{nicetheorem}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44] Beschouw de verzameling
+\begin{equation*}
+    S = \{xa + yb \mid x,y \in D\}
+\end{equation*}
+Dit is de verzameling van alle lineaire combinaties van $a$ en $b$. Omdat $a$ en $b$ niet allebei nul zijn, bevat $S$ minstens één niet-nul element. We kiezen nu een element
+\begin{equation*}
+    g \in S \setminus\{0\}
+\end{equation*}
+met minimale $d$-waarde. Omdat $g \in S$, bestaan er $s,t \in D$ zodat
+\begin{equation*}
+    g = sa + tb
+\end{equation*}
+We tonen aan dat $g$ een grootste gemene deler is van $a$ en $b$.
+
+Eerst tonen we dat $g$ zowel $a$ als $b$ deelt. Deel $a$ door $g$. Omdat $D$ Euclidisch is, bestaan er $q,r \in D$ zodat:
+\begin{equation*}
+    a = qg + r
+\end{equation*}
+waarbij
+\begin{equation*}
+    r = 0 \qquad \text{of} \qquad d(r) < d(g)
+\end{equation*}
+We herschrijven:
+\begin{equation*}
+    r = a - qg
+\end{equation*}
+Omdat $g = sa + tb$, krijgen we:
+\begin{equation*}
+    r = a - q(sa + tb)
+\end{equation*}
+Dus:
+\begin{equation*}
+    r = (1-qs)a + (-qt)b
+\end{equation*}
+Daarom is $r$ opnieuw een linearire combinatie van $a$ en $b$, dus $r \in S$. Maar $g$ was gekozen als niet-nul element van $S$ met minimale $d$-waarde. Daarom kan er geen niet-nul $r\in S$ bestaan met
+\begin{equation*}
+    d(r) < d(g)
+\end{equation*}
+Dus moet gelden dat $r=0$. Bijgevolg is
+\begin{equation*}
+    a = qg
+\end{equation*}
+Dus:
+\begin{equation*}
+    g \mid a
+\end{equation*}
+
+Analoog toon je dat $g \mid b$. Neem een willekeurige gemene deler $c$ van $a$ en $b$. Dan geldt:
+\begin{equation*}
+    c \mid a \qquad \text{en} \qquad c \mid b
+\end{equation*}
+Opnieuw, omdat $g=sa+tb$, volgt dan:
+\begin{equation*}
+    c \mid sa + tb
+\end{equation*}
+Dus:
+\begin{equation*}
+    c \mid g
+\end{equation*}
+Elke gemene deler van $a$ en $b$ deelt dus $g$. Daarom is $g$ een ggd van $a$ en $b$.
+
+\subsubsection{Het algoritme van Euclides}
+
+Bézout zegt dat de ggd bestaat; het algoritme van \textbf{Euclides} berekent deze via herhaalde deling met rest. De belangrijke regel is:
+\begin{equation*}
+    \operatorname{ggd}(a,b) = \operatorname{ggd}(b,r) \quad \text{ waarbij } a = qb+r
+\end{equation*}
+Dit kan je blijven tot je uiteindelijk $r=0$ uitkomt:
+\begin{equation*}
+    \operatorname{ggd}(a,b) = \operatorname{ggd}(b,r_1) = \operatorname{ggd}(r_1,r_2) = \dots = \operatorname{ggd}(r_k, \underbrace{r_{k+1}}_{=0}) = r_k
+\end{equation*}
+Via herhaaldelijk substitueren vind je dan:
+\begin{equation*}
+    g = r_k = r_{k-1} - q_kr_{k-1}
+\end{equation*}
+
+\textbf{\underbar{Voorbeeld:}} $\operatorname{ggd}(48,18)$
+\begin{equation*}
+    \begin{aligned}
+        48 &= 2 \cdot 18 + 12 \\
+        18 &= 1 \cdot 12 + 6 \\
+        12 &= 2 \cdot 6 + \textcolor{NavyBlue}{0}
+    \end{aligned}
+\end{equation*}
+Laatste niet-nul rest $= 6 = \operatorname{ggd}(48,18)$
+
+\textbf{\underbar{Voorbeeld:}} $\operatorname{ggd}(30031,\ 16579)$
+\begin{equation*}
+    \begin{aligned}
+        30031 &= 1 \times 16579 + 13452 \\
+        16579 &= 1 \times 13452 + 3127 \\
+        13452 &= 4 \times 3127 + 944 \\
+        3127  &= 3 \times 944 + 295 \\
+        944   &= 3 \times 295 + 59 \\
+        295   &= 5 \times 59 + \textcolor{NavyBlue}{0}
+    \end{aligned}
+\end{equation*}
+Dus $\operatorname{ggd}(30031,\ 16579) = 59$
+
+We bepalen nu $s$ en $t$ van Bézout via terugsubstitutie. Werk van onder terug naar boven:
+\begin{equation*}
+    \begin{aligned}
+        59 &= 1 \times 944 - 3 \times \textcolor{NavyBlue}{295} \\
+           &= 1 \times 944 - 3 \times (\textcolor{NavyBlue}{3127 - 3 \times 944}) \\
+           &= 10 \times \textcolor{RubineRed}{944} - 3 \times 3127 \\
+           &= 10 \times (\textcolor{RubineRed}{13452 - 4 \times 3127}) - 3 \times 3127 \\
+           &= 1+ \times 13452 - 43 \times \textcolor{YellowOrange}{3127} \\ 
+           &= 10 \times 13452 - 43 \times (\textcolor{YellowOrange}{16579 - 1 \times 13452}) \\
+           &= 10 \times 13452 - 43 \times 16579 + 43 \times 13452 \\
+           &= 53 \times \textcolor{Aquamarine}{13452} - 43 \times 16579 \\
+           &= 53 \times (\textcolor{Aquamarine}{30031 - 1 \times 16579}) - 43 \times 16579 \\
+           &= 53 \times 30031 - 53 \times 16479 - 43 \times 16579 \\
+           &= 53 \times 30031 - 96 \times 16579 \\
+           &= \underbrace{(53)}_{s} \times \underbrace{30031}_{a} + \underbrace{(-96)}_{t} \times \underbrace{16579}_{t} 
+    \end{aligned}
+\end{equation*}
+
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{Praktisch nut:}} deze $s$ en $t$ zijn precies hoe je de inverse van een element modulo $n$ berekent -- de basis van het oplossen van $\bar{a}x = \bar{1}$ in $\mathbb{Z}_n$, en later \textbf{RSA}. Als $\operatorname{ggd}(a,\ n) = 1$, dan geeft $sa + tn = 1$ meteen $\bar{a}^{-1} = \bar{s}$ in $\mathbb{Z}_n$. 
+\end{barbox}
+
+\subsubsection{Unieke factorisatie}
+
+In een Euclidische ring kan elke element $\neq 0$ ontbonden worden in een product van priemelementen ($\times$ een eenheid), en die ontbinding is \textbf{uniek} op volgorde en eenheden na. Dit is de algemene versie van de hoofdstelling van de rekenkunde: "elk getal is uniek een product van priemgetallen".
 
 \subsection{Rode draad van deze les}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+\begin{roundbox}[CornflowerBlue!10][RoyalPurple]
+    Een \textbf{ring} = abelse groep onder \inlinetext{$+$} plus een associatieve, distributieve \inlinetext{$\cdot$}. Voeg commutativiteit/eenheid toe en je krijgt rijkere structuren; voeg deelbaarheid toe en je krijgt een \textbf{lichaam/veld}. \newline\textbf{Nuldelers} verpesten het schrappen; een ring zonder nuldelers is een \textbf{integriteitsdomein}, en als die eindig is, is hij meteen een \textbf{veld}. \newline\textbf{Idealen} spelen de rol van normaaldelers: ze leveren de quotiëntring $R/I$, met opnieuw een \textbf{isomorfiestelling} $R/\operatorname{ker}\psi \cong \operatorname{Ran}\psi$. \newline In een \textbf{Euclidische ring} werkt deling-met-rest, en daarmee garandeert \textbf{Bézout} het bestaan van de ggd, die het \textbf{algoritme van Euclides} concreet berekent.
+\end{roundbox}
 
 \subsection{Oefeningen}
+
+\emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin} 

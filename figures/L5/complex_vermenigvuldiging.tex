@@ -1,0 +1,97 @@
+\begin{tikzpicture}[>=latex]
+
+% --- Global TikZ Styles ---
+\tikzset{
+    axis/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=black!80
+    },
+    vector/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=black!80,
+        shorten >=1pt
+    },
+    angleline/.style={
+        draw=NavyBlue!70,
+        thick
+    },
+    anglearrow/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=NavyBlue!70,
+        shorten >=1pt
+    },
+    element/.style={
+        font=\large
+    }
+}
+
+% ==================================================
+% --- Assen ---
+% ==================================================
+
+\draw[axis] (-0.35,0) -- (4.65,0);
+\draw[axis] (0,-0.25) -- (0,3.65);
+
+% ==================================================
+% --- Coördinaten ---
+% ==================================================
+
+\coordinate (O) at (0,0);
+
+% Vectoren in poolcoördinaten
+\coordinate (ztwo)  at (18:2.35);
+\coordinate (zone)  at (48:2.65);
+\coordinate (zprod) at (63:3.35);
+
+% ==================================================
+% --- Vectoren ---
+% ==================================================
+
+\draw[vector] (O) -- (ztwo);
+\draw[vector] (O) -- (zone);
+\draw[vector] (O) -- (zprod);
+
+% ==================================================
+% --- Hoeken ---
+% ==================================================
+
+% Kleine boog: theta_2
+\draw[angleline] (0.55,0) arc[start angle=0,end angle=18,radius=0.55];
+
+% Middelste boog: theta_1
+\draw[angleline] (0.80,0) arc[start angle=0,end angle=48,radius=0.80];
+
+% Grote boog: theta_1 + theta_2
+\draw[angleline] (1.05,0) arc[start angle=0,end angle=63,radius=1.05];
+
+% Hulplijntjes naar de labels
+\draw[anglearrow] (0.54,-0.30) -- (1.45,-0.30);
+\draw[anglearrow] (0.81,-0.60) -- (1.45,-0.60);
+\draw[anglearrow] (1.01,-0.90) -- (1.45,-0.90);
+
+% Verticale kleine hulplijntjes zoals in de schets
+\draw[angleline] (0.55,-0.30) -- (0.55,-0.05);
+\draw[angleline] (0.82,-0.60) -- (0.82,-0.05);
+\draw[angleline] (1.02,-0.90) -- (1.02,-0.05);
+
+% ==================================================
+% --- Labels ---
+% ==================================================
+
+\node[element, anchor=west] at (1.48,-0.25) {$\theta_2$};
+\node[element, anchor=west] at (1.48,-0.60) {$\theta_1$};
+\node[element, anchor=west] at (1.48,-0.99) {$\theta_1 + \theta_2$};
+
+\node[element, anchor=west] at ($(ztwo)+(0.10,0.00)$) {$z_2$};
+\node[element, anchor=west] at ($(zone)+(0.05,0.05)$) {$z_1$};
+\node[element, anchor=south] at ($(zprod)+(0.05,0.05)$) {$z_1z_2$};
+
+\node[element] at (1.85,-1.55) {vermenigvuldiging};
+
+\end{tikzpicture}

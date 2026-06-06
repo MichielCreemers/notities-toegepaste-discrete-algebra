@@ -1,0 +1,91 @@
+\begin{tikzpicture}[>=latex]
+
+% --- Global TikZ Styles ---
+\tikzset{
+    axis/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=black!80
+    },
+    circleline/.style={
+        draw=black!80,
+        thick
+    },
+    polygonline/.style={
+        draw=NavyBlue!80,
+        thick
+    },
+    pointer/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=black!80,
+        shorten >=1pt,
+        shorten <=1pt
+    },
+    element/.style={
+        font=\large
+    },
+    biglabel/.style={
+        font=\LARGE
+    }
+}
+
+% ==================================================
+% --- Coördinaten ---
+% ==================================================
+
+\coordinate (O)  at (0,0);
+
+% Wortels van de eenheid
+\coordinate (w0) at (0:2);
+\coordinate (w1) at (60:2);
+\coordinate (w2) at (120:2);
+\coordinate (w3) at (180:2);
+\coordinate (w4) at (240:2);
+\coordinate (w5) at (300:2);
+
+% ==================================================
+% --- Cirkel en assen ---
+% ==================================================
+
+\draw[circleline] (O) circle (2);
+
+\draw[axis] (-2.45,0) -- (2.65,0);
+\draw[axis] (0,-2.40) -- (0,2.65);
+
+% ==================================================
+% --- Ingeschreven zeshoek ---
+% ==================================================
+
+\draw[polygonline]
+    (w0) -- (w1) -- (w2) -- (w3) -- (w4) -- (w5) -- cycle;
+
+% ==================================================
+% --- Labels ---
+% ==================================================
+
+\node[biglabel, anchor=west] at (2.65,-0.45) {$w_0 = 1$};
+
+\node[biglabel, anchor=west] at (2.55,1.70) {$w_1 = e^{j2\pi/6}$};
+
+\node[biglabel, anchor=east] at (-2.2,2.35) {$w_2 = e^{j4\pi/6}$};
+
+\node[biglabel, anchor=east] at (-2.60,-0.45) {$w_3 = -1$};
+
+\node[biglabel, anchor=east] at (-0.20,-2.45) {$w_4 = e^{j8\pi/6}$};
+
+\node[biglabel, anchor=west] at (1.35,-1.95) {$w_5 = e^{j10\pi/6}$};
+
+% ==================================================
+% --- Kleine pijltjes / aanwijzingen ---
+% ==================================================
+
+% Pijl naar w_1
+\draw[pointer] (2.15,1.77) -- ($(w1)+(0.18,0.08)$);
+
+% Pijl naar w_2
+\draw[pointer] (-2.00,2.05) -- ($(w2)+(-0.05,0.05)$);
+
+\end{tikzpicture}
