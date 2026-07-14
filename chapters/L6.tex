@@ -1,0 +1,1253 @@
+\section{Les 6 -- Irreduceerbare elementen, restklassenringen en eindige velden}
+
+\begin{roundbox}[CornflowerBlue!10][RoyalPurple]
+    \textbf{Bézout + Euclidische deling geven je algoritmes voor inverses, ggd's én voor het bouwen van velden.}
+
+    \vspace{0.25cm}
+
+    Eénzelfde redening ($1 = sa + tb$) zal deze les vier keer opduiken: bij inverses modulo $n$, bij het priemlemma, bij eindige velden $\mathbb{F}_p$, en bij velduitbreidingen $F[x]/(g)$.
+\end{roundbox}
+
+\subsection*{Recap van vorige les}
+
+Een \inlinetext{Euclidische ring} is een integriteitsdomein $D$ met een "\emph{grootte}"-functie
+\begin{equation*}
+    d : D_0 \to \mathbb{N}
+\end{equation*}
+zodat:
+\begin{enumerate}
+    \item $\forall a,b \in D\backslash \{0\}$ geldt $d(a) \le d(ab)$, en
+    \item $\forall a \in D$ en $\forall b \in D \backslash \{0\}$ geldt \textbf{deling met rest}. Maw. bestaan $q,\ r \in D$ zodat $a = qb + r$ met $r=0$ of $d(r) < d(b)$
+\end{enumerate}
+Omdat $d(r)$ strikt daalt en in $\mathbb{N}$ leeft, moet herhaald delen uiteindelijk stoppen -- daarom ook dat het \textbf{algoritme van Euclides} werkt, en dat \textbf{Bézout} garandeert dat $\operatorname{ggd}(a,\ b) = sa + tb$.
+
+\subsubsection*{Algoritme van Euclides}
+
+\begin{nicealgorithm}*[Algoritme van Euclides]
+    \nextpart[]*
+    Voor twee elementen $a,\ b$ in een Euclidische ring berekent het algoritme van Euclides de grootste gemene deler door herhaald deling met rest uit te voeren:
+    \begin{equation*}
+        \begin{aligned}
+            a   &= q_1b + r_1 \\
+            b   &= q_2r_1 + r_2 \\
+            r_1 &= q_3r_2 + r_3 \\
+                &\;\; \vdots \\
+            r_{k-2} &= q_kr_{k-1} + r_k \\
+            r_{k-1} &= q_{k+1}r_k + 0
+        \end{aligned}
+    \end{equation*}
+    De laatste niet-nul rest $r_k$ is dan
+    \begin{equation*}
+        r_k = \operatorname{ggd}(a,\ b)
+    \end{equation*}
+\end{nicealgorithm}
+
+\subsubsection*{Stelling van Bézout}
+
+In een Euclidische ring kan de ggd van $a$ en $b$ beschreven worden als een lineaire combinatie van $a$ en $b$:
+\begin{equation*}
+    \operatorname{ggd}(a,\ b) = sa + tb
+\end{equation*}
+voor zekere $s,\ t \in D$.
+
+Als $a$ en $b$ onderling ondeelbaar zijn, dus $\operatorname{ggd}(a,\ b) = 1$, dan bestaan $s,\ t$ zodat
+\begin{equation*}
+    1 = sa + tb
+\end{equation*}
+Dit is de vorm die later heel vaak gebruikt wordt om inverses te vinden.
+
+\subsection{Veeltermen over een veld: \texorpdfstring{$F[x]$}{F[x]} als Euclidische ring}
+
+Dit is de grote uitbreiding van deze les: de Euclidische theorie geldt niet enkel voor $\mathbb{Z}$, maar ook voor \textbf{veeltermen}.
+
+Als $F$ een veld is, dan is de veeltermring $F[x]$ een Euclidische ring met als grootte-functie de graad:
+\begin{equation*}
+    d(f) = \operatorname{def}(f)
+\end{equation*}
+Hier is $F[x]$ de ring van univariate veetermen:
+\begin{equation*}
+    F[x] = \{a_0 + a_1x + \dots + a_nx^n \mid a_i \in F\}
+\end{equation*}
+De Euclidische deling is dan gewoon staartdeling van veeltermen.
+
+\subsubsection{Waarom moet \texorpdfstring{$F$}{F} een veld zijn?}
+
+Bij het delen wil je de hoogste term van $f$ wegwerken met een veelvoud van $g$. Stel:
+\begin{equation*}
+    f(x) = a_nx^n + \dots,\ \qquad g(x) = b_mx^m + \dots
+\end{equation*}
+waar $a_n,\ b_m \neq 0$ en $ n \ge m$. Dan trek je af:
+\begin{equation*}
+    \frac{a_n}{b_m}x^{n-m}g(x)
+\end{equation*}
+Dat vereist dat je door $b_m$ kunt \textbf{delen}, dus dat $b_m$ inverteerbaar is. Daarom moeten de coëfficiënten dus in een \textbf{veld} liggen!
+
+\textbf{\underbar{Voorbeeld:}} ggd van veeltermen in $\mathbb{Q}[x]$.\newline
+Bepaal:
+\begin{equation*}
+    \operatorname{ggd}(x^3 + x^2 - 2x,\ x^2 - 1)
+\end{equation*}
+\underbar{Oplossing:} Neem
+\begin{equation*}
+    f = x^3 + x^2 - 2x, \qquad g = x^2 - 1 
+\end{equation*}
+Deel $f$ door $g$:
+\begin{equation*}
+    (x+1)(x^2-1) = x^3 + x^2 - x - 1
+\end{equation*}
+Dus:
+\begin{equation*}
+    f - (x+1)g = (x^3 + x^2 - 2x) - (x^3 + x^2 - x - 1) = 1 - x
+\end{equation*}
+De rest is dus $1-x$, wat geassocieerd is met $x-1$. Volgende stap:
+\begin{equation*}
+    x^2 - 1 = (x+1)(x-1) + 0
+\end{equation*}
+Dus de ggd is, op eenheid na, $x-1$. Omdat men bij veeltermen meestal de \textbf{monische} ggd kiest:
+\begin{equation*}
+    \operatorname{ggd}(x^3 + x^2 - 2x,\ x^2 - 1)
+\end{equation*}
+
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{Let op:}} In $F[x]$ zijn alle niet-nul constante veeltermen eenheden ($F[x]^{\times} = F \backslash \{0\}$). Daardoor is de ggd maar bepaald op een constante factor na. Afspraak: kies de \textcolor{WildStrawberry}{\textbf{monische}} ggd (leidende coëfficiënt $1$).
+\end{barbox}
+
+\textbf{\underbar{Herinner:}} Een element $u$ in een ring $A$ heet een \inlinetext{eenheid} als het inverteerbaar is voor de vermenigvuldiging. De verzameling van eenheden noteren we dan als:
+\begin{equation*}
+    A^{\times} = \{a \in A \mid a \text{ is inverteerbaar}\}
+\end{equation*}
+
+\subsection{Het priemlemma}
+
+Dit lemma is de sleutel tot unieke factorisatie én tot de veldconstructies later.
+
+We hebben dit al eens gedefinieerd (\Cref{H4_irreduceerbaar_element}), maar we doen het nog eens ter opfrissing.
+
+\begin{nicedefinition}*[Irreduceerbaar element = Priemelement]
+    \nextpart[]*
+    Zij $\langle A, +, \cdot \rangle$ een integriteitsdomein (dus een commutatieve ring zonder nuldelers) en zij $p \in A\backslash\{0\}$. Dan noemen we $p$ een \textcolor{PineGreen!75!black}{\textbf{irreduceerbaar = priemelement}} als:
+    \begin{enumerate}
+        \item $p$ is geen eenheid (met eenheid bedoelen we elementen die inverteerbaar zijn). Dus
+        \begin{equation*}
+            p \notin A^{\times} = \{a \in A \mid \exists b \in A : ab=1\}
+        \end{equation*} 
+        \item Als $p=ab$ met $a,b \in A$ , dan is $a$ of $b$ een eenheid ($a \in A^{\times}$ of $b \in A^{\times}$)
+    \end{enumerate}
+\end{nicedefinition}
+
+\textbf{\underbar{Merk op:}} Dit moet gelden voor elke ontbinding $ab$ van $p$!
+
+\newpage
+\begin{nicelemma}*[Priemlemma]
+    \nextpart[]*
+    In een Euclidische ring geld: Als $p$ irreduceerbaar is en
+    \begin{equation*}
+        p \mid ab,
+    \end{equation*}
+    dan geldt
+    \begin{equation*}
+        p\mid a \quad \text{ of } \quad p \mid b
+    \end{equation*}
+\end{nicelemma}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44] Stel dat $p \mid ab$. We moeten dan aantonen dat:
+\begin{equation*}
+    p \mid a \qquad \text{of} \qquad p \mid b
+\end{equation*}
+Als $p \mid a$, dan zijn we klaar. Veronderstel nu dat
+\begin{equation*}
+    p \nmid a
+\end{equation*}
+Dan moet je tonen dat het noodzakelijk is dat $p \mid b$. Beschouw de ggd:
+\begin{equation*}
+    \operatorname{ggd}(p,\ a)
+\end{equation*}
+Omdat $p$ irreduceerbaar is, zijn de enige delers van $p$ eenheden of elementen die geassocieerd zijn met $p$. Aangezien $\operatorname{ggd}(p,\ a)$ een deler is van $p$, zijn er dus twee mogelijkheden. Neem $d = \operatorname{ggd}(p,\ a)$. Dan geldt per definitie: $d \mid p$ en $d \mid a$. Omdat $d \mid p$, bestaat er een $c \in A$ zodat:
+\begin{equation*}
+    p = dc
+\end{equation*}
+Maar omdat $p$ irreduceerbaar is, is ofwel $d$ een eenheid, ofwel $c$ een eenheid. Als $d$ een eenheid is zijn we klaar. Neem nu dat $c$ een eenheid is, dan geld:
+\begin{equation*}
+    \begin{aligned}
+        p &= dc \\
+        &\Downarrow \textcolor{Green}{\text{ c inverteerbaar}} \\
+        d &= pc^{-1} \\
+    \end{aligned}
+\end{equation*}
+Maar $d\mid a$, dus er bestaat een $k \in A$ zodat:
+\begin{equation*}
+    \begin{aligned}
+        a &= dk \\
+          &= (pc^{-1})k = p(c^{-1}k)
+    \end{aligned}
+\end{equation*}
+Dus $p \mid a$, maar we hadden aangenomen dat $p \nmid a$.
+\begin{equation*}
+    \begin{aligned}
+        &\operatorname{ggd}(p,\ a) \text{ is een eenheid} \\
+        &\operatorname{ggd}(p,\ a) \text{ is geassocieerd met } p
+    \end{aligned}
+\end{equation*}
+Maar als $\operatorname{ggd}(p,a)$ geassocieerd zou zijn met $p$, dan zou $p$ ook $a$ delen. Dat is in tegenspraak met onze aanname $p \nmid a$. Dus moet gelden:
+\begin{equation*}
+    \operatorname{ggd}(p,\ a) = 1
+\end{equation*}
+tot op vermenigvuldiging met een eenheid. Met andere woorden: $p$ en $a$ zijn relatief priem. Omdat we in een Euclidische ring werken, geldt de stelling van Bézout. Er bestaan dus $s,t\in D$ zodat
+\begin{equation*}
+    \begin{aligned}
+        1 &= sp + ta \\
+          &\Downarrow \textcolor{Green}{\;\; \cdot b} \\
+        b &= (sp + ta) \\
+          &\Downarrow \textcolor{Green}{\text{ distributiviteit}} \\
+        b &= spb + tab  
+    \end{aligned}
+\end{equation*}
+Nu geldt: $p \mid spb$ (want $spb = p(sb)$). Ook geldt: $p \mid tab$ want per aanname is $p \mid ab$.
+We hebben dus dat $p$ beide termen van de rechterkant deelt:
+\begin{equation*}
+    p \mid spd \qquad \text{en} \qquad p \mid tab
+\end{equation*}
+Daarom deelt $p$ ook hun som:
+\begin{equation*}
+    p \mid (spb + tab)
+\end{equation*}
+Maar $spb + tab = b$, dus $p \mid b$! We hebben nu dus aangetoond dat
+\begin{equation*}
+    p \nmid a \implies p \mid b
+\end{equation*}
+en dus is het lemma bewezen.
+
+\subsubsection{Unieke factorisatie}
+
+In een Euclidische ring heeft elk niet-nul element een \inlinetext{factorisatie in irreduceerbare elementen}[HighlightColor!66], uniek op volgorde en eenheden na.
+\begin{equation*}
+    a = u\;p_1\;p_2\;\dots\;p_r
+\end{equation*}
+waar $u$ een eenheid is en de $p_i$ irreduceerbaar zijn. Als ook geldt dat:
+\begin{equation*}
+    a = v\;q_1\;q_2\;\dots\;q_s
+\end{equation*}
+dan geldt $r=s$ en, na herschikken, is elke $q_i$ geassocieerd met $p_i$:
+\begin{equation*}
+    q_i = u_i p_i
+\end{equation*}
+voor een eenheid $u_i$.
+
+\textbf{\underbar{Voorbeeld:}} in $\mathbb{Z}$
+\begin{equation*}
+    15 = 3 \cdot 5 = (-3) \cdot (-5)
+\end{equation*}
+Dit zijn dezelfde factorisaties op eenheden na, omdat $-1$ een eenheid is in $\mathbb{Z}$.
+
+\subsection{Resklassenringen \texorpdfstring{$\mathbb{Z}_n$}{Zn} en de eenhedengroep \texorpdfstring{$\mathbb{Z}_n^{\times}$}{Zn*}}
+
+\SimpleHeading{Restklassen modulo $n$}
+
+De ring $\mathbb{Z}_n$ bestaat uit de restklassen modulo $n$:
+\begin{equation*}
+    \mathbb{Z}_n = \{\bar{0},\bar{1},\dots,\overline{n-1}\}
+\end{equation*}
+De restklasse van $a$ is
+\begin{equation*}
+    \bar{a} = \{a +kn \mid k \in \mathbb{Z}\}
+\end{equation*}
+Twee gehele getallen $a$ en $b$ stellen dezelfde restklasse voor als
+\begin{equation*}
+    a \equiv b \pmod{n}
+\end{equation*}
+of equivalent:
+\begin{equation*}
+    n \mid (a - b)
+\end{equation*}
+Optelling en vermenigvuldiging zijn gedefinieerd door:
+\begin{equation*}
+    \begin{aligned}
+        \bar{a} + \bar{b}     &= \overline{a+b} \\
+        \bar{a} \cdot \bar{b} &= \overline{ab}
+    \end{aligned}
+\end{equation*}
+Deze definities zijn goed gedefinieerd; ze hangen niet af van de gekozen representanten.
+
+\subsubsection{De eenhedengroep \texorpdfstring{$\mathbb{Z}_n^{\times}$}{Znx}}
+
+Niet elk element van $\mathbb{Z}_n$ is inverteerbaar. Bijvoorbeeld in $\mathbb{Z}_{12}$:
+\begin{equation*}
+    \bar{2} \cdot \bar{6} = \bar{12} = \bar{0}
+\end{equation*}
+terwijk $\bar{2}$ en $\bar{6}$ niet nul zijn. Ze kunnen dus niet inverteerbaar zijn. \textbf{Een nuldeler kan nooit een eenheid (inverteerbaar element) zijn.}
+
+\begin{nicetheorem}*[Wie is inverteerbaar?]
+    \nextpart[]*
+    Voor $a \in \mathbb{Z}$ geldt:
+    \begin{equation*}
+        \bar{a} \in \mathbb{Z}_n^{\times} \iff \operatorname{ggd}(a,\ n) = 1
+    \end{equation*}
+\end{nicetheorem}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44] 
+
+\inlinetext{$\Leftarrow$}[Goldenrod!44] Stel eerst dat $\operatorname{ggd}(a,n)=1$. Volgens Bézout bestaan er dan $s,t \in \mathbb{Z}$ zodat:
+\begin{equation*}
+    1 = sa + tn
+\end{equation*} 
+Gaan we nu over naar restklassen modulo $n$, dan krijgen we:
+\begin{equation*}
+    \bar{1} = \overline{sa + tn}
+\end{equation*}
+Omdat $tn$ deelbaar is door $n$, geldt: $\overline{tn} = \bar{0}$. Dus:
+\begin{equation*}
+    \bar{1} = \overline{sa} = \bar{s} \cdot \bar{a}
+\end{equation*}
+Bijgevolg bestaat er dus een element $\bar{s} \in \mathbb{Z}_n$ zodat
+\begin{equation*}
+    \bar{s} \cdot \bar{a} = \bar{1}
+\end{equation*}
+Dus $\bar{a}$ is inverteerbaar in $\mathbb{Z}_n$, met inverse $\bar{s}$. Daarom geldt dus: $\bar{a} \in \mathbb{Z}_n^{\times}$.
+
+\inlinetext{$\Rightarrow$}[Goldenrod!44] Stel nu omgekeerd dat $\bar{a} \in \mathbb{Z}_n^{\times}$. Dan bestaat er een $\bar{s} \in \mathbb{Z}_n$ zodat
+\begin{equation*}
+    \bar{s} \cdot \bar{a} = \bar{1}
+\end{equation*}
+Dit betekent $\overline{sa} = \bar{1}$. Dus:
+\begin{equation*}
+    \begin{aligned}
+        sa &\equiv 1 \pmod n \\
+        &\Downarrow \\
+        n &\mid sa - 1 \\
+    \end{aligned}
+\end{equation*}
+Er bestaat dus een $t \in \mathbb{Z}$ zodat $sa - 1 = tn$. Dus:
+\begin{equation*}
+    1 = sa - tn
+\end{equation*}
+Neem nu een willekeurige deler $d$ van $a$ en $n$. Dan geldt:
+\begin{equation*}
+    d \mid a \qquad \text{en} \qquad d \mid n
+\end{equation*}
+Dan deelt $d$ ook elke lineare combinatie van $a$ en $n$, dus in het bijzonder:
+\begin{equation*}
+    d \mid (sa - tn)
+\end{equation*}
+Maar: $sa - tn = 1$, dus
+\begin{equation*}
+    d \mid 1
+\end{equation*}
+De enige positieve deler van $1$ is $1$ zelf. Daarom geldt:
+\begin{equation*}
+    \operatorname{ggd}(a,n) = 1
+\end{equation*}
+
+\newpage
+\begin{nicedefinition}*[Eenhedengroep]
+    \nextpart[]*
+    De inverteerbare elementen vormen de \textcolor{PineGreen!75!black}{\textbf{eenhedengroep}}:
+    \begin{equation*}
+        \mathbb{Z}_n^{\times} = \{\bar{a} \mid \operatorname{ggd}(a,\ n) = 1\}
+    \end{equation*}
+\end{nicedefinition}
+
+\textbf{\underline{Voorbeeld:}} Zoek $\bar{5}^{-1}$ in $\mathbb{Z}_{12}$.\newline
+\underline{Oplossing:} We zoeken eerst $\operatorname{ggd}(12,5)$:
+\begin{equation*}
+    \begin{aligned}
+        12 &= 2 \times 5 + 2 \\
+        5  &= 2 \times 2 + 1 \\
+        2  &= 2 \times 1 + 0
+    \end{aligned}
+\end{equation*}
+Dus $\operatorname{ggd}(12,5)=1$. De inverse bestaat dus in $\mathbb{Z}_{12}$. Want we hebben net gezien dat een inverse enkel bestaat als $\operatorname{ggd}(5,12)=1$. We doen nu terugsubstitutie:
+\begin{equation*}
+    \begin{aligned}
+        1 &= 1 \times 5 - 2 \times \textcolor{NavyBlue}{2} \\
+          &= 1 \times 5 - 2 \times (\textcolor{NavyBlue}{12 - 2 \times 5}) \\
+          &= \underbrace{(-2) \times 12}_{\bar{0}} + 5 \times 5
+    \end{aligned}
+\end{equation*}
+Dus $s=5$. Bijgevolg is $\bar{5}^{-1} = \bar{5}$ in $\mathbb{Z}_{12}$.
+
+\subsection{Euler-\texorpdfstring{$\varphi$}{phi} en de stelling van Euler}
+
+\begin{nicedefinition}*[Euler-$\varphi$ functie]
+    \nextpart[]*
+    Voor $n\in \mathbb{Z}_{\geq 1}$ definiëren we de \textcolor{PineGreen!75!black}{\textbf{Euler-$\varphi$ functie}} door:
+    \begin{equation*}
+        \varphi(n) = \#\mathbb{Z}_n^{\times}
+    \end{equation*}
+    Dus $\varphi(n)$ telt het aantal inverteerbare elementen in $\mathbb{Z}_n$. Omdat:
+    \begin{equation*}
+        \bar{a} \in \mathbb{Z}_n^\times \iff \operatorname{ggd}(a,n) = 1
+    \end{equation*}
+    geldt ook:
+    \begin{equation*}
+        \varphi(n) = \#\{a \in \{1, \dots, n\} \mid \operatorname{ggd}(a,n) = 1\}
+    \end{equation*}
+\end{nicedefinition}
+
+\textbf{\underbar{Intuïtief:}} $\varphi(n)$ telt hoeveel getallen tussen $1$ en $n$ relatief priem zijn. Met \inlinetext{relatief priem} bedoelen we: $a$ is relatief priem met $n$ als:
+\begin{equation*}
+    \operatorname{ggd}(a,n) = 1
+\end{equation*}
+
+\SimpleHeading{Basisformules}
+
+\textbf{\underbar{Geval 1: $p$ priem}}\newline
+Als $p$ priem is, dan:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(p) = p-1
+\end{equationbox}
+Waarom? De getallen $1,2,\dots,p-1$ zijn allemaal priem met $p$, want $p$ heeft geen delers behalve $1$ en $p$. Alleen $p$ is niet zelf relatief priem met $p$, want $\operatorname{ggd}(p,p) = p$.
+
+\textbf{\underbar{Geval 2: macht van een priemgetal}}\newline
+Als $p$ priem is en $r \geq 1$, dan:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(p^r) = p^r - p^{r-1}
+\end{equationbox}
+Ook:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(p^r) = p^{r-1}(p-1)
+\end{equationbox}
+Waarom? We tellen de getallen tussen $1$ en $p^r$ die relatief priem zijn met $p^r$. Een getal is niet relatief priem met $p^r$ precies wanneer het deelbaar is door $p$.
+
+Dus we nemen alle getallen:
+\begin{equation*}
+    1,2,\dots,p^r
+\end{equation*}
+en trekken de veelvouden van $p$ er van af. Er zijn $p^r$ getallen in totaal. De veelvouden van $p$ zijn:
+\begin{equation*}
+    p, 2p, 3p, \dots, p^{r-1}p = 1
+\end{equation*}
+Dat zijn er $p^{r-1}$. Dus:
+\begin{equation*}
+    \varphi(p^r) = p^r - p^{r-1}
+\end{equation*}
+Factoriseer:
+\begin{equation*}
+    \varphi(p) = p^{r-1}(p-1)
+\end{equation*}
+
+\begin{niceproperty}*[Multiplicativiteit van $\varphi$]
+    \nextpart[]*
+    \begin{equation*}
+        \operatorname{ggd}(m,\ n) = 1 \implies \varphi(mn) = \varphi(m)\varphi(n)
+    \end{equation*}
+\end{niceproperty}
+
+\SimpleHeading{Stelling van Euler}
+
+De stelling van Euler is een rechtstreeks gevolg van de stelling van Lagrange.
+
+\begin{nicetheorem}*[Stelling van Euler]
+    \nextpart[]*
+    Als $\operatorname{ggd}(a,n)=1$, dan geldt:
+    \begin{equation*}
+        a^{\varphi(n)} \equiv 1 \pmod n
+    \end{equation*}
+\end{nicetheorem}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44] Omdat $\operatorname{ggd}(a,n)=1$ weten we dat:
+\begin{equation*}
+    \bar{a} \in \mathbb{Z}_n^{\times}
+\end{equation*}
+Ook weet je dat $\mathbb{Z}_n^{\times}$ een groep is onder vermenigvuldiging modulo $n$, en dat de orde van deze groep gelijk is aan:
+\begin{equation*}
+    \#\mathbb{Z}_n^{\times} = \varphi(n)
+\end{equation*}
+Uit Lagrange (\Cref{gevolg:lagrange_2_gevolg}) geldt er in een eindige groep $G$:
+\begin{equation*}
+    g^{\#G} = e \qquad \forall g \in G
+\end{equation*}
+We passen dit toe, dus:
+\begin{equation*}
+    G = \mathbb{Z}_n^{\times} \qquad \text{en} \qquad g = \bar{a}
+\end{equation*}
+Dan krijg je:
+\begin{equation*}
+    \begin{aligned}
+        \bar{a}^{\#\mathbb{Z}_n^{\times}} &= \bar{1} \\
+        &\Downarrow \textcolor{Green}{\;\; \#\mathbb{Z}_n^{\times} = \varphi(n)} \\
+        \bar{a}^{\varphi(n)} &= \bar{1} \\
+        &\Downarrow \\
+        a^{\varphi(n)} &\equiv 1 \pmod n
+    \end{aligned}
+\end{equation*}
+
+\subsubsection{Kleine stelling van Fermat als speciaal geval}
+
+Als $p$ priem is, dan weten we nu al dat $\varphi(p) = p-1$. Dus Euler geeft:
+\begin{equation*}
+    a^{\varphi(p)} \equiv 1 \pmod p
+\end{equation*}
+Daarom:
+\begin{equation*}
+    a^{p-1} \equiv 1 \pmod p
+\end{equation*}
+op voorwaarde dat $\operatorname{ggd}(a,p) = 1$. Omdat $p$ priem is, betekent dat hetzelfde als:
+\begin{equation*}
+    p \nmid a
+\end{equation*}
+
+\begin{nicecorollary}*[Kleine stelling van Fermat]
+    \nextpart[]*
+    Als $p$ priem is en $p \nmid a$, dan geldt:
+    \begin{equation*}
+        a^{p-1} \equiv 1 \pmod p
+    \end{equation*}
+\end{nicecorollary}
+
+Euler is dus gewoon Lagrange toegepast op de eenhedengroep.
+
+\newpage
+\textbf{\underbar{Voorbeeld:}} Bereken $\varphi(12)$.
+
+\underbar{Oplossing:} Factoriseer:
+\begin{equation*}
+    12 = 4 \cdot 3 = 2^2 \cdot 3
+\end{equation*}
+Omdat nu $\operatorname{ggd}(4,3)=1$, mag je schrijven:
+\begin{equation*}
+    \varphi(12) = \varphi(4)\varphi(3)
+\end{equation*}
+Nu:
+\begin{equation*}
+    \begin{aligned}
+        \varphi(4) &= \varphi(2^2) = 2^2 - 2^{2-1} = 4 - 2 = 2 \\
+        \varphi(3) &= 3 - 1 = 2
+    \end{aligned}
+\end{equation*}
+Dus:
+\begin{equation*}
+    \varphi(12)=2 \cdot 2 = 4
+\end{equation*}
+Inderdaad: $\mathbb{Z}_{12}^{\times} = \{\bar{1},\bar{5},\bar{7},\bar{11}\}$.
+
+\textbf{\underbar{Voorbeeld:}} Bereken $\varphi(360)$.
+
+\underbar{Oplossing:} Factoriseer:
+\begin{equation*}
+    \begin{aligned}
+        360 &= 36 \cdot 10 \\ 
+            &= 9 \cdot 4 \cdot 2 \cdot 5 \\
+            &= 3^2 \cdot 2^3 \cdot 5 
+    \end{aligned}
+\end{equation*}
+Dus:
+\begin{equation*}
+    \varphi(360) = \varphi(2^3)\varphi(3^2)\varphi(5)
+\end{equation*}
+Bereken elk stuk:
+\begin{equation*}
+    \begin{aligned}
+        \varphi(2^3) &= 2^3 - 2^3 = 8 - 4 = 4 \\
+        \varphi(3^2) &= 3^2 - 3^1 = 9 - 3 = 6 \\
+        \varphi(5)   &= 5 - 1 = 4
+    \end{aligned}
+\end{equation*}
+Dus $\varphi(360) = 4 \cdot 6 \cdot 4 = 96$.
+
+\textbf{\underbar{Voorbeeld:}} Bereken $7^{1000} \pmod{12}$
+
+\underbar{Oplossing:} $n=12$ en $a=7$, om de stelling van Euler te mogen gebruiken controleer je eerst:
+\begin{equation*}
+    \operatorname{ggd}(7,12) = 1
+\end{equation*}
+Dus Euler mag gebruikt worden. We weten ook dat $\varphi(12)=4$. De stelling van Euler zegt dan:
+\begin{equation*}
+    7^4 \equiv 1 \pmod{12}
+\end{equation*}
+Nu geldt ook dat:
+\begin{equation*}
+    1000 = 4 \cdot 250
+\end{equation*}
+Dus:
+\begin{equation*}
+    7^{1000} = 7^{4 \cdot 250} = (7^4)^{250}
+\end{equation*}
+Modulo $12$ is dan:
+\begin{equation*}
+    (7^4)^{250} \equiv 1^{250} \equiv 1 \pmod{12}
+\end{equation*}
+Dus: $7^{1000} \equiv 1 \pmod{12}$
+
+\subsection{Productringen, \texorpdfstring{$\mathbb{Z}_{mn} \cong \mathbb{Z}_m \times \mathbb{Z}_n$}{Zmn tgo Zm x Zn} en de Chinese reststelling}
+
+\subsubsection{Productringen}
+
+Als $A$ en $B$ ringen zijn, dan is het Carthesisch product
+\begin{equation*}
+    A \times B = \{(a,b) \mid a \in A,\ b \in B\}
+\end{equation*}
+opnieuw een ring met componentsgewijze bewerkingen:
+\begin{equation*}
+    \begin{gathered}
+        (a,b) + (a',b') = (a + a', b + b') \\
+        (a,b)(a',b') = (aa', bb')
+    \end{gathered}
+\end{equation*}
+Het nul-element is
+\begin{equation*}
+    (0_A, 0_B),
+\end{equation*}
+en, als beide ringen een eenheid hebben, is het eenheidselement
+\begin{equation*}
+    (1_A, 1_B)
+\end{equation*}
+
+\subsubsection{Isomorfisme \texorpdfstring{$\mathbb{Z}_{mn} \cong \mathbb{Z}_m \times \mathbb{Z}_n$}{Zmn tgo Zm x Zn}}
+
+\begin{nicetheorem}*[Splitsingsisomorfisme]
+    \nextpart[]*
+    Als $m$ en $n$ onderling ondeelbaar zijn, dus
+    \begin{equation*}
+        \operatorname{ggd}(m,n) = 1
+    \end{equation*}
+    dan is
+    \begin{equation*}
+        \psi : \mathbb{Z}_{mn} \to \mathbb{Z}_m \times \mathbb{Z}_n : [a]_{mn} \mapsto ([a]_m,\ [a]_n)
+    \end{equation*}
+    met 
+    \begin{equation*}
+        \psi([a]_{mn}) = ([a]_m,\ [a]_n)
+    \end{equation*}
+    een \textcolor{red!75!black}{\textbf{ringisomorfisme}}.    
+\end{nicetheorem}
+
+\textbf{\underbar{Notatie:}} $[a]$ betekent hier gewoon restklasse of equivalentieklasse van $a$ modulo een bepaald getal:
+\begin{equation*}
+    [a]_n = \bar{a} \in \mathbb{Z}_n = \{a +kn \mid k \in \mathbb{Z}\}
+\end{equation*}
+
+\newpage
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!44]\newline
+\textbf{1) $\psi$ is goed gedefinieerd:} Stel dat $[a]_{mn} = [b]_{mn}$. Dan geldt:
+\begin{equation*}
+    mn \mid (a-b)
+\end{equation*}
+Omdat $m \mid mn$ en $n \mid mn$, volgt:
+\begin{equation*}
+    m \mid (a-b) \qquad \text{en} \qquad n \mid (a-b)
+\end{equation*}
+Dus $[a]_m = [b]_m$ en $[a]_n = [b]_n$. Bijgevolg is
+\begin{equation*}
+    ([a]_m, [a]_n)=([b]_m, [b]_n)
+\end{equation*}
+Dus $\psi$ is goed gedefinieerd.
+
+\textbf{2) $\psi$ is een ringhomomorfisme:} Neem $[a]_{mn},[b]_{mn}\in\mathbb{Z}_{mn}$. Voor de optelling geldt:
+\begin{equation*}
+    \psi([a]_{mn}+[b]_{mn}) = \psi([a+b]_{mn})
+\end{equation*}
+Per definitie van $\psi$:
+\begin{equation*}
+    \psi([a+b]_{mn}) = ([a+b]_m,[a+b]_n)
+\end{equation*}
+Maar:
+\begin{equation*}
+    [a+b]_m=[a]_m+[b]_m \qquad \text{en} \qquad [a+b]_n=[a]_n+[b]_n
+\end{equation*}
+Dus:
+\begin{equation*}
+    \psi([a]_{mn}+[b]_{mn}) = ([a]_m+[b]_m,[a]_n+[b]_n)
+\end{equation*}
+Dit is precies:
+\begin{equation*}
+    ([a]_m,[a]_n)+([b]_m,[b]_n)
+\end{equation*}
+Dus:
+\begin{equation*}
+    \psi([a]_{mn}+[b]_{mn}) = \psi([a]_{mn})+\psi([b]_{mn})
+\end{equation*}
+Voor de vermenigvuldiging geldt analoog:
+\begin{equation*}
+    \psi([a]_{mn}\cdot[b]_{mn}) = \psi([ab]_{mn}) = ([ab]_m,[ab]_n)
+\end{equation*}
+Omdat:
+\begin{equation*}
+    [ab]_m=[a]_m[b]_m \qquad \text{en} \qquad [ab]_n=[a]_n[b]_n
+\end{equation*}
+krijgen we:
+\begin{equation*}
+    \psi([a]_{mn}\cdot[b]_{mn}) = ([a]_m[b]_m,[a]_n[b]_n)
+\end{equation*}
+Dus:
+\begin{equation*}
+    \psi([a]_{mn}\cdot[b]_{mn}) = \psi([a]_{mn})\cdot\psi([b]_{mn})
+\end{equation*}
+Ten slotte:
+\begin{equation*}
+    \psi([1]_{mn})=([1]_m,[1]_n)
+\end{equation*}
+dus $\psi$ bewaart ook het eenheidselement. Daarom is $\psi$ een ringhomomorfisme.
+
+\textbf{3) $\psi$ is injectief:} We bekijken de kern van $\psi$ als homomorfisme van additieve groepen. Stel:
+\begin{equation*}
+    [a]_{mn}\in\ker(\psi)
+\end{equation*}
+Dan:
+\begin{equation*}
+    \psi([a]_{mn})=([0]_m,[0]_n)
+\end{equation*}
+Dus:
+\begin{equation*}
+    ([a]_m,[a]_n)=([0]_m,[0]_n)
+\end{equation*}
+Hieruit volgt:
+\begin{equation*}
+    [a]_m=[0]_m \qquad \text{en} \qquad [a]_n=[0]_n
+\end{equation*}
+Dus:
+\begin{equation*}
+    m\mid a - \textcolor{Aquamarine}{0} \qquad \text{en} \qquad n\mid a - \textcolor{Aquamarine}{0}
+\end{equation*}
+Omdat $\operatorname{ggd}(m,n)=1$, volgt: $mn\mid a$. Dus:
+\begin{equation*}
+    [a]_{mn}=[0]_{mn}
+\end{equation*}
+Daarom:
+\begin{equation*}
+    \ker(\psi)=\{[0]_{mn}\}
+\end{equation*}
+Dus $\psi$ is injectief.
+
+\begin{nicenote}*
+    \nextpart[]*
+    Om injectiviteit van een groepshomomorfisme te bewijzen, volstaat het om te tonen dat de kern alleen uit het neutraal element bestaat.
+\end{nicenote}
+
+\textbf{4) $\psi$ is bijectief:} We hebben: $\#\mathbb{Z}_{mn}=mn$. Ook hebben we:
+\begin{equation*}
+    \#(\mathbb{Z}_m\times\mathbb{Z}_n) = \#\mathbb{Z}_m\cdot \#\mathbb{Z}_n = mn
+\end{equation*}
+Dus domein en codomein hebben evenveel elementen. Omdat $\psi$ injectief is tussen twee eindige verzamelingen met hetzelfde aantal elementen, is $\psi$ ook surjectief. Dus $\psi$ is bijectief.
+
+\textbf{Conclusie:} De afbeelding $\psi$ is een bijectief ringhomomorfisme. Daarom is $\psi$ een ringisomorfisme.
+Dus: 
+\begin{equation*}
+    \mathbb{Z}_{mn}\cong \mathbb{Z}_m\times \mathbb{Z}_n
+\end{equation*}
+
+\subsubsection{Gevolgen voor \texorpdfstring{$\mathbb{Z}_n^{\times}$}{Znx} en \texorpdfstring{$\varphi$}{phi}}
+
+Uit $\mathbb{Z}_{mn}\cong \mathbb{Z}_m\times \mathbb{Z}_n$ volgt voor de eenhedengroepen:
+\begin{equation*}
+    \mathbb{Z}_{mn}^\times\cong \mathbb{Z}_m^\times\times \mathbb{Z}_n^\times
+\end{equation*}
+\textbf{als $\operatorname{ggd}(m,\ n)=1$}. Dus
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(mn) = \varphi(m)\varphi(n)
+\end{equationbox}
+voor onderling ondeelbare $m$ en $n$. Als
+\begin{equation*}
+    n = p_1^{r_1} p_2^{r_2} \dots p_s^{r_s}
+\end{equation*}
+met \textbf{verschillende priemgetallen} $p_i$, dan volgt:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(n) = \prod_{i=1}^{s}\varphi(p_i^{r_s})
+\end{equationbox}
+en dus:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(n) = \prod_{i=1}^{s}p_i^{r_i-1}(p_i -1)
+\end{equationbox}
+Equivalent:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \varphi(n) = n\prod_{p\mid n}^{}\left(1 - \frac{1}{p}\right)
+\end{equationbox}
+
+\subsubsection{Chinese reststelling}
+
+De Chinese reststelling hangt rechtstreeks samen met het ringisomorfisme
+\begin{equation*}
+    \mathbb{Z}_{mn}\cong \mathbb{Z}_m\times \mathbb{Z}_n
+\end{equation*}
+wanneer
+\begin{equation*}
+    \operatorname{ggd}(m,n)=1.
+\end{equation*}
+De surjectiviteit van dit isomorfisme betekent precies dat elke combinatie van een rest modulo $m$ en een rest modulo $n$ afkomstig is van één rest modulo $mn$.
+
+\begin{nicetheorem}*[Chinese reststelling: twee moduli]
+    \nextpart[]*
+    Zij $m,n\in\mathbb{Z}_{\geq 1}$ met
+    \begin{equation*}
+        \operatorname{ggd}(m,n)=1.
+    \end{equation*}
+
+    Dan bestaat er voor elke keuze van $a_1,a_2\in\mathbb{Z}$ een $a\in\mathbb{Z}$
+    zodat
+    \begin{equation*}
+        a\equiv a_1 \pmod m
+    \end{equation*}
+    en
+    \begin{equation*}
+        a\equiv a_2 \pmod n.
+    \end{equation*}
+
+    Bovendien is deze oplossing uniek modulo $mn$.
+\end{nicetheorem}
+
+\SimpleHeading{Betekenis}
+
+We kunnen dus altijd een systeem van twee congruenties oplossen:
+\begin{equation*}
+    \begin{cases}
+        a\equiv a_1 \pmod m,\\
+        a\equiv a_2 \pmod n,
+    \end{cases}
+\end{equation*}
+zolang $m$ en $n$ onderling ondeelbaar zijn. De oplossing is uniek modulo $mn$. Dat betekent: als $a$ en $a'$ allebei oplossingen zijn, dan geldt
+\begin{equation*}
+    a\equiv a' \pmod{mn}
+\end{equation*}
+
+\SimpleHeading{Expliciete formule via Bézout}
+
+Omdat $\operatorname{ggd}(m,n)=1$, bestaan er volgens Bézout gehele getallen $s,t\in\mathbb{Z}$ zodat
+\begin{equation*}
+    sm + tn = 1
+\end{equation*}
+Dan is een oplossing van
+\begin{equation*}
+    \begin{cases}
+        a\equiv a_1 \pmod m,\\
+        a\equiv a_2 \pmod n
+    \end{cases}
+\end{equation*}
+gegeven door:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    a=sma_2+tna_1
+\end{equationbox}
+
+\textbf{\underline{Controle modulo $m$:}}
+
+Modulo $m$ geldt: $sm\equiv 0 \pmod m$. Dus $sma_2\equiv 0 \pmod m$. Uit $sm+tn=1$ volgt modulo $m$:
+\begin{equation*}
+    tn\equiv 1 \pmod m
+\end{equation*}
+Daarom:
+\begin{equation*}
+    tna_1\equiv a_1 \pmod m
+\end{equation*}
+Dus:
+\begin{equation*}
+    a=sma_2+tna_1\equiv a_1 \pmod m
+\end{equation*}
+
+\textbf{\underline{Controle modulo $n$:}}
+
+Modulo $n$ geldt: $tn\equiv 0 \pmod n$. Dus $tna_1\equiv 0 \pmod n$. Uit $sm+tn=1$ volgt modulo $n$:
+\begin{equation*}
+    sm\equiv 1 \pmod n
+\end{equation*}
+Daarom:
+\begin{equation*}
+    sma_2\equiv a_2 \pmod n
+\end{equation*}
+Dus:
+\begin{equation*}
+    a=sma_2+tna_1\equiv a_2 \pmod n
+\end{equation*}
+Hiermee is gecontroleerd dat $a=sma_2+tna_1$ inderdaad een oplossing is.
+
+\SimpleHeading{Oplossing is uniek}
+
+Stel dat $a$ en $a'$ allebei oplossingen zijn. Dan geldt:
+\begin{equation*}
+    a\equiv a' \pmod m \qquad \text{en} \qquad a\equiv a' \pmod n
+\end{equation*}
+Dus:
+\begin{equation*}
+    m\mid(a-a') \qquad \text{en} \qquad n\mid(a-a')
+\end{equation*}
+Omdat $\operatorname{ggd}(m,n)=1$, volgt dat:
+\begin{equation*}
+    mn\mid(a-a')
+\end{equation*}
+Dus:
+\begin{equation*}
+    a\equiv a' \pmod{mn}
+\end{equation*}
+De oplossing is dus uniek modulo $mn$
+
+\SimpleHeading{Meerder moduli}
+
+De Chinese reststelling bestaat ook voor meer dan twee moduli. Zij
+\begin{equation*}
+    m_1,m_2,\dots,m_r
+\end{equation*}
+paarsgewijs onderling ondeelbaar. Dat betekent:
+\begin{equation*}
+    \operatorname{ggd}(m_i,m_j)=1 \qquad \text{voor alle } i\neq j
+\end{equation*}
+Dan heeft het systeem
+\begin{equation*}
+    \begin{cases}
+        x\equiv a_1 \pmod {m_1},\\
+        x\equiv a_2 \pmod {m_2},\\
+        \vdots\\
+        x\equiv a_r \pmod {m_r}
+    \end{cases}
+\end{equation*}
+een oplossing. Bovendien is die oplossing uniek modulo
+\begin{equation*}
+    M=m_1m_2\cdots m_r
+\end{equation*}
+Met andere woorden: alle oplossingen verschillen van elkaar met een veelvoud van $M$.
+
+\textbf{\underbar{Voorbeeld:}} Los het volgende systeem op:
+\begin{equation*}
+    \begin{cases}
+            x\equiv 2 \pmod 3,\\
+            x\equiv 3 \pmod 5.
+        \end{cases}
+\end{equation*}
+Hier is
+\begin{equation*}
+    m=3,\qquad n=5,\qquad a_1=2,\qquad a_2=3
+\end{equation*}
+Omdat $\operatorname{ggd}(3,5)=1$, mogen we de Chinese reststelling toepassen. We zoeken eerst $s,t\in\mathbb{Z}$ zodat
+\begin{equation*}
+    sm+tn=1
+\end{equation*}
+Dus:
+\begin{equation*}
+    3s+5t=1
+\end{equation*}
+Een oplossing is:
+\begin{equation*}
+    2\cdot 3+(-1)\cdot 5=1
+\end{equation*}
+Dus
+\begin{equation*}
+    s=2 \qquad \text{en} \qquad t=-1
+\end{equation*}
+De expliciete formule uit de Chinese reststelling is:
+\begin{equation*}
+    x=sma_2+tna_1
+\end{equation*}
+Invullen geeft:
+\begin{equation*}
+    x=(2\cdot 3)\cdot 3+((-1)\cdot 5)\cdot 2
+\end{equation*}
+Dus $x=18-10=8$. We controleren: $8\equiv 2 \pmod 3$, want $8=2\cdot 3+2$.
+
+Ook: $8\equiv 3 \pmod 5$, want $8=1\cdot 5+3$. Dus $x=8$ is een oplossing. Omdat de oplossing uniek is modulo
+\begin{equation*}
+    mn=3\cdot 5=15
+\end{equation*}
+is de volledige oplossing:
+\begin{equation*}
+    x\equiv 8 \pmod {15}
+\end{equation*}
+
+\subsection{Eindige velden}
+
+Als $p$ priem is, dan is
+\begin{equation*}
+    \mathbb{F}_p = \mathbb{Z}_p
+\end{equation*}
+een veld met $p$ elementen.
+
+\textbf{\underbar{Waarom?}} Neem een niet-nul element $\bar{a} \in \mathbb{Z}_p$. Omdat $p$ priem is en $a \not\equiv 0 \pmod p$, geldt:
+\begin{equation*}
+    \operatorname{ggd}(a,p) = 1
+\end{equation*}
+Door Bézout bestaan er dan $s,\ t$ zodat
+\begin{equation*}
+    sa + tp = 1
+\end{equation*}
+Modulo $p$ wordt dit:
+\begin{equation*}
+    \bar{s}\bar{a} = \bar{1}
+\end{equation*}
+Dus $\bar{a}$ heeft een inverse. Elk niet-nul element is dus inverteerbaar. Dus $\mathbb{Z}_p$ is een veld.
+
+\subsubsection{Velden construeren met veeltermen modulo een irreduceerbare veelterm}
+
+\SimpleHeading{Setup}
+
+Laat $F$ een veld zijn en beschouw de Euclidische ring $F[x]$. Neem dan een irreduceerbare veelterm
+\begin{equation*}
+    g(x) \in F[x]
+\end{equation*}
+We beschouwen de quotiëntring
+\begin{equation*}
+    F[x]/(g(x))
+\end{equation*}
+Dit wordt in de literatuur ook wel lichter genoteerd als 
+\begin{equation*}
+    F[x] \;\text{ mod } g(x)
+\end{equation*}
+Hier is $(g(x))$ het ideaal van alle veelvouden van $g(x)$:
+\begin{equation*}
+    (g(x)) = \{h(x)g(x) \mid h(x) \in F[x]\}
+\end{equation*}
+
+\SimpleHeading{Equivalentie modulo $g(x)$}
+
+Twee veeltermen $f_1(x)$ en $f_2(x)$ stellen dezelfde klasse voor modulo $g(x)$ als
+\begin{equation*}
+    f_1(x) \equiv f_2(x) \pmod{g(x)}
+\end{equation*}
+Dit betekent:
+\begin{equation*}
+    g(x) \mid (f_1(x) - f_2(x))
+\end{equation*}
+Dit is volledig analoog aan rekenen modulo $n$ in $\mathbb{Z}$.
+
+\subsubsection{Waarom \texorpdfstring{$F[x]/(g(x))$}{F[x]/(g(x))} een veld is als \texorpdfstring{$g$}{g} irreduceerbaar is}
+
+\begin{nicetheorem}*
+    \nextpart[]*
+    Als $g$ irreduceerbaar is, dan is $F[x]/(g(x))$ een \textbf{veld}.
+\end{nicetheorem}
+
+\inlinetext{\underline{Bewijs:}}[Goldenrod!44] We moeten aantonen dat elk niet-nul element een inverse heeft. Neem een niet-nul klasse
+\begin{equation*}
+    [f(x)] \in F[x]/(g(x))
+\end{equation*}
+Niet-nul betekent:
+\begin{equation*}
+    g(x) \nmid f(x)
+\end{equation*}
+want als $f(x)$ een veelvoud is van $g(x)$ is het de klasse $\bar{0} = [f(x)]$. Omdat $g(x)$ irreduceerbaar is (aanname), zijn de enige delers van $g(x)$ eenheden en geassocieerden van $g(x)$. Dus als $g(x)$ geen deler is van $f(x)$, dan moet wel gelden:
+\begin{equation*}
+    d(x) = \operatorname{ggd}(f(x),\ g(x)) = 1
+\end{equation*}
+Want als de ggd een geassocieerde van $g(x)$ zou zijn, dan bestaat er een:
+\begin{equation*}
+    d(x) = c \cdot g(x) \;\;\xLongrightarrow{g\text{ niet-nul}}\;\; g(x) = \frac{1}{c} \cdot d(x)
+\end{equation*}
+Maar $d(x) \mid f(x)$, dus er bestaat ook een $k(x)$ zodat:
+\begin{equation*}
+    f(x) = k(x) \cdot d(x) \;\;\xLongrightarrow{d(x)\text{ invullen}}\;\; \begin{aligned}
+        f(x) &= k(x) \cdot (c \cdot g(x)) \\
+             &= (c \cdot k(x)) \cdot \textcolor{Aquamarine}{g(x)}
+    \end{aligned}
+\end{equation*} 
+Dus hier staat dat $g(x) \mid f(x)$, maar dan kan niet volgens onze aanname!
+
+Door Bézout in de Euclidische ring $F[x]$ bestaan veeltermen $s(x), t(x)$ zodat
+\begin{equation*}
+    s(x)g(x) + t(x)f(x) = 1
+\end{equation*}
+Modulo $g(x)$ verdwijnt de eerste term:
+\begin{equation*}
+    [t(x)][f(x)] = [1]
+\end{equation*}
+Dus $[t(x)]$ is de inverse van $[f(x)]$. Daarom is 
+\begin{equation*}
+    F[x]/(g(x))
+\end{equation*}
+een veld!
+
+\begin{barbox}[WildStrawberry][gray!3]
+    \textcolor{WildStrawberry}{\textbf{Het parallel:}} een \textbf{priemgetal} $p$ maakt $\mathbb{Z}/(p)$ een veld; een \textbf{irreduceerbare veelterm} $g$ maakt $F[x]/(g)$ een veld. Irreduceerbare veeltermen zijn de "priemgetallen" van $F[x]$. 
+\end{barbox}
+
+\textbf{\underbar{Voorbeeld:}} We construeren het eindige veld met $4$ elementen (genoteerd als $\mathbb{F}_{2^2}$ of $\mathbb{F}_4$) door de veeltermring $\mathbb{F}_2[x]$ te delen door een irreduceerbare veelterm van graad $2$.
+
+\textbf{1) Keuze irreduceerbare veelterm $g(x)$:} We kiezen de veelterm
+\begin{equation*}
+    g(x) = x^2 + x + 1 \in \mathbb{F}_2[x]
+\end{equation*}
+en checken op irreduceerbaarheid. Omdat $g(x)$ graad $2$ heeft, is hij irreduceerbaar \emph{asa} hij geen nulpunten heeft in $\mathbb{F}_2 = \{0,1\}$:
+\begin{equation*}
+    \begin{aligned}
+        g(0) &= 0^2 + 0 + 1 = 1 \neq 0 \\
+        g(1) &= 1^2 + 1 + 1 = 3 \equiv 1 \pmod 2 \neq 0
+    \end{aligned}
+\end{equation*}
+Omdat er geen nulpunten zijn, is $g(x)$ \textbf{irreduceerbaar over $\mathbb{F}_2$}. De quotiëntring $\mathbb{F}[x]/(x^2 + x + 1)$ is hierdoor gegarandeerd een \textbf{veld}.
+
+\textbf{2) De elementen van het veld:} Als we een willekeurige veelterm delen door $g(x)$ (graad 2), zijn de mogelijke resten $r(x)$ altijd van graad $< 2$. De algemene vorm is: 
+\begin{equation*}
+    r(x) = ax + b \pmod{g(x)}
+\end{equation*}
+waarbij de coëfficiënten $a$ en $b$ uit het basisveld $\mathbb{F}_2 = \{0,1\}$ moeten komen. Dit levert exact $2^2=4$ unieke combinaties (elementen) op:
+\begin{itemize}
+    \item $a=0,\ b=0 \to 0$
+    \item $a=0,\ b=1 \to 1$
+    \item $a=1,\ b=0 \to x$
+    \item $a=1,\ b=1 \to x+1$
+\end{itemize}
+Het veld is dus de verzameling:
+\begin{equation*}
+    \mathbb{F}_2[x]/(x^2+x+1) = \{0,\ 1,\ x,\ x+1\}
+\end{equation*}
+
+\textbf{3) Rekenen in dit veld:} Bij het rekenen in dit veld gelden er twee belangrijke regels:
+\begin{enumerate}
+    \item \textbf{Coëfficiënten:} Rekenen met getallen gaat modulo $2$
+    \item \textbf{Machten van $x$:} Rekenen met $x$ gaat modulo $x^2 + x + 1$. Dus $x^2 + x + 1 = \bar{0}$
+\end{enumerate}
+
+\begin{equation*}
+\begin{array}{c@{\hspace{2cm}}c}
+    \begin{array}{c|cccc}
+        + & 0 & 1 & x & x+1 \\
+        \hline
+        0     & 0   & 1   & x   & x+1 \\
+        1     & 1   & 0   & x+1 & x \\
+        x     & x   & x+1 & 0   & 1 \\
+        x+1   & x+1 & x   & 1   & 0
+    \end{array}
+    &
+    \begin{array}{c|cccc}
+        \cdot & 0 & 1 & x & x+1 \\
+        \hline
+        0     & 0 & 0   & 0   & 0 \\
+        1     & 0 & 1   & x   & x+1 \\
+        x     & 0 & x   & x+1 & 1 \\
+        x+1   & 0 & x+1 & 1   & x
+    \end{array}
+\end{array}
+\end{equation*}
+
+\begin{itemize}
+    \item $x^2 + x + 1 = 0 \implies x^2 = x + 1$
+    \item $x \cdot x = x^2 = x + 1$
+    \item $x \cdot (x + 1) = x^2 + x = x + 1 + x = 2x + 1 = 1$
+\end{itemize}
+
+Merk ook op dat elk niet-nul element een inverse heeft, het is dus zeker een veld!
+
+\subsubsection{Algemene eindige velden \texorpdfstring{$\mathbb{F}_{p^m}$}{Fpm}}
+
+We combineren nu twee ideeën:
+\begin{enumerate}
+    \item $\mathbb{F}_p$ is een veld met $p$ elementen.
+    \item Als $g(x)$ irreduceerbaar is over een veld, dan is $F[x]/\left(g(x)\right)$ opnieuw een veld.
+\end{enumerate}
+Neem dus een irreduceerbare veelterm
+\begin{equation*}
+    g(x) \in \mathbb{F}_p[x]
+\end{equation*}
+met
+\begin{equation*}
+    \text{deg}(g) = m
+\end{equation*}
+Dan is
+\begin{equationbox}*[NavyBlue]
+    \mathbb{F}_p[x]/\left(g(x)\right)
+\end{equationbox}
+een \textbf{veld!}
+
+\SimpleHeading{Aantal elementen}
+
+Door Euclidische deling heeft elke klasse modulo $g(x)$ een unieke representant met graad kleiner dan $m$:
+\begin{equation*}
+    a_0 + a_1x + a_2x^2 + \cdots + a_{m-1}x^{m-1}
+\end{equation*}
+waarbij
+\begin{equation*}
+    a_i \in \mathbb{F}_p
+\end{equation*}
+Er zijn $m$ coëfficiënten, en elke coëfficiënt heeft $p$ mogelijke waarden. Daarom zijn er
+\begin{equationbox}*[NavyBlue]
+    p^m
+\end{equationbox}
+elementen. Dus:
+\begin{equationbox}*[NavyBlue]
+    \#\left(\mathbb{F}_p[x]/\left(g(x)\right)\right) = p^m
+\end{equationbox}
+Dit veld noteert men als
+\begin{equation*}
+    \mathbb{F}_{p^m} \qquad \text{of} \qquad GF(p^m)
+\end{equation*}
+
+\SimpleHeading{Interpretatie}
+
+Rekenen in $GF(p^m)$ betekent:
+\begin{enumerate}
+    \item Reken met veeltermen met coëfficiënten in $\mathbb{F}_p$.
+    \item Reduceer telkens modulo de irreduceerbare veelterm $g(x)$.
+    \item Het resultaat kan steeds als veelterm van graad kleiner dan $m$ geschreven worden.
+\end{enumerate}
+
+\textbf{\underbar{Voorbeeld:}}\newline
+Als $m=3$, dan ziet elk element er uit als
+\begin{equation*}
+    a_0 + a_1x + a_2x^2 \qquad \text{met} \qquad a_i \in \mathbb{F}_p
+\end{equation*}
+Als een product een term $x^3$ of hoger oplevert, reduceer je met de relatie $g(x) = 0$.
+
+\subsubsection{Belangrijke feiten over eindige velden}
+
+\begin{enumerate}
+    \item Elk eindig veld heeft een aantal elementen van de vorm
+    \begin{equation*}
+        p^m
+    \end{equation*}
+    waar $p$ een \textbf{priemgetal} is en $m \ge 1$.
+    \item Voor elk priemgetal $p$ en elke $m \ge 1$ bestaat er een irreduceerbare veelterm van graad $m$ over $\mathbb{F}_p$.
+    \item Dus voor elke $p$ en $m$ bestaat er een eindig veld met $p^m$ elementen.
+    \item Alle velden met $p^m$ elementen zijn \textbf{isomorf}. Daarom mag men spreken over \textbf{het} eindige veld met $p^m$ elementen:
+    \begin{equation*}
+        \mathbb{F}_{p^m} = GF(p^m)
+    \end{equation*}
+    In de volgende les wordt er intensief gewerkt met $\mathbb{F}_{2^8}$, wat belangrijk is in toepassingen zoals codetheorie en cryptografie.
+\end{enumerate}
+
+\subsection{Belangrijkste algoritmische patronen}
+
+\subsubsection{Inverse modulo \texorpdfstring{$n$}{n}}
+
+Om $\overline{a}^{-1}$ in $\mathbb{Z}_n$ te vinden:
+\begin{enumerate}
+    \item Controleer dat $\operatorname{ggd}(a,n) = 1$.
+    \item Gebruik extended Euclid:
+    \begin{equation*}
+        sa + tn = 1
+    \end{equation*}
+    \item Dan:
+    \begin{equation*}
+        \overline{a}^{-1} = \overline{s}
+    \end{equation*}
+\end{enumerate}
+
+\subsubsection{Inverse modulo een veelterm}
+
+Om $\left[f(x)\right]^{-1}$ in F$\left[x\right]/\left(g(x)\right)$ te vinden:
+\begin{enumerate}
+    \item Contoleer dat $g(x)$ irreduceerbaar is en $\left[f(x)\right] \neq [0]$.
+    \item Gebruik extended Euclid in $F[x]$:
+    \begin{equation*}
+        s(x)g(x) = t(x)f(x) = 1
+    \end{equation*}
+    \item Dan:
+    \begin{equation*}
+        \left[f(x)\right]^{-1} = \left[t(x)\right]
+    \end{equation*}
+\end{enumerate}
+
+\subsubsection{Chinese reststelling oplossen}
+
+Om
+\begin{equation*}
+    x \equiv a_1 \pmod m, \qquad x \equiv a_2 \pmod n
+\end{equation*}
+met $\operatorname{ggd}(m, n) = 1$ op te lossen:
+\begin{enumerate}
+    \item Bereken $s,t$ met
+    \begin{equation*}
+        sm + tn = 1
+    \end{equation*}
+    \item Neem
+    \begin{equation*}
+        x = sm\ \textcolor{Aquamarine}{a_2} + tn\ \textcolor{Aquamarine}{a_1}
+    \end{equation*}
+    \item De oplossing is uniek modulo $mn$.
+\end{enumerate}
+
+\subsection{Samenvattende Oefeningen}
+
+\emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin}
+
+
+
+
+
+
+
+
+
+

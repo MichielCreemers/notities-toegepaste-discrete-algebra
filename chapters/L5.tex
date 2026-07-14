@@ -167,7 +167,7 @@ Ook bij matrices:
 \end{equation*}
 
 \begin{barbox}[PineGreen][gray!3]
-    Optellen schrappen mag altijd: $a+c = B+c \Rightarrow a=b$ (want $\langle A,+ \rangle$ is een groep). Maar \textbf{vermenigvuldigen} schrappen mag niet zomaar: uit $ac = bc$ volgt niet noodzakelijk $a=b$. Voorbeeld in $\mathbb{Z}_6$: $\bar{2} \cdot \bar{1} = \bar{2}$ en $\bar{2} \cdot \bar{4} = \bar{8} = \bar{2}$, dus $\bar{2} \cdot \bar{1} = \bar{2} \cdot \bar{4}$, maar $\bar{1} \neq \bar{4}$. De boosdoener is nuldeler $\bar{2}$.
+    Optellen schrappen mag altijd: $a+c = b+c \Rightarrow a=b$ (want $\langle A,+ \rangle$ is een groep). Maar \textbf{vermenigvuldigen} schrappen mag niet zomaar: uit $ac = bc$ volgt niet noodzakelijk $a=b$. Voorbeeld in $\mathbb{Z}_6$: $\bar{2} \cdot \bar{1} = \bar{2}$ en $\bar{2} \cdot \bar{4} = \bar{8} = \bar{2}$, dus $\bar{2} \cdot \bar{1} = \bar{2} \cdot \bar{4}$, maar $\bar{1} \neq \bar{4}$. De boosdoener is nuldeler $\bar{2}$.
 \end{barbox}
 
 \begin{nicedefinition}*[Deelring]
@@ -378,8 +378,8 @@ en
         \item $I$ is een deelgroep van $\langle A, + \rangle$
         \item $I$ absorbeert vermenigvuldiging met elementen uit $A$:
         \begin{itemize}
-            \item[] $ai \in A \qquad \forall a \in A, i \in I$
-            \item[] $ia \in A \qquad \forall a \in A, i \in I$
+            \item[] $ai \in I \qquad \forall a \in A, i \in I$
+            \item[] $ia \in I \qquad \forall a \in A, i \in I$
         \end{itemize}
     \end{enumerate}
 \end{nicedefinition}
@@ -391,7 +391,7 @@ en
 
 \SimpleHeading{Absorberen?}
 
-Zodra één facot in $I$ zit, valt het hele product terug in $I$. Dus:
+Zodra één factor in $I$ zit, valt het hele product terug in $I$. Dus:
 \begin{equation*}
     i \in I, a \in A \implies ai \in I \text{ en } ia \in I
 \end{equation*}
@@ -413,7 +413,7 @@ Dan bestaan er $i_1,i_2 \in I$ zodat:
 \end{equation*}
 Dan:
 \begin{equation*}
-    a_1'a_2' = (a_1 + i_1)(a_2 + i_2) = a_1a_2 a_1i_2 + i_1a_2 + i_1i_2
+    a_1'a_2' = (a_1 + i_1)(a_2 + i_2) = a_1a_2 + a_1i_2 + i_1a_2 + i_1i_2
 \end{equation*}
 Maar omdat $I$ nu een ideaal is geldt:
 \begin{equation*}
@@ -438,7 +438,7 @@ Daarom:
 \emoji{right-arrow} Dus het product hangt niet af van de gekozen representanten. De vermenigvuldiging is dus goed gedefinieerd.
 
 \begin{roundbox}[CornflowerBlue!10][RoyalPurple]
-    Ananlogie valkuil: zodra je een willekeurig element uit de hele ring ($a$) vermenigvuldigt met iets uit het ideaal ($i$), wordt het resultaat direct geabsorbeerd en wordt het óók een onderdeel van het ideaal. Vergelijk: in $\mathbb{Z}$is "even $\times$ om-het-even = even". De even getallen slokken op.
+    Analogie valkuil: zodra je een willekeurig element uit de hele ring ($a$) vermenigvuldigt met iets uit het ideaal ($i$), wordt het resultaat direct geabsorbeerd en wordt het óók een onderdeel van het ideaal. Vergelijk: in $\mathbb{Z}$ is "even $\times$ om-het-even = even". De even getallen slokken op.
 \end{roundbox}
 
 \subsubsection{Quotiëntring}
@@ -494,7 +494,7 @@ Zij $\psi: R \to S$ een ring-homomorfisme. Dan gelden de volgende drie fundament
 
 \SimpleHeading{Wanneer is een integriteitsdomein een veld?}
 
-Elke veld is een integriteitsdomein. Het omgekeerde geldt niet altijd ($\mathbb{Z}$!). \textbf{tenzij de voel EINDIG is}. Dit leidt tot de volgende stelling:
+Elke veld is een integriteitsdomein. Het omgekeerde geldt niet altijd ($\mathbb{Z}$!). \textbf{tenzij de ring EINDIG is}. Dit leidt tot de volgende stelling:
 
 \begin{nicetheorem}*
     \nextpart[]*
@@ -613,7 +613,7 @@ $\mathbb{C}$ is een veld dat je kunt opvatten als $\mathbb{R}^2$ met componentsg
 \begin{equation*}
     (x_1,\ y_1)(x_2,\ y_2) = (x_1x_2 - y_1y_2,\ x_1y_2 + x_2y_1)
 \end{equation*}
-Schrijf je $(x,\ y)$ als $z = jy$ met $j^2 = -1$, dan vind je dit product gewoon doot haakjes uit te werken:
+Schrijf je $(x,\ y)$ als $z = jy$ met $j^2 = -1$, dan vind je dit product gewoon door haakjes uit te werken:
 \begin{equation*}
     (x_1 + jy_1)(x_2 + jy_2) = (x_1x_2 - y_1y_2) + j(x_1y_2 + x_2y_1)
 \end{equation*}
@@ -691,7 +691,7 @@ De \textbf{inverteerbare elementen} (de \textbf{eenheden}) zijn de sleutel tot d
 
 \textbf{Eenhedengroep}: De eenheden van een ring met eenheidselement vormen samen een \textbf{groep onder de vermenigvuldiging} (product van twee eenheden is een eenheid, en de inverse van een eenheid is er een). Dit is de \textbf{eenhedengroep}, notatie $R^{\times}$.
 \begin{equation*}
-    \langle A^{\times}, \cdot \rangle = \langle \{a \in A \mid \exists a^{-1},\cdot\} \rangle
+    \langle A^{\times}, \cdot \rangle = \langle \{a \in A \mid \exists a^{-1}\},\ \cdot \rangle
 \end{equation*}
 Bijvoorbeeld $\mathbb{Z}^{\times} = \{1,\ -1\} \cong \mathbb{Z}_2$. (De gedetailleerde studie van $\mathbb{Z}_n^{\times}$ en de Euler-$\varphi$ functie volgt in de volgende les.)
 
@@ -721,7 +721,7 @@ Bijvoorbeeld $\mathbb{Z}^{\times} = \{1,\ -1\} \cong \mathbb{Z}_2$. (De gedetail
 In het middelbaar heb je waarschijnlijk geleerd dat de $\operatorname{ggd}$ de grootste is in de zin van het hoogste getal. Maar in een algemeen integriteitsdomein (zoals bij veeltermen) betekent "groter" niet meer dat een getal hoger is op de getallenas, maar dat het \textbf{het meest deelbaar} is. De definite deelt de $\operatorname{ggd}$ daarom op in twee logische eisen:
 \begin{enumerate}
     \item $g$ moet überhaubt een deler zijn van $a$ en $b$ (gemeenschappelijke deler).
-    \item Elke andere deler $c$ moet ook een deler zijn van $g$. $g$ zit bovenaan in de hiërarchie van de delers.
+    \item Elke andere gemene deler $c$ moet ook een deler zijn van $g$. $g$ zit bovenaan in de hiërarchie van de delers.
 \end{enumerate}
 
 \begin{nicedefinition}*[GGD en KGV]
@@ -760,7 +760,7 @@ In het middelbaar heb je waarschijnlijk geleerd dat de $\operatorname{ggd}$ de g
 
 \subsubsection{Priemelementen}
 
-\begin{nicedefinition}*[Irreduceerbaar element]
+\begin{nicedefinition}*[Irreduceerbaar element]\label{H4_irreduceerbaar_element}
     \nextpart[]*
     Zij $D$ een integriteitsdomein. Een element $p \in D$ (met $p \neq 0$ en $p$ niet inverteerbaar) heet \textcolor{PineGreen!75!black}{\textbf{irreduceerbaar}} als geldt:
     \begin{equation*}

@@ -218,7 +218,7 @@ Dit geldt voor alle $x,y\in H$, dus $\varphi^{-1}$ is een homomorfisme. Omdat $\
     \item $\langle \mathbb{R}_{>},\cdot \rangle$ is een deelgroep van $\langle \mathbb{R}\backslash\{0\},\cdot \rangle$
     \item De veelvouden van $m$: $\langle \mathbb{Z},+\rangle$ is een deelgroep van $\langle\mathbb{Z},+\rangle$, $\forall m \ge 1$
     \item $\langle SL_n(\mathbb{R}) = \{ M \in \mathbb{R}^{n \times n} \mid det(M)=1 \} \rangle$ is een deelgroep van alle matrices $\{A \in \mathbb{R}^{n \times n} \mid det(A) \neq 0\} = GLn(\mathbb{R})$. $SL_n(\mathbb{R})$ noemt men de \inlinetext{Special Linear group}.
-    \item $\langle A_n = \{\sigma \in S_n \mid \text{sign}(\sigma)=1\}, \circ \rangle$ is een deelgroep van $S_n$. $A_n$ noemt men de \newline\inlinetext{Alternating group}.
+    \item $\langle A_n = \{\sigma \in S_n \mid \text{sign}(\sigma)=+1\}, \circ \rangle$ is een deelgroep van $S_n$. $A_n$ noemt men de \newline\inlinetext{Alternating group}. Dus een deelgroep met enkel \textbf{even permutaties}.
 \end{itemize}
 
 \begin{nicetheorem}*[Stelling van Cayley]
@@ -375,7 +375,7 @@ Dit geldt voor alle $x,y\in H$, dus $\varphi^{-1}$ is een homomorfisme. Omdat $\
     \end{equation*}
     Dus:
     \begin{equation*}
-        \psi(g*h) = \pi_g * \pi_h
+        \psi(g*h) = \pi_g \circ \pi_h
     \end{equation*}
     Aangezien $\psi(g) = \pi_g$ en $\psi(h) = \pi_h$, krijg je:
     \begin{equation*}
@@ -823,7 +823,7 @@ Dit geeft $\{2, 4, 3, 1\}$, exact de elementen van de groep. Dus de groep is cyc
     want $\{\textcolor{Green}{e}, g, \dots, g^{\text{ord}(g)-1}\}\textcolor{Green}{g^{\text{ord}(g)}}\}$
 \end{nicenote}
 
-\begin{nicecorollary}*[van Lagrange 1]
+\begin{nicecorollary}*[van Lagrange 1]\label{gevolg:H3_gevolg_lagrange_1}
     \nextpart[]*
     Je weet: "een element $g$ genereert een deelgroep $\langle g \rangle$. En omdat $\langle g \rangle$ een deelgroep is van $G$, weten we ook uit \emph{Lagrange}:
     \begin{equation*}
@@ -1209,7 +1209,7 @@ Dat is precies rekenen modulo $m$!
             \begin{aligned}
                 y &= g^{-1}xg \\
                 &\Downarrow \textcolor{Green}{\text{ Links $g$ en rechts $g^{-1}$}}\\
-                gyg^{-1} &= y
+                gyg^{-1} &= x
             \end{aligned}
         \end{equation*}
         \item Voor een vaste $g$ is $\psi : G \to G : x \mapsto g^{-1}xg$ een automorfisme. Want:
