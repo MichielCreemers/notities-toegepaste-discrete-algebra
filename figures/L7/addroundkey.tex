@@ -1,0 +1,126 @@
+\begin{tikzpicture}[>=latex]
+
+% --- Global TikZ Styles ---
+\tikzset{
+    matrixA/.style={
+        matrix of math nodes,
+        nodes in empty cells,
+        inner sep=0pt,
+        row sep=-\pgflinewidth,
+        column sep=-\pgflinewidth,
+        nodes={
+            draw=black!55,
+            line width=0.55pt,
+            fill=blue!8,
+            minimum width=1.25cm,
+            minimum height=1cm,
+            inner sep=0pt,
+            anchor=center,
+            font=\large
+        }
+    },
+    matrixK/.style={
+        matrix of math nodes,
+        nodes in empty cells,
+        inner sep=0pt,
+        row sep=-\pgflinewidth,
+        column sep=-\pgflinewidth,
+        nodes={
+            draw=black!55,
+            line width=0.55pt,
+            fill=purple!8,
+            minimum width=1.25cm,
+            minimum height=1cm,
+            inner sep=0pt,
+            anchor=center,
+            font=\large
+        }
+    },
+    matrixB/.style={
+        matrix of math nodes,
+        nodes in empty cells,
+        inner sep=0pt,
+        row sep=-\pgflinewidth,
+        column sep=-\pgflinewidth,
+        nodes={
+            draw=black!55,
+            line width=0.55pt,
+            fill=red!8,
+            minimum width=1.25cm,
+            minimum height=1cm,
+            inner sep=0pt,
+            anchor=center,
+            font=\large
+        }
+    },
+    frameA/.style={
+        draw=blue!70,
+        thick
+    },
+    frameK/.style={
+        draw=purple!70,
+        thick
+    },
+    frameB/.style={
+        draw=red!70,
+        thick
+    },
+    operation/.style={
+        font=\LARGE,
+        text=black!75
+    }
+}
+
+% ==================================================
+% --- Matrix A ---
+% ==================================================
+
+\matrix[matrixA] (A) at (0,0) {
+    a_{0,0} & a_{0,1} & a_{0,2} & a_{0,3} \\
+    a_{1,0} & a_{1,1} & a_{1,2} & a_{1,3} \\
+    a_{2,0} & a_{2,1} & a_{2,2} & a_{2,3} \\
+    a_{3,0} & a_{3,1} & a_{3,2} & a_{3,3} \\
+};
+
+\draw[frameA]
+    (A.north west) rectangle (A.south east);
+
+% ==================================================
+% --- Matrix K ---
+% ==================================================
+
+\matrix[matrixK, right=2.0cm of A] (K) {
+    k_{0,0} & k_{0,1} & k_{0,2} & k_{0,3} \\
+    k_{1,0} & k_{1,1} & k_{1,2} & k_{1,3} \\
+    k_{2,0} & k_{2,1} & k_{2,2} & k_{2,3} \\
+    k_{3,0} & k_{3,1} & k_{3,2} & k_{3,3} \\
+};
+
+\draw[frameK]
+    (K.north west) rectangle (K.south east);
+
+% XOR exactly halfway between A and K
+\node[operation] (xor) at
+    ($(A.east)!0.5!(K.west)$)
+    {$\oplus$};
+
+% ==================================================
+% --- Matrix B ---
+% ==================================================
+
+\matrix[matrixB, right=2.0cm of K] (B) {
+    b_{0,0} & b_{0,1} & b_{0,2} & b_{0,3} \\
+    b_{1,0} & b_{1,1} & b_{1,2} & b_{1,3} \\
+    b_{2,0} & b_{2,1} & b_{2,2} & b_{2,3} \\
+    b_{3,0} & b_{3,1} & b_{3,2} & b_{3,3} \\
+};
+
+\draw[frameB]
+    (B.north west) rectangle (B.south east);
+
+% Equals sign exactly halfway between K and B
+\node[operation] (equals) at
+    ($(K.east)!0.5!(B.west)$)
+    {$=$};
+
+\end{tikzpicture}

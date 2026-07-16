@@ -1,0 +1,106 @@
+\begin{tikzpicture}[>=latex]
+
+% --- Global TikZ Styles ---
+\tikzset{
+    leftmatrix/.style={
+        matrix of math nodes,
+        nodes in empty cells,
+        inner sep=0pt,
+        row sep=-\pgflinewidth,
+        column sep=-\pgflinewidth,
+        nodes={
+            draw=black!55,
+            line width=0.55pt,
+            fill=blue!8,
+            minimum width=1.15cm,
+            minimum height=1cm,
+            inner sep=0pt,
+            anchor=center,
+            font=\large
+        }
+    },
+    rightmatrix/.style={
+        matrix of math nodes,
+        nodes in empty cells,
+        inner sep=0pt,
+        row sep=-\pgflinewidth,
+        column sep=-\pgflinewidth,
+        nodes={
+            draw=black!55,
+            line width=0.55pt,
+            fill=red!8,
+            minimum width=1.15cm,
+            minimum height=1cm,
+            inner sep=0pt,
+            anchor=center,
+            font=\large
+        }
+    },
+    frameA/.style={
+        draw=blue!70,
+        thick
+    },
+    frameB/.style={
+        draw=red!70,
+        thick
+    },
+    arrow/.style={
+        ->,
+        >=latex,
+        thick,
+        draw=black!65,
+        shorten >=2pt,
+        shorten <=2pt
+    }
+}
+
+% ==================================================
+% --- Left matrix ---
+% ==================================================
+
+\matrix[leftmatrix] (A) at (0,0) {
+    a & b & c & d \\
+    e & f & g & h \\
+    i & j & k & l \\
+    m & n & o & p \\
+};
+
+% Colored outer frame
+\draw[frameA]
+    (A.north west) rectangle (A.south east);
+
+% ==================================================
+% --- Right matrix ---
+% ==================================================
+
+\matrix[rightmatrix] (B) at (7.5,0) {
+    a & b & c & d \\
+    f & g & h & e \\
+    k & l & i & j \\
+    p & m & n & o \\
+};
+
+% Colored outer frame
+\draw[frameB]
+    (B.north west) rectangle (B.south east);
+
+% ==================================================
+% --- Arrows corresponding to rows 2, 3, and 4 ---
+% ==================================================
+
+\draw[arrow]
+    ($(A-2-4.east)+(0.75,0)$)
+    --
+    ($(B-2-1.west)+(-0.75,0)$);
+
+\draw[arrow]
+    ($(A-3-4.east)+(0.75,0)$)
+    --
+    ($(B-3-1.west)+(-0.75,0)$);
+
+\draw[arrow]
+    ($(A-4-4.east)+(0.75,0)$)
+    --
+    ($(B-4-1.west)+(-0.75,0)$);
+
+\end{tikzpicture}

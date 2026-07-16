@@ -2,20 +2,200 @@
 \section{Les 7 -- Cryptografie}
 
 \begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.9\hsize}L >{\hsize=1.1\hsize}L @{}}
+        \textbf{Algebra die je leerde} & \textbf{Waar het hier terugkomt} \\
+        \hline
+        Eindige velden $\mathbb{F}_{2^8}$ (les 6) & \textbf{AES} (byte-rekenen, SubBytes-inverse, MixColumns) \\
+        \thinrule
+        Euler \& Fermat, CRT (les 6) & \textbf{RSA} (correctheid van decryptie, versnelling) \\
+        \thinrule
+        Inverse vie Bézout / extended Euclid (les 6) & \textbf{sleutelgeneratie} ($d = e^{-1}$), SubBytes-inverse \\
+        \thinrule
+        Cyclische groepen, orde, generator (les 4) & \textbf{DLP, Diffie-Hellman, Schnorr} \\
+        \thinrule
+        Stelling van Lagrange (les 4) & waarom $g^{\text{orde}} = e$, basis van DLP-groepen \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \textcolor{RoyalPurple!75}{\textbf{De rode draad:}} moderne cryptografie = "makkelijk in één richting, moeilijk in de andere". Machtsverheffingen zijn goedkoop ($g^a, m^e$), maar de omkering (discrete log, factorisatie) is duur.
+\end{barbox}
+
+\begin{center}
     \inlinetext{Vanaf hier niet kennen voor examen}[Magenta!33]
 \end{center}
 
 \subsection{Wat is cryptografie? -- Culturele Inleiding}
 
+\textbf{Cryptografie} betekent letterlijk “geheimschrift”. In moderne termen is het de wetenschap van het beveiligen van informatie door berichten te transformeren zodat enkel bevoegde partijen ze kunnen lezen of controleren.
+
+\SimpleHeading{Steganografie}
+
+\inlinetext{Steganografie} is de kunst van het verbergen dat er überhaubt een boodschap is. Bijvoorbeeld:
+\begin{itemize}
+    \item een tekst verborgen onder een laag klei;
+    \item een bericht getatoeëerd op een kaalgeschoren hoofd, waarna men wacht tot het haar terug groeit.
+\end{itemize}
+Bij steganografie probeert men de aanwezigheid van de boodschap te verbergen. \textcolor{red!66}{niet deze cursus}
+
+\SimpleHeading{Cryptografie}
+
+Bij \inlinetext{cryptografie} mag iedereen weten dat er een boodschap wordt verstuurd, en mag zelfs het algoritme publiek zijn. Het geheim zit in een \inlinetext{sleutel}. Dus:
+\begin{itemize}
+    \item het algoritme is publiek;
+    \item de sleutel is geheim;
+    \item zonder sleutel is de cijfertekst praktisch onleesbaar of onbruikbaar.
+\end{itemize}
+Dit principe is belangrijk: moderne cryptografie vertrouwt niet op geheime algoritmes, maar op geheime sleutels en moeilijk oplosbare wiskundige problemen.
+
 \subsubsection{Taken van moderne cryptografie}
+
+Oorspronkelijk ging cryptografie vooral over geheimhouding, maar vandaag omvat het veel meer.
+
+\SimpleHeading{Geheimhouding / vertrouwelijkheid}
+
+Een aanvaller die het kanaal afluistert, mag de inhoud van het bericht niet leren.
+
+\textbf{\underbar{Voorbeeld:}} iemand luistert internetverkeer af, maar mag het bericht niet kunnen lezen.
+
+\SimpleHeading{Authenticatie}
+
+Je wil weten met wie je communiceert.
+
+\textbf{\underbar{Voorbeeld:}} als je denkt met Alice te praten, wil je zeker zijn dat het echt Alice is en niet iemand die zich voordoet als Alice.
+
+\SimpleHeading{Integriteit}
+
+Je wil weten of het bericht onderweg gewijzigd werd.
+
+\textbf{\underbar{Voorbeeld:}} een aanvaller kan het bericht misschien niet lezen, maar zou het kunnen veranderen in nonsens of zelfs in een ander betekenisvol bericht.
+
+\SimpleHeading{Onweerlegbaarheid}
+
+Een partij mag achteraf niet kunnen ontkennen dat ze een bepaald bericht of een bepaalde transactie heeft verstuurd.
+
+\textbf{\underbar{Voorbeeld:}} bij een elektronische betaling wil je kunnen aantonen dat de betaling effectief door de betaler werd uitgevoerd.
 
 \subsubsection{Symmetrische en asymmetrische cryptografie}
 
+Er zijn twee grote families.
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \arrayrulecolor{black}
+    %\setlength{\arrayrulewidth}{1pt}
+    \begin{tabularx}{\linewidth}{@{} >{\hsize=0.9\hsize}L >{\hsize=0.9\hsize}L >{\hsize=1.1\hsize}L >{\hsize=1.1\hsize}L @{}}
+        \textbf{Type} & \textbf{Ook genoemd} & \textbf{Sleutelgebruik} & \textbf{Typisch doel} \\
+        \hline
+        Private-sleutelcryptografie & symmetrische cryptografie & Alice en Bob gebruiken dezelfde geheime sleutel & snelle versleuteling van grote data \\
+        \thinrule
+        Publieke-sleutelcryptografie & asymmetrische cryptografie & publieke sleutel voor iedereen, private sleutel voor eigenaar & sleuteluitwisseling, authenticatie, handtekeningen \\
+        \hline
+    \end{tabularx}
+\end{center}
+
+\subsubsection{Symmetrische cryptografie}
+
+Bij symmetrische cryptografie hebben Alice en Bob allebei dezelfde geheime sleutel $k$. Er zijn twee functies:
+\begin{equation*}
+    \begin{gathered}
+        E : \mathcal{M} \times \mathcal{K} \to \mathcal{C} \\
+        D : \mathcal{C} \times \mathcal{K} \to \mathcal{M}
+    \end{gathered}
+\end{equation*}
+waarbij:
+\begin{itemize}
+    \item $\mathcal{M} =$ verzameling mogelijke berichten;
+    \item $\mathcal{K} =$ verzameling mogelijke sleutels;
+    \item $\mathcal{C} =$ verzameling mogelijke cijferteksten
+    \item $E =$ encryptie / vercijfering
+    \item $D =$ decryptie / ontcijfering
+\end{itemize}
+correctheid betekent:
+\begin{equation*}
+    D(E(m, \textcolor{Aquamarine}{k}), \textcolor{Aquamarine}{k}) = m
+\end{equation*}
+Merk de \textcolor{Aquamarine}{symmetrie} op: zender en ontvanger zelfde sleutel. Dus Alice berekent
+\begin{equation*}
+    c = E(m, \textcolor{Aquamarine}{k})
+\end{equation*}
+en Bob berekent
+\begin{equation*}
+    m = D(c, \textcolor{Aquamarine}{k})
+\end{equation*}
+Een afluisteraar ziet alleen $c$, maar niet $k$!
+
+\SimpleHeading{Belangrijk probleem}
+
+Symmetrische cryptografie is snel, maar heeft een groot praktisch probleem:
+\begin{barbox}[RoyalPurple!75][gray!3]
+    Hoe krijgen Alice en Bob veilig dezelfde sleutel?
+\end{barbox}
+Dit is het \textbf{sleuteluitwisselingsprobleem}. Publieke-sleutelcryptografie is vooral belangrijk omdat ze dit probleem oplost.
+
 \subsubsection{Berichten van beperkte lengte en blokcijfers}
+
+In de systemen uit deze les bestaan $\mathcal{M}$, $\mathcal{C}$ en $\mathcal{K}$ meestal uit strings van \textbf{beperkte lengte}. Als men een lange tekst wil vercijferen, splitst men de tekst op in blokken en vercijfert men blok per blok. Een naïve aanpak is bijvoorbeeld:
+\begin{enumerate}
+    \item bericht opdelen in blokken;
+    \item elk blok appart vercijferen;
+    \item cijferteksten achter elkaar plakken.
+\end{enumerate}
+Maar dit it te naïef. Als gelijke blokken dezelfde cijfertekst geven, lekt er structuur. Daarom gebruikt men in de praktijk een zogenaamnde \textbf{mode of operation}, bijvoorbeeld \textbf{CBC} (Cipher Block Chaining), waarbij blokken op een gecontroleerde manier aan elkaar worden "geritst".
 
 \subsubsection{Klassieke substitutiecijfers}
 
+\SimpleHeading{Mono-alfabetsische substitutie}
+
+Een extreem eenvoudig symmetrisch systeem is \inlinetext{mono-alfabetsische substitutie}. Hier is een berichtverzameling gewoon het alfabet. De sleutel is een permutatie
+\begin{equation*}
+    \sigma \in S_{\{A, B, C, \dots, Z\}}
+\end{equation*}
+Encryptie is dan:
+\begin{equation*}
+    E(m, \sigma) = \sigma (m)
+\end{equation*}
+Decryptie:
+\begin{equation*}
+    D(c, \sigma) = \sigma^{-1}(c)
+\end{equation*}
+Dus elke letter wordt vervangen door een andere letter volgens dezelfde vaste permutatie.
+
+\SimpleHeading{Caesarversleuteling}
+
+De Caesarversleuteling is een speciaal geval waarbij elke letter vervangen wordt door de derde volgende letter in het alfabet. Bijvoorbeeld:
+\begin{equation*}
+    A \mapsto D, \quad B \mapsto E, \quad C \mapsto F
+\end{equation*}
+In termen van modulo rekenen komt dit overeen met:
+\begin{equation*}
+    m \mapsto m + 3 \pmod {26}
+\end{equation*}
+
+\SimpleHeading{Waarom is dit onveilig?}
+
+Je zou misschien denken dat dit niet het geval is, want zelfs een willekeurige mono-alfabetsische substitutie heeft heel veel sleutels:
+\begin{equation*}
+    26! \approx 2^{88}
+\end{equation*}
+Een brute-force aanval lijkt dus moelijk. Toch is het syteem onveilig door \textbf{letterfrequenties}. In een Nederlandse tekst komt bijvoorbeeld de letter \textbf{\texttt{E}} veel vaker voor dan de meeste andere letters. Als een bepaalde letter in de cijfertekst opvallend vaak voorkomt, is die waarschijnlijk $\sigma(E)$. Daarna kan men verder puzzelen. Dus het probleem is niet dat de sleutelruimte te klein is, maar dat de structuur van de taal behouden blijft.
+
 \subsubsection{Poly-alfabetsische systemen en rotormachines}
+
+Om frequentieanalyse moeilijker te maken, gebruikt men blokken van letters of meerdere substituties. Enkele bekende voorbeelden hiervan zijn:
+\begin{itemize}
+    \item \textbf{Vigenère-cijfer:} per blok van letters wordt een vaste vector in $\left(\mathbb{Z}/26\mathbb{Z}\right)^n$ opgeteld.
+    \item \textbf{Hill-cijfer:} een blok letters wordt als vector gezien en vermenigvuldigd met een inverteerbare matrix modulo 26.
+    \item \textbf{rotormachines:} de substitutie verandert na elke letter.
+\end{itemize}
+
+\SimpleHeading{Enigma en Lorenz}
+
+De \inlinetext{Enigma} was een rotormachine. Als je bijvoorbeeld twee keer dezelfde letter indrukt, kan die twee keer tot een andere letter versleuteld worden, omdat de rotoren tussendoor draaien. De geheime instelling zat in de instellingen en bedrading van de machine. Deze code werdt gekraakt.
 
 \begin{center}
     \inlinetext{Vanaf hier terug te kennen voor examen}[Magenta!33]
@@ -23,19 +203,235 @@
 
 \subsubsection{DES en AES}
 
+\SimpleHeading{DES}
+
+\inlinetext{DES} staate voor \emph{Data Encryption Standard}. Het was een vroege internationale standaard voor symmetrische cryptografie. DES had een sleutelruimte van grootte
+\begin{equation*}
+    2^{56}
+\end{equation*}
+Dat is vandaag veel te klein: een aanvaller kan deze sleutelruimte exhaustief doorzoeken met moderne rekenkracht.
+
+\SimpleHeading{AES / Rijndael}
+
+\inlinetext{AES} staat voor \emph{Advanced Encryption Standard}. Het algoritme dat als AES gekozen werd, heet \inlinetext{Rijndael} en werd ontworpen door de Belgische onderzoekers Joan Daemen en Vincent Rijmen. In deze cursus wordt vooral de 128-bit versie besproken.
+
+AES werkt met:
+\begin{itemize}
+    \item $\mathcal{M} = \{0, 1\}^{128}$: berichten / blokken van 128 bits.
+    \item $\mathcal{K} = \{0, 1\}^{128}$: sleutels van 128 bits in de besproken versie.
+    \item $\mathcal{C} = \{0, 1\}^{128}$
+    \item Merk op dat: $128 \text{ bits} = 16 \cdot 8 \text{ bits} = 16 \text{ bytes}$.
+    \item De 16 bytes worden georganiseerd als een $4 \times 4$ matrix.
+\end{itemize}
+Dus één bericht/blok bestaat uit 16 bytes. Deze toestand ziet er schematisch uit als:
+\begin{equation*}
+    m = \begin{bmatrix}
+        a_{0,0} & a_{0,1} & a_{0,2} & a_{0,3} \\
+        a_{1,0} & a_{1,1} & a_{1,2} & a_{1,3} \\
+        a_{2,0} & a_{2,1} & a_{2,2} & a_{2,3} \\
+        a_{3,0} & a_{3,1} & a_{3,2} & a_{3,3} 
+    \end{bmatrix}
+\end{equation*}
+AES voert meerdere rondes uit. In AES-128 zijn dat 10 rondes. Elke ronde bestaat uit 4 stappen:
+\begin{enumerate}
+    \item \texttt{SubBytes}
+    \item \texttt{ShiftRows}
+    \item \texttt{MixColumns}
+    \item \texttt{AddRoundKey}
+\end{enumerate}
+In de laatste ronde wordt \texttt{MixColumns} weggelaten.
+
 \subsection{Symmetrische cryptografie: AES en het veld \texorpdfstring{$\mathbb{F}_{2^8}$}{F2-8}}
+
+AES rekent in het eindige veld:
+\begin{equation*}
+    \mathbb{F}_{2^8} = \mathbb{F}_2[x]/\left(x^8 + x^4 + x^3 + x + 1\right)
+\end{equation*}
+Elke byte is een veldelement en bestaat uit 8 bits:
+\begin{equation*}
+    \left(\ b_7,\ b_6,\ b_5,\ b_4,\ b_3,\ b_2,\ b_1,\ b_0 \ \right)
+\end{equation*}
+Die byte wordt dan geïnterpreteerd als de veelterm
+\begin{equation*}
+    b_7x^7 + b_6x^6 + b_5x^5 + b_4x^4 + b_3x^3 + b_2x^2 + b_1x + b_0
+\end{equation*}
+Daarna bekijk je deze veelterm modulo
+\begin{equation*}
+    f(x) = x^8 + x^4 + x^3 + x + 1
+\end{equation*}
+Omdat $f(x)$ irreducibel is over $\mathbb{F}_2$, is de quotiëntring een veld!
+
+\textbf{\underbar{Voorbeeld:}} De byte \texttt{10100011} komt overeen met
+\begin{equation*}
+    x^7 + x^5 + x + 1
+\end{equation*}
 
 \subsubsection{De vier AES-stappen}
 
 \SimpleHeading{SubBytes}
 
+\texttt{SubBytes} werkt byte per byte. Elke byte wordt geïnterpreteerd als element van $\mathbb{F}_{2^8}$. Daarna neemt men de \textbf{inverse} in $\mathbb{F}_{2^8}$:
+\begin{equation*}
+    a_{i,j} \mapsto y = \begin{cases}
+        (a_{i,j})^{-1} & \text{als } a_{i,j} \neq 0 \\
+        0 & \text{als } a_{i,j} = 0
+    \end{cases}
+\end{equation*}
+ Deze inverse $y = a_{i,j}^{-1}$ bereken je met het uitgebreide algoritme van Euclides, maar nu in $\mathbb{F}_2[x]$ modulo de irreduceerbare veelterm $f(x)$, in plaats van in $\mathbb{Z}$ modulo $n$.
+
+\begin{center}
+\resizebox{0.8\textwidth}{!}{%
+    \input{figures/L7/subbytes.tex}
+}
+\end{center}
+
+Vervolgens past men nog een \textbf{affiene transformatie} toe op elke byte:
+\begin{equation*}
+    z = b_{i,j} = Ay \oplus B
+\end{equation*}
+Hier is $\oplus$ bitgewijze XOR, dus optelling in $\mathbb{F}_2$. Merk op:
+\begin{itemize}
+    \item \texttt{SubBytes} is de enige \textbf{niet-linearire} stap van AES.
+    \item Deze stap zorgt voor verwarring/diffusie op byte-niveau.
+    \item De matrices $A$ en $B$ zijn constantes.
+\end{itemize}
+\begin{equation*}
+    \begin{bmatrix}
+            z_0 \\ z_1 \\ z_2 \\ z_3 \\ z_4 \\ z_5 \\ z_6 \\ z_7
+        \end{bmatrix} = \underbrace{\begin{bmatrix}
+            1 & 1 & 1 & 1 & 1 & 0 & 0 & 0 \\
+            0 & 1 & 1 & 1 & 1 & 1 & 0 & 0 \\
+            0 & 0 & 1 & 1 & 1 & 1 & 1 & 0 \\
+            0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\
+            1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+            1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\
+            1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\
+            1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 
+        \end{bmatrix}}_{A_{8 \times 8}} \cdot \begin{bmatrix}
+            y_0 \\ y_1 \\ y_2 \\ y_3 \\ y_4 \\ y_5 \\ y_6 \\ y_7
+        \end{bmatrix} \oplus \underbrace{\begin{bmatrix}
+            0 \\ 1 \\ 1 \\ 0 \\ 0 \\ 0 \\ 1 \\ 1
+    \end{bmatrix}}_{B_{8 \times 1}}
+\end{equation*}
+
 \SimpleHeading{ShiftRows}
+
+\texttt{ShiftRows} is een linearire afbeelding die de rijen de rijen van de $4 \times 4$ matrix. Typisch gebeurt er:
+\begin{itemize}
+    \item rij $0$ blijft staan
+    \item rij $1$ verschuift cyclisch
+    \item rij $2$ verschuift cyclisch over twee plaatsen
+    \item rij $3$ verschuift cyclisch over 3 plaatsen
+\end{itemize}
+Het doel is bytes uit verschillende kolommen te mengen en ze met elkaar in contact te brengen in latere stappen.
+
+\begin{center}
+\resizebox{0.7\textwidth}{!}{%
+    \input{figures/L7/shiftrows.tex}
+}
+\end{center}
 
 \SimpleHeading{MixColumns}
 
+\texttt{MixColumns} is een linearire afbeelding die kolom per kolom werkt. Elke kolom van de toestandsmatrix wordt gezien als een vector
+\begin{equation*}
+    s \in \left(\mathbb{F}_{2^8}\right)^4 = \left\{\begin{bmatrix}
+        x_0 \\ x_1 \\ x_2 \\ x_3
+    \end{bmatrix} : x_i \in \mathbb{F}_{2^8}\right\}
+\end{equation*}
+In plaats van dit te zien als een vector, beschouwen we elke kolom als een veelterm $d(z)$ van graad $3$ over $\mathbb{F}_{2^8}$:
+\begin{equation*}
+    \mathbf{s} = \begin{bmatrix}
+        s_0 \\ s_1 \\ s_2 \\ s_3
+    \end{bmatrix} \quad\longleftrightarrow\quad d(z) = s_3z^3 + s_2z^2 + s_1z + s_0
+\end{equation*}
+Let op: de coëfficiënten $(s_0, s_1, s_2, s_3)$ zijn elementen uit het veld $\mathbb{F}_{2^8}$, dus bytes. Dit is dus een veelterm waarvan de coëfficiënten zelf weer veeltermen zijn!
+
+We passen nu de volgende afbeelding toe:
+\begin{equation*}
+    c(z) = d(z) \cdot \underbrace{\mathtt{0x03} \cdot z^3 + \mathtt{0x01} \cdot z^2 + \mathtt{0x01} \cdot z + \mathtt{0x02}}_{m(z)} \pmod {z^4 + 1}
+\end{equation*}
+$m(z)$ is een vaste veelterm waarmee we vermenigvuldigen:
+\begin{equation*}
+    m(z) = m_3z^3 + m_2z^2 + m_1z + m_0 = \mathtt{0x03} \cdot z^3 + \mathtt{0x01} \cdot z^2 + \mathtt{0x01} \cdot z + \mathtt{0x02}
+\end{equation*}
+Maar als we $d(z)$ vermenigvuldigen met $m(z)$, krijgen we een veelterm van graad $6$. Omdat we een resultaat van maximaal graad $3$ willen (want een kolom heeft immers maar $4$ bytes), nemen we de rest bij deling door $z^4+1$. In de ring van veeltermen modulo $z^4+1$ geldt een handige eigenschap omdat we in het grondveld $\mathbb{F}_2$ werken:
+\begin{itemize}
+    \item $z^4+1 \equiv 0 \pmod {z^4+1} \implies z^4 \equiv -1 \equiv 1 \pmod {z^4+1}$
+    \item $z^5 = z^4 \cdot z = 1 \cdot z = z$
+    \item $z^6 = z^4 \cdot z^2 = 1 \cdot z^2 = z^2$
+\end{itemize}
+Laten we nu eens de vermenigvuldiging $c(z) = d(z) \cdot m(z) \pmod {z^4+1}$ uitwerken.
+\begin{equation*}
+    \begin{aligned}
+        (s_3z^3 + s_2z^2 + s_1z + s_0) \cdot (m_3z^3 + m_2z^2 + m_1z + m_0) &= s_3m_3z^6 + s_3m_2z^5 + s_3m_1z^4 + s_3m_0z^3 \\
+        &+ s_2m_3z^5 + s_2m_2z^4 + s_2m_1z^3 + s_2m_0z^2 \\
+        &+ s_1m_3z^4 + s_1m_2z^3 + s_1m_1z^2 + s_1m_0z\\
+        &+ s_0m_3z^3 + s_0m_2z^2 + s_0m_1z \ \ + s_0m_0
+        \\[1em]
+        &= s_3m_3\textcolor{Aquamarine}{z^2} + s_3m_2\textcolor{RubineRed}{z} + s_3m_1\textcolor{BurntOrange}{1} + s_3m_0\textcolor{Green}{z^3} \\
+        &+ s_2m_3\textcolor{RubineRed}{z} + s_2m_2\textcolor{BurntOrange}{1} + s_2m_1\textcolor{Green}{z^3} + s_2m_0\textcolor{Aquamarine}{z^2} \\
+        &+ s_1m_3\textcolor{BurntOrange}{1} + s_1m_2\textcolor{Green}{z^3} + s_1m_1\textcolor{Aquamarine}{z^2} + s_1m_0\textcolor{RubineRed}{z} \\
+        &+ s_0m_3\textcolor{Green}{z^3} + s_0m_2\textcolor{Aquamarine}{z^2} + s_0m_1\textcolor{RubineRed}{z} + s_0m_0\textcolor{BurntOrange}{1}
+    \end{aligned}
+\end{equation*}
+Tellen we deze coëfficiënten bij termen van gelijke graad op, dan krijgen we $4$ nieuwe coëfficiënten $(c_0, c_1, c_2, c_3)$:
+\begin{equation*}
+    \begin{aligned}
+        \textcolor{BurntOrange}{c_0} &= m_0s_0 + m_3s_1 + m_2s_2 + m_1s_3 \\
+        \textcolor{RubineRed}{c_1} &= m_1s_0 + m_0s_1 + m_3s_2 + m_2s_3 \\
+        \textcolor{Aquamarine}{c_2} &= m_2s_0 + m_1s_1 + m_0s_2 + m_3s_3 \\
+        \textcolor{Green}{c_3} &= m_3s_0 + m_2s_1 + m_1s_2 + m_0s_3
+    \end{aligned} \qquad \begin{cases}
+        m_0 &= \mathtt{0x02} \leftrightarrow x \\
+        m_1 = m_2 &= \mathtt{0x01} \leftrightarrow 1 \\
+        m_3 &= \mathtt{0x03} \leftrightarrow x + 1
+    \end{cases}
+\end{equation*}
+Dit kunnen we schrijven als een matrixvermenigvuldiging:
+\begin{equation*}
+    \begin{bmatrix}
+        c_0 \\ c_1 \\ c_2 \\ c_3
+    \end{bmatrix} = \underbrace{\begin{bmatrix}
+        m_0 & m_3 & m_2 & m_1 \\
+        m_1 & m_0 & m_3 & m_2 \\
+        m_2 & m_1 & m_0 & m_3 \\
+        m_3 & m_2 & m_1 & m_0
+    \end{bmatrix}}_M \cdot \begin{bmatrix}
+        s_0 \\ s_1 \\ s_2 \\ s_3
+    \end{bmatrix}
+\end{equation*}
+De vaste AES-waarden invullen van de veelterm $m(z)$ geeft dan de hexadecimale matrix $M$.
+
+\begin{center}
+\resizebox{0.8\textwidth}{!}{%
+    \input{figures/L7/mixcolumns.tex}
+}
+\end{center}
+
 \SimpleHeading{AddRoundKey}
 
+In \texttt{AddRoundKey} wordt de toestand opgeteld bij een \textbf{round key}. Deze round key wordt deterministisch afgeleid uit de geheime AES-sleutel. De optelling is bitsgewijze XOR ($\oplus$).
+\begin{itemize}
+    \item Pas hier komt de geheime sleutel expliciet binnen.
+    \item Elke ronde gebruikt een andere round key.
+    \item De round keys zijn afgeleid uit dezelfde hofdsleutel.
+\end{itemize}
+
+\begin{center}
+\resizebox{1.0\textwidth}{!}{%
+    \input{figures/L7/addroundkey.tex}
+}
+\end{center}
+
 \subsubsection{Limitaties AES}
+
+AES is zeer snel en wordt overal gebruikt. Moderne chips ondersteunen AES zelfs hardwarematig. Maar AES lost het sleuteluitwisselingsprobleem niet op. Als Alice en Bob AES willen gebruiken, moeten ze eerst dezelfde geheime sleutel hebben. Publieke-sleutelcryptografie wordt in praktijk vaak gebruikt om zo'n tijdelijke AES-sleutel veilig af te spreken. Moderne communicatie is dus meestal hybride:
+\begin{itemize}
+    \item publieke-sleutelcryptografie voor sleuteluitwisseling of authenticatie;
+    \item AES voor snelle versleuteling van de eigenlijke data.
+
+\end{itemize}
 
 \subsection{Publieke-sleutelcryptografie}
 
