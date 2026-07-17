@@ -436,7 +436,7 @@ Factoriseer:
 
 De stelling van Euler is een rechtstreeks gevolg van de stelling van Lagrange.
 
-\begin{nicetheorem}*[Stelling van Euler]
+\begin{nicetheorem}*[Stelling van Euler]\label{l6_stelling-euler}
     \nextpart[]*
     Als $\operatorname{ggd}(a,n)=1$, dan geldt:
     \begin{equation*}
@@ -1237,6 +1237,210 @@ met $\operatorname{ggd}(m, n) = 1$ op te lossen:
     \end{equation*}
     \item De oplossing is uniek modulo $mn$.
 \end{enumerate}
+
+\subsection{Carmichael}
+
+Deze stelling hebben we in de les niet gezien, maar kan handig zijn.
+
+\begin{nicetheorem}*[Carmichael]\label{l6_carmichael}
+    \nextpart[]*
+    Voor elk geheel getal $n \ge 1$ bestaat er een kleinste positief geheel getal $\lambda(n)$ zodat voor elk geheel getal $a$ met
+    \begin{equation*}
+        \operatorname{ggd}(a,\ n) = 1
+    \end{equation*}
+    geldt:
+    \begin{equation*}
+        a^{\lambda(n)} \equiv 1 \pmod n
+    \end{equation*}
+    Het getal $\lambda(n)$ heet de \textcolor{red!75!black}{\textbf{Carmichael-functie}} van $n$.
+\end{nicetheorem}
+
+Net zoals de stelling van Euler zijn er rekenregels:
+
+\SimpleHeading{Rekenregel 1 -- Voor een priemgetal $p$}
+
+Uit de Kleine Stelling van Fermat weten we dat als $p$ een priemgetal is en $p \nmid a$, dan geldt:
+\begin{equation*}
+    a^{p-1} \equiv 1 \pmod p
+\end{equation*}
+Dit is de stelling van Carmichael als $\lambda(n) = p-1$. Dus er geldt steeds voor een priemgetal dat:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \lambda(p) = p - 1
+\end{equationbox}
+
+\SimpleHeading{Rekenregel 2 -- product twee onderling ondeelbare getallen}
+
+Als je twee getallen $x$ en $y$ hebt die onderling ondeelbaar zijn ($\operatorname{ggd}(x, y) = 1$), dan geldt de volgende universele rekenregel voor de Carmichael-functie:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \lambda(xy) = \operatorname{kgv}\left(\lambda(x),\ \lambda(y)\right)
+\end{equationbox}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!66] Stel voor het gemak dat:
+\begin{equation*}
+    L = \operatorname{kgv}\left(\lambda(x),\ \lambda(y)\right)
+\end{equation*}
+We bewijzen beide deelbaarheden.
+
+\textbf{1. Bewijs dat $\lambda(xy) \mid L$}\newline
+Neem een willekeurig geheel getal $a$ waarvoor geldt dat
+\begin{equation*}
+    \operatorname{ggd}(a,\ xy) = 1
+\end{equation*}
+Dan is $a$ zowel onderling ondeelbaar met $x$ als met $y$:
+\begin{equation*}
+    \operatorname{ggd}(a,x) = 1 \qquad \text{en} \qquad \operatorname{ggd}(a,y) = 1
+\end{equation*}
+Uit de definitie van Carmichael volgt dan dat:
+\begin{equation*}
+    a^{\lambda(x)} \equiv 1 \pmod x \qquad \text{en} \qquad a^{\lambda(y)} \equiv \pmod y
+\end{equation*}
+Ook weet je dat, omdat $\lambda(x) \mid L$, er een geheel getal $r$ bestaat zodat
+\begin{equation*}
+    L = r \cdot \lambda(x)
+\end{equation*}
+en dus:
+\begin{equation*}
+    a^L = \left(a^{\lambda(x)}\right)^r \equiv 1^r \equiv 1 \pmod x
+\end{equation*}
+Analoog, omdat $\lambda(y) \mid L$, geldt: $a^L \equiv 1 \pmod y$. We hebben dus
+\begin{equation*}
+    a^L \equiv 1 \pmod x \qquad \text{en} \qquad a^L \equiv 1 \pmod y
+\end{equation*}
+Omdat $x$ en $y$ onderling ondeelbaar zijn, volgt uit de Chinese reststelling:
+\begin{equation*}
+    a^L \equiv 1 \pmod {xy}
+\end{equation*}
+Dus $L$ is een exponent die werkt voor alle getallen die onderling ondeelbaar zijn met $xy$. Omdat $\lambda(xy)$ de \textbf{kleinste} positieve dergelijke exponent is, geldt:
+\begin{equationbox}*[black]
+    \lambda(xy) \mid L
+\end{equationbox}
+Alle exponenten die voor alle eenheden modulo $xy$ werken, zijn namelijk veelvouden van $\lambda(xy)$.
+
+\textbf{2. Bewijs dat $L \mid \lambda(xy)$}\newline
+Stel $t = \lambda(xy)$. We tonen eerst aan dat
+\begin{equation*}
+    \lambda(x) \mid t
+\end{equation*}
+Neem een willekeurige $a$ met $\operatorname{ggd}(a,x) = 1$. We kunnen niet zomaar zeggen dat $a$ ook onderling ondeelbaar is met $y$. Daarom construeren we met de Chinese reststelling een getal $b$ waarvoor
+\begin{equation*}
+    \begin{cases}
+        b \equiv a \pmod x \\
+        b \equiv 1 \pmod y
+    \end{cases}
+\end{equation*}
+Zo een $b$ bestaat want $\operatorname{ggd}(x,y) = 1$. Waarom precies deze twee voorwaarden?
+\begin{itemize}
+    \item Modulo $x$ gedraagt $b$ zich hetzelfde als $a$.
+    \item Modulo $y$ is $b$ gelijk aan $1$, dus zeker onderling ondeelbaar met $y$.
+\end{itemize}
+Meer nog, omdat $b \equiv a \pmod x$ ($\sim$ $a$ en $b$ hebben dezelfde restklasse bij deling door $x$) geldt:
+\begin{equation*}
+    \begin{aligned}
+        b &= a + k \cdot x \\
+        &\Updownarrow \\
+        a &= b - k \cdot x
+    \end{aligned}
+\end{equation*}
+Maar er geldt ook dat $\operatorname{ggd}(a,x) = 1$, dus:
+\begin{equation*}
+    \operatorname{ggd}(b, x) = 1
+\end{equation*}
+want stel dat $b$ en $x$ wél een gemeenschappelijke deler zouden hebben, bijvoorbeeld $g$. Dan is $g$ een deler van $b$ én $x$, en dus:
+\begin{itemize}
+    \item $b$ is een veelvoud van $g$
+    \item $x$ is een veelvoud van $g$
+\end{itemize}
+Maar kijk naar de bovenstaande formule voor $a$: $a = \textcolor{Aquamarine}{\mathbf{b}} - k \cdot \textcolor{Aquamarine}{\mathbf{x}}$ \newline
+$\to$ Als $g$ een deler is van $b$ en $g$, dan moet ze ook wel een deler zijn van $a$, maar we hebben aangenomen dat dat niet kan!
+
+Omdat $b \equiv 1 \pmod y$, geldt ook dat $\operatorname{ggd}(b, y) = 1$. Dus
+\begin{equation*}
+    \begin{cases}
+        \operatorname{ggd}(b, x) &= 1 \\
+        \operatorname{ggd}(b, y) &= 1
+    \end{cases}\qquad \Longrightarrow \qquad \operatorname{ggd}(b,\ xy) = 1
+\end{equation*}
+Volgens de definitie van $t = \lambda(xy)$ en de stelling van Carmichael geldt dan
+\begin{equation*}
+    b^t \equiv 1 \pmod {xy}
+\end{equation*}
+In het bijzonder:
+\begin{equation*}
+    b^t \equiv 1 \pmod x
+\end{equation*}
+want:
+\begin{equation*}
+    \begin{aligned}
+        b^t &\equiv 1 \pmod {xy} \\
+        &\Downarrow \\
+        b^t &= 1 + c \cdot (xy) \\
+        &\Updownarrow \\
+        b^t - 1 &= c \cdot (xy) \\
+        &\Updownarrow \\
+        b^t - 1 &= (cy) \cdot x
+    \end{aligned}
+\end{equation*}
+Dus $(b^t-1)$ is automatisch ook een veelvoud van $x$!
+
+Maar we hebben $b$ zo geconstrueerd dat $b$ zich modulo $x$ hetzelfde gedraagt als $a$ ($b \equiv a \pmod x$). Dus
+\begin{equation*}
+    a^t \equiv 1 \pmod x
+\end{equation*}
+Dit geldt voor iedere $a$ die onderling ondeelbaar is met $x$. Bijgevolg is $t$ een universele exponent modulo $x$, zodat
+\begin{equation*}
+    \lambda(x) \mid t
+\end{equation*}
+Op dezelfde manier construeren we voor ieder getal dat onderling ondeelbaar is met $y$ een getal dat modulo $x$ gelijk is aan $1$. Daaruit volgt dan:
+\begin{equation*}
+    \lambda(y) \mid t
+\end{equation*}
+Omdat dus zowel $\lambda(x)$ als $\lambda(y)$ delers zijn van $t$, is hun kleinste gemeenschappelijke veelvoud ook een deler van $t$:
+\begin{equationbox}*
+    \operatorname{kgv}\left(\lambda(x), \lambda(y)\right) \mid t 
+\end{equationbox}
+Dus
+\begin{equationbox}*
+    L \mid \lambda(xy)
+\end{equationbox}
+
+\textbf{3. Conclusie} \newline
+We hebben beide deelbaarheden:
+\begin{equation*}
+    \lambda(xy) \mid L \qquad \text{en} \qquad L \mid \lambda(xy)
+\end{equation*}
+Daarom zijn beide positieve getallen gelijk:
+\begin{equationbox}*
+    \lambda(xy) = \operatorname{kgv}\left(\lambda(x), \lambda(y)\right)
+\end{equationbox}
+
+\SimpleHeading{Rekenregel 3}
+
+Voor elk positief geheel getal $N$ geldt:
+
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \lambda(N) \mid \varphi(N)
+\end{equationbox}
+
+\inlinetext{\underbar{Bewijs:}}[Goldenrod!66] Beschouw de eenhedengroep (multiplicatieve groep van de inverteerbare restklassen modulo $N$):
+\begin{equation*}
+    G = \mathbb{Z}_N^\times = \left(\mathbb{Z}/N\mathbb{Z}\right)^\times
+\end{equation*}
+Per definitie bevat deze groep precies $\varphi(N)$ elementen:
+\begin{equation*}
+    \#G = \varphi(N)
+\end{equation*}
+Volgens Lagrange geldt dan: voor elk element $a \in G$ geldt dat de orde van $a$ de orde van de groep deelt (\Cref{gevolg:H3_gevolg_lagrange_1}):
+\begin{equation*}
+    \operatorname{ord}(a) \mid \varphi(N)
+\end{equation*}
+De Carmichael-functie $\lambda(N)$ is de exponent van de groep $G$. Dit betekent dat
+\begin{equation*}
+    \operatorname{kgv}\left\{\operatorname{ord}(a) \mid a \in G\right\}
+\end{equation*}
+Elke orde ($\operatorname{ord}(a)$) is dus een deler van $\varphi(N)$. Het kleinste gemene veelvoud van getallen die allemaam $\varphi(N)$ delen, deelt dus zelf ook $\varphi(N)$. Daarom geldt:
+\begin{equationbox}
+    \lambda(N) \mid \varphi(N)
+\end{equationbox}
 
 \subsection{Samenvattende Oefeningen}
 
