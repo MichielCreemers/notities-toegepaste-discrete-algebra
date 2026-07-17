@@ -12,7 +12,7 @@
         \thinrule
         Euler \& Fermat, CRT (les 6) & \textbf{RSA} (correctheid van decryptie, versnelling) \\
         \thinrule
-        Inverse vie Bézout / extended Euclid (les 6) & \textbf{sleutelgeneratie} ($d = e^{-1}$), SubBytes-inverse \\
+        Inverse via Bézout / extended Euclid (les 6) & \textbf{sleutelgeneratie} ($d = e^{-1}$), SubBytes-inverse \\
         \thinrule
         Cyclische groepen, orde, generator (les 4) & \textbf{DLP, Diffie-Hellman, Schnorr} \\
         \thinrule
@@ -430,18 +430,101 @@ AES is zeer snel en wordt overal gebruikt. Moderne chips ondersteunen AES zelfs 
 \begin{itemize}
     \item publieke-sleutelcryptografie voor sleuteluitwisseling of authenticatie;
     \item AES voor snelle versleuteling van de eigenlijke data.
-
 \end{itemize}
 
 \subsection{Publieke-sleutelcryptografie}
 
+Bij publieke-sleutelcryptografie heeft Bob twee sleutels:
+\begin{itemize}
+    \item Een publieke sleutel \inlinetext{$pk$}, die iedereen mag kennen.
+    \item Een private sleutel \inlinetext{$sk$}, die \underbar{enkel} Bob kent.
+\end{itemize}
+Alice gebruikt Bob's publieke sleutel om te versleutelen:
+\begin{equation*}
+    c = E(m, \textcolor{Aquamarine}{pk_B})
+\end{equation*}
+Bob gebruikt zijn private sleutel om te ontcijferen:
+\begin{equation*}
+    m = D(c, \textcolor{RubineRed}{sk_B})
+\end{equation*}
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \textcolor{RoyalPurple!75}{\textbf{Analogie (brievenbus):}} iedereen kan een brief in Bob's brievenbus stoppen (publieke sleutel), maar enkel Bob kan ze openen (private sleutel).
+\end{barbox}
+Het is theoretisch mogelijk dat de private sleutel uit de publieke sleutel volgt, maar het moet computationeel onhaalbaar zijn.
+
 \subsubsection{RSA -- publieke sleutel via factorisatie}
+
+RSA werd gepubliceerd in 1978 door Rivest, Shamir en Adleman. Het is gebaseerd op de moeilijkheid van het factoriseren van grote gehele getallen.
 
 \SimpleHeading{Sleutelgeneratie}
 
+Bob kiest 2 grote priemgetallen $p$ en $q$ en berekent:
+\begin{equation*}
+    N = pq
+\end{equation*}
+Verder geldt dat
+\begin{equation*}
+    \varphi(N) = \varphi(pq) = (p-1)(q-1)
+\end{equation*}
+Bob kiest dan een \textbf{encryptie-exponent} $e$ zodat
+\begin{equation*}
+    \operatorname{ggd}(e,\ \varphi(N)) = 1
+\end{equation*}
+Vaak kiest men hiervoor $e = 2^{16} + 1 = 65537$. Nu, omdat $e$ dus onderling ondeelbaar is met $\varphi(N)$, bestaat er een inverse modulo $\varphi(N)$. Deze inverse noemt men de \textbf{decryptie-exponent} $d$:
+\begin{equation*}
+    ed \equiv 1 \pmod {\varphi(N)}
+\end{equation*}
+want:
+\begin{equation*}
+    \begin{aligned}
+        \operatorname{ggd}(e,\ \varphi(N)) &= 1 \\
+        &\Downarrow \textcolor{Green}{\text{ stelling van Bézout}} \\
+        ed + \varphi(N)k &= 1 \\
+        &\Downarrow \textcolor{Green}{\pmod {\varphi(N)}} \\
+        ed + \varphi(N)k &\equiv 1 \pmod {\varphi(N)} \\
+        ed + 0 &\equiv 1 \pmod {\varphi(N)} \\
+        ed &\equiv 1 \pmod {\varphi(N)}
+    \end{aligned}
+\end{equation*}
+Dus 
+\begin{equation*}
+    d = e^{-1} \pmod {\varphi(N)}
+\end{equation*}
+De publieke sleutel is dan typisch
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    (N,\ e)
+\end{equationbox}
+De private sleutel moet dus minstens de informatie bevatten om $d$ te berekenen, bijvoorbeeld $(p,q)$ of $d$.
+
 \SimpleHeading{Encryptie}
 
+Een bericht wordt geïnterpreteerd als een element van $\mathbb{Z}/N\mathbb{Z}$. Alice berekent
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    c \equiv m^e \pmod {N}
+\end{equationbox}
+
 \SimpleHeading{Decryptie}
+
+Bob berekent
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    m \equiv c^d \pmod {N}
+\end{equationbox}
+
+\textbf{Waarom werkt dit?} \emoji{star} \newline
+Je weet dat $c \equiv m^e \pmod N$, dus
+\begin{equation*}
+    c^d \equiv \left(m^e\right)^d = m^{ed} \pmod N
+\end{equation*}
+Omdat $ed \equiv 1 \pmod {\varphi(N)}$, kunnen we schrijven $ed = 1 + \lambda \varphi(N)$ voor een geheel getal $\lambda$. Dus
+\begin{equation*}
+    c^d = m^{ed} = m^{1 + \lambda\varphi(N)} = m\cdot\left( m^{\varphi(N)} \right)^\lambda
+\end{equation*}
+Uit de stelling van Euler (\Cref{l6_stelling-euler}) weten we ook dat als $\operatorname{ggd}(m,N) = 1$, dan geldt:
+\begin{equation*}
+    m^{\varphi(N)} \equiv 1 \pmod N
+\end{equation*}
+Dus $m^{ed} \equiv m \pmod N$ en dus $c^d \equiv m \pmod N$. Daarom werkt decryptie. Een andere manier om dit aan te tonen is via de stelling van Carmichael. Deze werkwijze is terug te vinden in \cref{ex:l7_rsa-alternatief}.
+
 
 \subsubsection{Veiligheid van RSA}
 
@@ -462,6 +545,126 @@ AES is zeer snel en wordt overal gebruikt. Moderne chips ondersteunen AES zelfs 
 \subsubsection{Van identificatie naar handtekening}
 
 \subsection{Samenvattende Oefeningen}
+
+\begin{niceexercise}*[Bewijs waarom RSA werkt volgens cursus]\label{ex:l7_rsa-alternatief}
+    \nextpart[]*
+    Toon aan dat RSA werkt door \emph{Carmichael} te gebruiken i.p.v. \emph{Euler}.
+\end{niceexercise}
+
+Neem $N = pq$, waarbij $p$ en $q$ verschillende priemgetallen zijn. Uit het algoritme van RSA weten we dat:
+\begin{equation*}
+    ed \equiv 1 \pmod {\varphi(N)}
+\end{equation*}
+Ook weet je dat $\lambda(N) \mid \varphi(N)$. Inderdaad, $\operatorname{kgv}\left(p-1, q-1\right)$ deelt het product $(p-1)(q-1)$. Er bestaat dus een $k \in \mathbb{Z}$ zodat:
+\begin{equation*}
+    ed - 1 \equiv k \cdot \varphi(N)
+\end{equation*}
+Maar dus omdat $\varphi(N)$ een veelvoud is van $\lambda(N)$, is $ed - 1$ ook een veelvoud van $\lambda(N)$. Bijgevolg:
+\begin{equation*}
+    ed \equiv 1 \pmod {\lambda(N)}
+\end{equation*}
+waarbij de Carmichael-functie voor $N = pq$ gegeven wordt door $\lambda(N) = \operatorname{kgv}\left(p-1, q-1\right)$. Er bestaat dus een geheel getal $k$ zodat
+\begin{equation*}
+    ed = 1 + k\lambda(N)
+\end{equation*}
+Omdat $p-1 \mid \lambda(N)$ en $q-1 \mid \lambda(N)$, geldt in het bijzonder
+\begin{equation*}
+    ed \equiv 1 \pmod {p-1} \qquad \text{en} \qquad ed \equiv 1 \pmod {q-1}
+\end{equation*}
+We willen nu opniew aantonen dat
+\begin{equation*}
+    \begin{aligned}
+        c^d &\equiv m \pmod N \\
+        &\Downarrow \textcolor{Green}{\quad c \equiv m^e \pmod N} \\
+        c^d &\equiv m^{ed} \pmod N
+    \end{aligned}
+\end{equation*}
+Het volstaat dus om aan te tonen dat
+\begin{equation*}
+    m^{ed} \equiv m \pmod {pq}
+\end{equation*}
+\textbf{Stap 1: Bewijs modulo $p$}\newline
+We onderscheiden twee gevallen.\newline
+\underbar{Geval 1:} $p \mid m$ \newline
+Dan is
+\begin{equation*}
+    m \equiv 0 \pmod p
+\end{equation*}
+Omdat $ed \ge 1$, geldt ook
+\begin{equation*}
+    m^{ed} \equiv 0 \pmod p
+\end{equation*}
+Dus
+\begin{equation*}
+    m^{ed} \equiv m \pmod p
+\end{equation*}
+\underbar{Geval 1:} $p \nmid m$ \newline
+In dit geval mogen we de kleine stelling van Fermat gebruiken:
+\begin{equation*}
+    m^{p-1} \equiv 1 \pmod p
+\end{equation*}
+Omdat $ed \equiv 1 \pmod {p-1}$, bestaat er een geheel getal $r$ zodat
+\begin{equation*}
+    ed = 1 + r(p-1)
+\end{equation*}
+Daarom geldt
+\begin{equation*}
+    \begin{aligned}
+        m^{ed} &= m^{1+r(p-1)} \\
+        &= m \left(m^{p-1}\right)^r \\
+        &\equiv m \cdot 1^r \\
+        &\equiv m \pmod p
+    \end{aligned}
+\end{equation*}
+$\to$ In beide gevallen vinden we dus $m^{ed} \equiv m \pmod p$.
+
+\textbf{Stap 2: Bewijs modulo $q$}\newline
+Volledig analoog onderscheiden we opniew twee gevallen. \newline
+Als $q \mid m$, dan
+\begin{equation*}
+    m^{ed} \equiv 0 \equiv m \pmod q
+\end{equation*}
+Als $q \nmid m$, dan geeft de kleine stelling van Fermat
+\begin{equation*}
+    m^{q-1} \equiv 1 \pmod q
+\end{equation*}
+Omdat $ed \equiv 1 \pmod {q-1}$, kunnen we $ed = 1 + s(q-1)$ schrijven, zodat
+\begin{equation*}
+    m^{ed} = m\left(m^{q-1}\right)^s \equiv m \pmod q
+\end{equation*}
+Dus hier ook steeds $m^{ed} \equiv m \pmod q$.
+
+\textbf{Stap 3: Chinese Reststelling}\newline
+We hebben nu
+\begin{equation*}
+    \begin{cases}
+        m^{ed} \equiv m \pmod p \\
+        m^{ed} \equiv m \pmod q 
+    \end{cases}
+\end{equation*}
+D.w.z. dat zowel $p$ als $q$ het verschil $m^{ed} - m$ delen:
+\begin{equation*}
+    p \mid \left(m^{ed} - m\right), \qquad q \mid \left(m^{ed} - m\right)
+\end{equation*}
+Omdat $p$ en $q$ verschillende priemgetallen zijn, geldt $\operatorname{ggd}(p, q) = 1$. Dan impliceert de chinese reststelling dat
+\begin{equation*}
+    pq \mid \left(m^{ed} - m\right)
+\end{equation*}
+M.a.w.
+\begin{equation*}
+    m^{ed} \equiv m \pmod {\underbrace{pq}_N}
+\end{equation*}
+Aangezien $c^d \equiv m^{ed} \pmod N$, kan je besluiten dat:
+\begin{equationbox}
+    c^d \equiv m \pmod N
+\end{equationbox}
+
+\begin{niceexercise}*\label{ex:l7_rsa-m-deelt-N-niet}
+    \nextpart[]*
+    We hebben eerder aangetoond waarom RSA werkt, ervanuitgaande dat $\operatorname{ggd}(m,N) = 1$. Toon aan dat dit systeem ook correct blijft wanneer $m$ niet onderling \underbar{on}deelbaar is met $N$.
+\end{niceexercise}
+
+Onrechtstreeks aangetoond in \cref{ex:l7_rsa-m-deelt-N-niet}.
 
 \emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin}
 
