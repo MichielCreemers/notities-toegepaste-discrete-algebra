@@ -33,3 +33,13 @@
     \right\} \xrightarrow{\text{self-subsuming resolution}} #2
 }
 
+% Highlight
+\providecommand{\hldefaultcolor}{yellow}
+
+% Define \hl with standard convention: \hl[color]{text}
+% O{\hldefaultcolor} = optional argument #1 (defaults to \hldefaultcolor)
+% m = mandatory argument #2 (the text)
+\NewDocumentCommand{\hl}{ O{\hldefaultcolor} m }{%
+    \textcolor{#1}{\textbf{#2}}%
+}
+

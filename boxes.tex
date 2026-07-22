@@ -170,6 +170,9 @@
 % New property / eigenschap box
 \createResEnviornment{property}{propproof}{niceproperty}{RoyalPurple}{\LangProperty}
 
+\definecolor{factcolor}{HTML}{ef476f}
+\createResEnviornment{fact}{factproof}{nicefact}{factcolor}{\LangFact}
+
 % For referencing using Cleverref
 % Format: \crefname{<env_name>}{<singular>}{<plural>}
 \ifdutch
@@ -202,6 +205,9 @@
 
   \crefname{property}{eigenschap}{eigenschappen}
   \Crefname{property}{Eigenschap}{Eigenschappen}
+
+  \crefname{fact}{feit}{feiten}
+  \Crefname{fact}{Feit}{Feiten}
 \else
   \crefname{lemma}{lemma}{lemmas}
   \Crefname{lemma}{Lemma}{Lemmas}
@@ -232,6 +238,9 @@
 
   \crefname{property}{property}{properties}
   \Crefname{property}{Property}{Properties}
+
+  \crefname{fact}{fact}{facts}
+  \Crefname{fact}{Fact}{Facts}
 \fi
 
 
