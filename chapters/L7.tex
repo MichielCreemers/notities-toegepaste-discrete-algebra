@@ -650,7 +650,7 @@ Dit was het oorspronkelijke voorstel van \emph{Diffie en Hellman}. Er bestaan ec
 Bij elliptische krommen gebruikt men een groep van punten op een kromme over $\mathbb{F}_q$. Dit wordt gedetailleerd besproken in les 8.
 Het voordeel is dat de beste bekende algemene aanvallen ongeveer orde $\sqrt{q}$ hebben. Daardoor kan men met veel kleinere sleutels werken dan bij RSA of klassieke finite-field Diffie-Hellman. 
 
-\subsection{Diffie--Hellman-sleuteluitwisseling}
+\subsection{Diffie--Hellman-sleuteluitwisseling}\label{sec:l7_diffie-hellman}
 
 \hl{Diffie-Hellman} is een protocol om via een publiek kanaal een geheim af te spreken. Een belangrijk verschil met RSA is:
 \begin{itemize}
@@ -703,7 +703,7 @@ Het geheim dat Alice en Bob uiteindelijk delen is:
 }
 \end{center}
 
-\subsection{ElGamal-encryptie}
+\subsection{ElGamal-encryptie}\label{sec:l7_elgamal}
 
 \hl{ElGamal} is een asymmetrisch ecryptieschema gebaseerd op het DLP. Het is in feite een uitbreiding van de Diffie-Hellman sleuteluitwisseling, waarbij het afgesproken geheim direct wordt gebruikt om een bericht te versleutelen met behulp van een \hl{Key Derivation Function (KDF)} en een \hl{XOR-operatie} ($\oplus$).
 
@@ -767,7 +767,7 @@ Wanneer Alice het bericht ontcijferd, gebruikt zijn $c_1^a$. Omdat $c_1 = g^r$, 
 $\rightwhitearrow$ Ze berekenen dus onafhankelijk van elkaar exact dezelfde input voor de KDF! Omdat een dubbele XOR-operatie met dezelfde waarde zichzelf opheft ($X \oplus Y \oplus Y = X$), haalt Alice het originele bericht $m$ foutloos terug.
 Een afluisteraar kent $a$ en $r$ niet, en kan dus $g^{ar}$ niet berekenen (wegens DLP), en kan dus de XOR-operatie niet ongedaan maken.
 
-\subsection{Schnorr-identificatie}
+\subsection{Schnorr-identificatie}\label{sec:l7_schnorr}
 
 Bij een \hl{identificatieprotocol} noemen we de partijen:
 \begin{itemize}
