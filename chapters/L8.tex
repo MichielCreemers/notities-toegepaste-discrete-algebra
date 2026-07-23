@@ -1,10 +1,189 @@
 \section{Les 8 -- Elliptische krommen en lineaire codes}
 
+\subsection*{Herhaling: discrete logaritmes in cyclische groepen}
+
+We vertrekken van een \hl{cyclische groep} $G$ van eindige orde $n$, met een gekozen generator $g$. Dan kunnen alle elementen geschreven worden als:
+\begin{equation*}
+    G = \{e, g, g^2, \dots, g^{n-1}\}, \qquad g^n = e
+\end{equation*}
+Voor een element $h \in G$ bestaat er dan een unieke exponent
+\begin{equation*}
+    a \in \{0, 1, \dots, n-1\}
+\end{equation*}
+zodat
+\begin{equation*}
+    h = g^a
+\end{equation*}
+Deze exponent noemen we het \hl{discrete logaritme} van $h$ ten opzichte van $g$:
+\begin{equation*}
+    a = \log_g(h)
+\end{equation*}
+Het \hl{discrete-logaritmeprobleem} of \hl{DLP} is dan:
+\begin{equation*}
+    \text{Gegeven } g \text{ en } h = g^a \quad \to \quad \text{vind } a
+\end{equation*}
+Het cruciale verschil met gewone logaritmes is dat discrete logaritmes in goed gekozen groepen zeer moeilijk te berekenen zijn. Dit is de veiligheidsaanname achter veel publieke-sleutelcryptografie.
+
+\subsubsection*{Generieke aanvallen en groepsgrootte}
+
+Er bestaan generieke aanvallen die in elke groep werken. In de cursus wordt de methode aangehaald die gebaseerd is op \hl{Pohlig-Hellman-reductie}.
+
+\begin{nicefact}*[Pohlig-Hellman-reductie]
+    \nextpart[]*
+    Het DLP is een groep van orde
+    \begin{equation*}
+        n = |G| = p_1^{e_1} p_2^{e_2} \cdots p_r^{e_r}
+    \end{equation*}
+    kan via \hl[factcolor!75!black]{Pohlig-Hellman} gereduceerd worden naar het berekenen van discrete-logaritmeproblemen in groepen van orde $p_i$.
+\end{nicefact}
+
+Gebaseerd op dit feit formuleerde \emph{Pollard} een algoritme dat werkt in alle groepen, genaamd \hl{Pollard's rho-methode}, dat een DLP in een groep van priemorde $p$ oplost in ongeveer $\sqrt{p}$ groepsoperaties.
+
+$\rightwhitearrow$ Daarom nemen we in cryptografie meestal een groep van \hl{grote priemorde} $p$, want als de orde factoriseerbaar is, kan Pohlig-Hellman het probleem reduceren naar kleinere groepen.
+
+Voor \hl{128-bit veiligheid} wil men dat een aanvaller ongeveer $2^{128}$ operaties nodig heeft. Omdat Pollard rho ongeveer $\sqrt{p}$ operaties vraagt, moet
+\begin{equation*}
+    \sqrt{p} \approx 2^{128}
+\end{equation*}
+dus $p \approx 2^{256}$. Daarom zijn groepen van ongeveer \hl{256 bits} voldoende als er geen betere aanval bekend is dan Pollard rho.
+
+\subsubsection*{Twee belangrijke DLP-groepen}
+
+\SimpleHeading{Multiplicatieve groep van een eindig veld}
+
+Een historisch belangrijk voorbeeld is
+\begin{equation*}
+    \langle\mathbb{F}_q^\times, \cdot \rangle 
+\end{equation*}
+Dit is de eenhedengroep van een eindig veld, of een cyclische deelgroep daarvan.
+Dit was het oorspronkelijke voorstel van \emph{Diffie} en \emph{Hellman}. Het probleem is echter dat voor deze groepen betere aanvallen bestaan dan Pollard rho, namelijk \hl{index-calculus-methoden}, waaronder de \hl{number field sieve}. \newline
+$\rightwhitearrow$ Gevolg: voor 128-bit veiligheid heeft men een veldgrootte van ongeveer
+\begin{equation*}
+    q \approx 2^{3072}
+\end{equation*}
+nodig. Dit leidt tot veel grotere sleutels.
+
+\SimpleHeading{Elliptische krommen over eindige velden}
+
+Het belangrijkste moderne voorbeeld is een cyclische deelgroep van de groep van punten op een elliptische kromme over een eindig veld:
+\begin{equation*}
+    \langle E\left(\mathbb{F}_q, +\right) \rangle
+\end{equation*}
+Dit werd voorgesteld foor \emph{Koblitz} en \emph{Miller} in 1985. Voor elliptische krommen zijn geen index-calculus-aanvallen bekend die vergelijkbaar zijn met die voor $\mathbb{F}_q^\times$. Daarom is ongeveer
+\begin{equation*}
+    q \approx 2^{256}
+\end{equation*}
+voldoende voor 128-bit veiligheid.
+
+Tegenvoorbeeld: in de groep $\langle \mathbb{F}_p, \textcolor{Red}{+}\rangle$ is DLP gemakkelijk. Dit wordt aangetoond in \cref{ex:l8_groep-DLP-easy}.
+
+\subsubsection*{Protocols op basis van het DLP}
+
+We gaan hier niet opnieuw dieper in op de protocollen, maar de volgende zijn gebaseerd op het DLP:
+\begin{itemize}
+    \item Diffie-Hellman-sleuteluitwisseling: gebruikt om een gedeelde geheime sleutel af te spreken. (\Cref{sec:l7_diffie-hellman})
+    \item ElGamal-encryptie: een encryptie-systeem gebaseerd op DLP. (\Cref{sec:l7_elgamal})
+    \item Schnorr-handtekeningen: een digitaal handtekeningsschema gebaseerd op DLP. (\Cref{sec:l7_schnorr})
+\end{itemize}
+
+\subsection{Elliptische krommen}
+
+\SimpleHeading{Definitie}
+
+We werken over een veld $K$ met karakteristiek niet gelijk aan 2 of 3:
+\begin{equation*}
+    \operatorname{char}(K) \neq 2, 3
+\end{equation*}
+
+\underbar{Herinner:} De \hl{karakteristiek} van een veld $K$ is simpelweg: hoe vaak moet je het getal 1 bij zichzelf optellen om op 0 uit te komen?
+\begin{itemize}
+    \item Gewone getallen ($\mathbb{R}$, $\mathbb{Q}$, $\mathbb{C}$): Als je $1 + 1 + 1 + \dots$ doet, kom je nooit op 0 uit. De karakteristiek is hier dus 0.
+    \item Eindige velden ($\mathbb{F}_p$): Hier rekenen we modulo een priemgetal $p$. Bijvoorbeeld:
+    \begin{itemize}
+        \item In $\mathbb{F}_5$ geldt: $1 + 1 + 1 + 1 + 1 = 5 \equiv 0 \pmod 5$. De karakteristiek is hier 5.
+        \item In $\mathbb{F}_2$ geldt: $1 + 1 = 2 \equiv 0 \pmod 2$. De karakteristiek is hier 2.
+    \end{itemize}
+\end{itemize}
+Dus $\operatorname{char}(K) \neq 2,3$ wil zeggen: het veld waarin we werken mag géén modulo 2 or 3 rekenen zijn. En $K$ mag dus ook geen \textcolor{WildStrawberry}{uitbreidingsveld} hiervan zijn, zoals $\mathbb{F}_{2^m}$!
+
+\begin{nicedefinition}*[Elliptische Kromme]
+    \nextpart[]*
+    Een \hl[PineGreen!75!black]{elliptische kromme} over een veld $K$ is dan een vlakke kromme van de vorm
+    \begin{equation*}
+        E : y^2 = x^3 + Ax + B
+    \end{equation*}
+    waarbij $A, B \in K$ en
+    \begin{equation*}
+        4A^3 + 27B^2 \neq 0
+    \end{equation*}
+    Deze laatste voorwaarde betekent dat de kromme \hl[PineGreen!75!black]{niet-singulier} is. Dat wil zeggen dat de kromme overal glas is, en dus geen scherpe punten of "zelf-doorsnijdingen" heeft. Algebraïsch heeft de derdegraadsvergelijking $x^3 + Ax + B = 0$ geen meervoudige wortels.
+
+    \vspace{0.20cm}
+
+    Voor ons is het vooral belangrijk dat de raaklijn in elk punt goed gedefinieerd is.
+\end{nicedefinition}
+
+\newpage
+\SimpleHeading{Intuïtie over de vorm}
+
+Over $\mathbb{R}$ kan je een elliptische kromme tekenen. Typisch zie je vormen zoals hieronder: één verbonden component of twee componenten.
+
 \begin{center}
 \resizebox{1.0\textwidth}{!}{%
     \input{figures/L8/elliptische_krommen.tex}
 }
 \end{center}
+
+De vergelijking is symmetrisch in $y$, want als $(x,y)$ op de kromme ligt, dan ligt ook $(x, -y)$ op de kromme.
+
+De snijpunten met de $x$-as vind je door $y=0$ te zetten:
+\begin{equation*}
+    x^3 + Ax + B = 0
+\end{equation*}
+Over $\mathbb{C}$ heeft deze derdegraadsvergelijking drie nulpunten. Over $\mathbb{R}$ zijn er ofwel één, ofwel drie reële nulpunten, omdat niet-reële nulpunten in complex toegevoegde paren voorkomen.
+
+\SimpleHeading{Geen ellips}
+
+Een elliptische kromme is \hl{geen ellips}. De naam komt gewoon historisch van de studie van de omtrek van een ellips, waarvij elliptische integralen optreden.
+
+\subsubsection{Punten op een elliptische kromme}
+
+De puntenverzameling noteren we als $E(K)$. Ze bestaat uit alle oplossingen $(a,b) \in K^2$ van
+\begin{equation*}
+    b^2 = a^3 + Aa + B
+\end{equation*}
+plus één extra punt: $\infty$. Dus
+\begin{equation*}
+    E(K) = \{(a,b) \in K^2 \mid b^2 = a^3 + Aa + B\} \cup \{\infty\}
+\end{equation*}
+Het punt $\infty$ heet het \hl{punt op oneindig}. Intuïtief kan je het zien als het punt waar alle verticale lijnen elkaar op oneindig snijden. In projectieve meetkunde verschijnt dit punt natuurlijk door de vergelijking te homogeniseren, maar dit wordt buiten beschouwing gelaten.
+
+Voor cryptografie neemt men meestal
+\begin{equation*}
+    K = \mathbb{F}_p
+\end{equation*}
+met $p$ een groot priemgetal, vaak ongeveer 256 bits lang.
+
+\subsubsection{Groepswet op een elliptische kromme}
+
+De punten op een elliptische kromme vormen een \hl{commutatieve groep}. De groepsbewerking wordt additief genoteerd als:
+\begin{equation*}
+    P+Q
+\end{equation*}
+Merk op dat dit \hl[WildStrawberry]{niet} coördinaatsgewijze optelling is.
+
+\hl{1. Meetkundige constructie voor $P_1 + P_2$} \newline
+Neem twee punten $p_1$ en $p_2$ op de kromme.
+\begin{enumerate}
+    \item Trek de rechte door $p_1$ en $p_2$.
+    \item Deze rechte snijdt de kubische kromme in een derde punt $R$.
+    \item Spiegel $R$ in de $x$-as.
+    \item Dat gespiegelde punt is
+    \begin{equation*}
+        P_1 + P_2
+    \end{equation*}
+\end{enumerate}
+Omdat de kromme graad 3 heeft, snijdt een rechte de kromme in drie punten, als men multipliciteiten en punten op oneindig meetelt.
 
 \begin{center}
 \resizebox{1.0\textwidth}{!}{%
@@ -12,22 +191,328 @@
 }
 \end{center}
 
+\hl{2. Verdubbeling: $2P$}\newline
+Als $P_1 = P_2 = P$, dan gebruik je niet een rechte door twee verschillende punten, maar de \hl{raaklijn} aan de kromme in $P$.
+\begin{enumerate}
+    \item Trek de raaklijn in $P$.
+    \item Die snijdt de kromme opnieuw in een derde punt $R$.
+    \item Spiegel $R$ in de $x$-as.
+    \item Dat punt is
+    \begin{equation*}
+        2P = P + P
+    \end{equation*}
+\end{enumerate}
+
+\hl{3. Speciale gevallen}\newline
+\textbf{Verticaal tegenover elkaar liggende punten}\newline
+Als
+\begin{equation*}
+    p_1 = (a,b), \qquad p_2 = (a, -b)
+\end{equation*}
+dan liggen ze verticaal tegenover elkaar. De rechte door $p_1$ en $p_2$ is verticaal en snijdt de kromme in het punt op oneindig. Dus
+\begin{equation*}
+    p_1 + p_2 = \infty
+\end{equation*}
+
+\textbf{Punten op de $x$-as}\newline
+Dit is hetzelfde als een punt met zichzelf optellen, we nemen dus de raaklijn. Op de $x$-as is deze verticaal, dus het derde snijpunt is in ondeindig:
+\begin{equation*}
+    2P = \infty
+\end{equation*}
+
 \begin{center}
 \resizebox{1.0\textwidth}{!}{%
     \input{figures/L8/speciale_gevallen_1.tex}
 }
 \end{center}
 
+\textbf{Punt op oneindig}\newline
+Het punt $\infty$ behoort in principe ook tot de groep, dus moeten we het ook kunnen samenstellen. Neem bijvoorbeeld een punt $Q$. De rechte door $\infty$ en $Q$ gaat dan door een derde snijpunt $R$, dat na spiegelen met de $x$-as terug gewoon $Q$ is. Dus
+\begin{equation*}
+    Q + \infty = Q
+\end{equation*}
+
 \begin{center}
-\resizebox{1.0\textwidth}{!}{%
+\resizebox{0.75\textwidth}{!}{%
     \input{figures/L8/speciale_gevallen_2.tex}
 }
 \end{center}
 
+\begin{nicetheorem}*
+    \nextpart[]*
+    Met deze optelling is
+    \begin{equation*}
+        \langle E(K), + \rangle
+    \end{equation*}
+    een \hl[red!75!black]{commutatieve groep}.
+\end{nicetheorem}
+Bewijs niet kennen.
+
+Uit de bovenstaande voorbeelden kunnen we ook eigenschappen afleiden.
+
+Uit de samenstelling met een punt op oneindig weet je $Q + \infty = Q$. M.a.w. $\infty$ is het neutraal element.
+
+\begin{niceproperty}*[Neutraal element]
+    \nextpart[]*
+    In de commutatieve groep $\langle E(K), + \rangle$ is $\infty$ het \hl[RoyalPurple!75!black]{neutrale element}.
+\end{niceproperty}
+
+Ook weten we dat, als we twee verticaal tegenover elkaar liggende punten $p_1 = (a,b)$ en $p_2 = (a, -b)$ nemen, dat $p_1 + p_2 = \infty = 0$ (herinner neutrale element). M.a.w. $p_2$ is de inverse van $p_1$.
+
+\begin{niceproperty}*[Invers element]
+    \nextpart[]*
+    In de commutatieve groep $\langle E(K), + \rangle$ is het \hl[RoyalPurple!75!black]{inverse element} voor een punt
+    \begin{equation*}
+        -(a,b) = (a, -b)
+    \end{equation*}
+\end{niceproperty}
+
+\subsubsection{Expliciete formules voor de groepswet}
+
 \begin{center}
-\resizebox{1.0\textwidth}{!}{%
+\resizebox{0.65\textwidth}{!}{%
     \input{figures/L8/expliciete_formules.tex}
 }
 \end{center}
 
+Voor berekeningen over eindige velden hebben we algebraïsche formules nodig. Neem
+\begin{equation*}
+    P_1 = (a_1, b_1) \qquad \text{en} \qquad P_2 = (a_2, b_2)
+\end{equation*}
+en schrijf
+\begin{equation*}
+    P_1 + P_2 = (a_3, b_3)
+\end{equation*}
+De kromme is
+\begin{equation*}
+    E : y^2 = x^3 + Ax + B
+\end{equation*}
+
+\SimpleHeading{Richtingscoëfficiënt}
+
+Als $P_1 \neq P_2$, dan is de richtingscoëfficiënt van de rechte door beide punten gewoon
+\begin{equation*}
+    \lambda = \frac{\Delta y}{\Delta x} = \frac{b_2 - b_1}{a_2 - a_1}
+\end{equation*}
+Als $P_1 = P_2$, dan gebruiken we de raaklijn aan de kromme door dit punt. De richtingscoëfficiënt van een raaklijn is de afgeleide $dx/dy$.
+\begin{equation*}
+    \begin{aligned}
+        \frac{d}{dx}(y^2) &= \frac{d}{dx}(x^3 + Ax + B) \\
+        2y \cdot \frac{dy}{dx} &= 3x^2 + A \\
+        \frac{dy}{dx} &= \frac{3x^2 + A}{2y}
+    \end{aligned}
+\end{equation*}
+Invullen in het punt $(a_1, b_1)$ geeft dan direct de gewenste richtingscoëfficiënt:
+\begin{equation*}
+    \lambda = \frac{3a_1^2 + A}{2b_1}
+\end{equation*}
+
+\SimpleHeading{Coördinaten van de som}
+
+We hebben nu de recht $y = \lambda(x-a_1) + b_1$ met richtingscoëfficiënt $\lambda$ die door $P_1$ en $P_2$ loopt. 
+
+\hl{Stap A: we zoeken het snijpunt van de rechte met de kromme} \newline
+We lossen het stelsel op:
+\begin{enumerate}
+    \item Kromme: $y^2 = x^3 + Ax + B$
+    \item rechte: $y = \lambda(x-a_1) + b_1$
+\end{enumerate}
+(1) in (2) substitueren geeft:
+\begin{equation*}
+    \left(y = \lambda(x-a_1) + b_1\right)^2 = x^3 + Ax + B
+\end{equation*}
+Dit uitwerken resulteert in een derdegraadsvergelijking in $x$ van de vorm:
+\begin{equation*}
+    x^3 - \lambda^2 x^2 + \cdots = 0 
+\end{equation*}
+
+\hl{Stap B: formule $a_3$ afleiden} \newline
+Volgens de \hl{Regels van Viète} is de som van de drie wortels $x_1$, $x_2$, $x_3$ van een veelterm $x^3 + cx^2 + dx + e = 0$ gelijk aan $-c$.
+
+In onze vergelijking is de coëfficiënt voor $x^2$ gelijk aan $-\lambda^2$. Dus geldt:
+\begin{equation*}
+    x_1 + x_2 + x_3 = \lambda^2
+\end{equation*}
+We weten al dat $x_1 = a_1$ en $x_2 = a_2$ al snijpunten zijn. Het derde snijpunt heeft $x$-coördinaat $a'_3$:
+\begin{equation*}
+    a_1 + a_2 + a'_3 = \lambda^2 \implies a'_3 = \lambda^2 - a_1 - a_2
+\end{equation*}
+Herinner dat de optelling volgens de groepswet zegt dat we het derde snijpunt moeten spiegelen over de $x$-as, de $x$-coördinaat verandert dus niet. 
+
+Voor ons sompunt $P_3 = (a_3, b_3)$ geldt dus gewoon:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    a_3 = \lambda^2 - a_1 - a_2
+\end{equationbox}
+
+\hl{Stap C: formule $b_3$ afleiden} \newline
+Het derde (onbekende) snijpunt op de lijn $(a_3, b'_3)$ heeft een $y$-coördinaat $b'_3$ die voldoet aan de vergelijking:
+\begin{equation*}
+    b'_3 = \lambda (a_3 - a_1) + b_1
+\end{equation*}
+Vergeet niet dat ons uiteindelijke punt $P_3 = (a_3, b_3)$ de \hl{gespiegelde versie} is van dit snijpunt over de $x$-as ($b_3 = -b'_3$):
+\begin{equation*}
+    b_3 = -\left(\lambda(a_3 - a_1) + b_1\right) = -b_1 - \lambda (a_3 - a_1)
+\end{equation*}
+Dit uitwerken geeft:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    b_3 = \lambda (a_1 - a_3) - b_1
+\end{equationbox}
+
+\subsubsection{Elliptic Curve Diffie-Hellman}
+
+Voor cryptografie kiest men:
+\begin{itemize}
+    \item een elliptische kromme $E$ over een eindig veld $\mathbb{F}_q$.
+    \item een punt $P \in E(\mathbb{F}_q)$ dat een cyclische deelgroep van grote priemorde $l$ voortbrengt. $\langle P \rangle = \{1P, 2P, 3P, \dots, (l-1)P, lP=\infty\}$
+\end{itemize}
+De \textcolor{Emerald}{publieke parameters} zijn dan: $E, \mathbb{F}_q, P$ en $l$.
+
+\SimpleHeading{Protocol}
+
+\textbf{1.} Alice kies \textcolor{WildStrawberry}{geheim}
+\begin{equation*}
+    \textcolor{WildStrawberry}{a} \in \{0, 1, \dots, l-1\}
+\end{equation*}
+en stuurt $\textcolor{WildStrawberry}{a}P$ naar Bob.
+
+\textbf{2.} Bob kiest \textcolor{WildStrawberry}{geheim}
+\begin{equation*}
+    \textcolor{BurntOrange}{b} \in \{0, 1, \dots, l-1\}
+\end{equation*}
+en stuurt $\textcolor{WildStrawberry}{b}P$ naar Alice.
+
+\textbf{3.} Alice berekent: $\textcolor{WildStrawberry}{a}(\textcolor{BurntOrange}{b}P) = \textcolor{WildStrawberry}{a}\textcolor{BurntOrange}{b}P$
+
+\textbf{4.} Bob berekent: $\textcolor{BurntOrange}{b}(\textcolor{WildStrawberry}{a}P) = \textcolor{WildStrawberry}{a}\textcolor{BurntOrange}{b}P$
+
+$\rightwhitearrow$ Beiden komen dus uit op hetzelfde punt $abP$. Dat punt wordt daarna omgezet naar bijvoorbeeld een AES-sleutel.
+
+\begin{center}
+\resizebox{0.82\textwidth}{!}{%
+    \input{figures/L8/elliptic-diffie-hellman.tex}
+}
+\end{center}
+
+\SimpleHeading{Veiligheidsaanname}
+
+Een aanvaller ziet $P$, $aP$ en $bP$, maar zou $abP$ moeten vinden. De evident manier is om uit $aP$ de scalar $a$ te halen. Maar dat is precies het DLP op elliptische krommen:
+\begin{equation*}
+    P, aP \longrightarrow a
+\end{equation*}
+Dit klinkt misschien vreemd, waarom is uit $aP$ proberen $a$ te berekenen een DLP?
+\begin{enumerate}
+    \item Het "machtsverheffen" (forward operation):\newline
+    Gegeven een punt $P$ en een geheim getal $a$, bereken het punt $Q = aP$. Dit kan supersnel met het square-and-multipl of double-and-add algoritme (zie \Cref{sec:l8_aP-berekenen}).
+
+    \item Het "Discrete Logaritme" (reverse operation):\newline
+    Gegeven een startpunt $P$ en een eindpunt $Q = aP$, vind het geheime getal $a$.
+    \begin{equation*}
+        \text{vind } a = \log_P(Q)
+    \end{equation*}
+    Omdat de bewerking $aP$ kriskras over de kromme spring, is er geen gemakkelijke formule om $a$ direct uit $aP$ en $P$ te berekenen. Een aanvaller zou in het ergste geval alle mogelijkheden voor $a$ moeten proberen.
+\end{enumerate}
+
+\subsubsection{Scalarvermenigvuldiging: \texorpdfstring{$aP$}{aP} berekenen}\label{sec:l8_aP-berekenen}
+
+Naïef $aP$ berekenen als
+\begin{equation*}
+    P + P + \cdots + P
+\end{equation*}
+met $a$ termen is onmogelijk als $a$ ongeveer 256 bits lang is.
+
+Daarom gebruikt men \hl{verdubbelen-en-optellen}. Dit is de additieve versie van \hl{square-and-multiply}.
+
+Schrijf $a$ binair:
+\begin{equation*}
+    a = a_0 + a_1 2 + a_2 2^2 + \cdots a_r 2^r
+\end{equation*}
+met $a_i \in \{0,1\}$.
+
+Bereken eerst door herhaald verdubbelen:
+\begin{equation*}
+    P, 2P, 2^2P, 2^3P, \dots, 2^rP
+\end{equation*}
+Dan is
+\begin{equation*}
+    aP = \sum_{i:a_i = 1}2^iP
+\end{equation*}
+$i:a_i = 1$ wil gewoon zeggen "neem de som over alle indexen $i$ waarvoor de bit $a_i$ gelijk is aan 1".
+
+\textbf{\underbar{Voorbeeld:}} Stel we willen $aP$ berekenen voor $a=13$.
+\begin{enumerate}
+    \item Zet $a=13$ om naar binair: $13 = 1101_2$\newline
+    Dit betekent gewoon:
+    \begin{itemize}
+        \item $a_0 = 1$
+        \item $a_1 = 0$
+        \item $a_2 = 1$
+        \item $a_3 = 1$
+    \end{itemize}
+    \item Bereken de verdubbelingen $(P, 2P, 2^2P, 2^3P)$. \newline
+    Dit kost maar 3 verdubbelingen $(P\to2P\to4P\to8P)$.
+    \item Pas de formule toe. We kijken welke bitjes op 1 staan ($i=0,2,3$) en tellen alleen die punten op:
+    \begin{equation*}
+        13P = (1 \cdot 2^3P) + (1 \cdot 2^2P) + (0 \cdot 2^1P) + (1 \cdot 2^0P)
+    \end{equation*}
+    \begin{equation*}
+        13P = 8P + 4P + P
+    \end{equation*}
+    $\rightwhitearrow$ Dus voor $13P$ te berekenen heb je maar slechts 3 verdubbelingen en 2 optellingen nodig. Trek je dit door naar een 256-bit getal, dan vraagt dit algoritme gemiddeld maar 256 verdubbelingen en 128 optellingen. Verglijk dit met de naïve $2^256$ optellingen!
+\end{enumerate}
+
 \tocdecorline{Hoofdtuk 5 -- Codetheorie}
+
+\subsection{Motivatie -- Codetheorie}
+
+\subsubsection{Voorbeeld: pariteitsbit}
+
+\subsubsection{Algemene setting van codes}
+
+\subsection{lineaire codes}
+
+\subsubsection{Generatormatrix}
+
+\subsubsection{Systematische codes}
+
+\subsubsection{Pariteitscontrole als lineaire code}
+
+\subsubsection{Pariteitscontrolematrix bij systematische codes}
+
+\subsection{Foutdetectie via pariteitscontrole}
+
+\subsubsection{Nearest-neighbour decoding}
+
+\subsubsection{Hamming-gewicht en Hamming-afstand}
+
+\subsubsection{Geometrisch idee achter foutcorrectie}
+
+\subsection{Recap -- Kernpunten van deze les}
+
+\subsection{Samenvattende oefeningen}
+
+\begin{niceexercise}*\label{ex:l8_groep-DLP-easy}
+    \nextpart[]*
+    Toon aan dat in een cryptografisch systeem dat is gebaseerd op de groep $\langle \mathbb{F}_p, \textcolor{Red}{+}\rangle$ onveilig is, want het DLP is hier gemakkelijk.
+\end{niceexercise}
+
+Normaal gesproken kijken we naar de multiplicatieve groep $\langle \mathbb{F}_p^\times, \cdot \rangle$. Het DLP is dan als volgt gedefinieerd:
+\begin{itemize}
+    \item Gegegven een basis $g$ en een element $y$,
+    \item[$\to$] Zoek de geheime $x$ waarvoor geldt: $g^x \equiv y \pmod p$
+\end{itemize}
+We hebben eerder al gezien dat dit moeilijk is. Wat verandert er nu in de additieve groep $\langle \mathbb{F}_p, + \rangle$?
+
+In de additieve groep $\mathbb{F}_p$ is de groepsbewerking niet vermenigvuldigen, maar optellen. Wanneer we in een additieve groep een element $g$ "machtsverheffen" tot de macht $x$, betekent dat niet $g \cdot g \cdot \dots \dot g$, maar dat we $g$ $x$ keer bij zichzelf optellen:
+\begin{equation*}
+    \underbrace{g + g + \cdots + g}_{x \text{ keer}} \equiv y \mod p
+\end{equation*}
+Maar $x$ keer $g$ bij zichzelf optellen is natuurlijk gewoone vermenigvuldiging:
+\begin{equation*}
+    x \cdot g \equiv y \pmod p
+\end{equation*}
+Waarom is het DLP hier nu dan triviaal? We hebben het DLP in $\langle \mathbb{F}_p, + \rangle$ net herleid tot de vergelijking $x \cdot g \equiv y \pmod p$. I.p.v. dat we een moeilijke exponent $x$ moeten zoeken, zoeken we nu gewoon de factor $x$. En hoe los je een gewone lineaire vergelijking op modulo $p$?
+Door te delen door $g$! Dat is dus gewoon vermenigvuldigen met de modulaire inverse van $g$:
+\begin{equation*}
+    x \equiv y \cdot g^{-1} \pmod p
+\end{equation*}
+Het uitgebreide algoritme van Euclides kan dit extreem snel berekenen!
