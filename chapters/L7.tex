@@ -184,7 +184,7 @@ Je zou misschien denken dat dit niet het geval is, want zelfs een willekeurige m
 \end{equation*}
 Een brute-force aanval lijkt dus moelijk. Toch is het syteem onveilig door \textbf{letterfrequenties}. In een Nederlandse tekst komt bijvoorbeeld de letter \textbf{\texttt{E}} veel vaker voor dan de meeste andere letters. Als een bepaalde letter in de cijfertekst opvallend vaak voorkomt, is die waarschijnlijk $\sigma(E)$. Daarna kan men verder puzzelen. Dus het probleem is niet dat de sleutelruimte te klein is, maar dat de structuur van de taal behouden blijft.
 
-\subsubsection{Poly-alfabetsische systemen en rotormachines}
+\subsubsection{Poly-alfabetische systemen en rotormachines}
 
 Om frequentieanalyse moeilijker te maken, gebruikt men blokken van letters of meerdere substituties. Enkele bekende voorbeelden hiervan zijn:
 \begin{itemize}
@@ -528,21 +528,404 @@ Dus $m^{ed} \equiv m \pmod N$ en dus $c^d \equiv m \pmod N$. Daarom werkt decryp
 
 \subsubsection{Veiligheid van RSA}
 
+De publieke sleutel bevat $N=pq$. Als een aanvaller $N$ kan factoriseren, dan kent hij $p$ en $q$, en dus ook
+\begin{equation*}
+    \varphi(N) = (p-1)(q-1)
+\end{equation*}
+Daarmee kan hij dan $d$ berekenen. Daarom steunt RSA op de aanname:
+\begin{barbox}[RoyalPurple!75][gray!3]
+    Het is praktisch onmogelijk om een groot getal $N = pq$ te factoriseren wanneer $p$ en $q$ grote willekeurige priemgetallen zijn.
+\end{barbox}
+Vandaag de dag is het \textbf{Number Field Sieve / getallenveldzeef} het bekenste algoritme voor factorisatie. Dit is echter sub-exponentieel, niet polynomiaal, maar ook niet volledig exponentieel. Daardoor moeten RSA-sleutels veel groter zijn dan AES sleutels om hetzelfde veiligheidsniveau te halen.
+\begin{itemize}
+    \item AES-128 heeft 128-bit veiligheid met een 128-bit sleutel;
+    \item RSA heeft voor vergelijkbare veiligheid veel grotere moduli nodig, typisch duizenden bits.
+\end{itemize}
+Een goede oefening is het aantonen dat $\varphi(N)$ berekenen uit $N$ even moeilijk is als $N$ factoriseren. Dit is uitgewerkt in \cref{ex:l7_rsa-veiligheid}.
+
 \subsubsection{RSA-handtekeningen}
+
+RSA kan ook gebruikt worden voor \inlinetext{digitale handtekeningen}. Bij encryptie gebruikt Alice the publieke exponent $e$, en Bob de private exponent $d$ om te decrypteren.
+
+$\rightwhitearrow$ Bij \inlinetext{handtekeningen} draait men dit idee om.
+
+Bob wil een publiek bericht $m$ ondertekenen. Hij berekent
+\begin{equation*}
+    s \equiv m^d \pmod N
+\end{equation*}
+De handtekening is $s$. Iedereen kan nu controleren of
+\begin{equation*}
+    s^e \equiv m \pmod N
+\end{equation*}
+Inderdaad:
+\begin{equation*}
+    s^e \equiv (m^d)^e = m^{de} \equiv m \pmod N 
+\end{equation*}
+Waarom bewijst dit nu dat Bob ondertekende? Namelijk omdat alleen Bob $d$ kent! Als iemand anders een $s$ kan maken waarvoor $s^e = m$, dan lijkt die persoon de private exponent te kennen.
+In echte cryptografische systemen ondertekent men meestal niet het ruwe bericht, maar een hash of een correct gepadde versie van het bericht. Dat detail wordt niet behandelt in deze cursus.
+
+\textbf{Waarom werkt dit?} \emoji{star} \newline
+\underbar{De setup:}
+\begin{itemize}
+    \item $N = pq$, met $p$ en $q$ twee verschillende priemgetallen;
+    \item $\varphi(N) = (p-1)(q-1)$;
+    \item De geheime sleutel $d$ en de publieke sleutel $e$ zijn zo gekozen zodat $de \equiv 1 \pmod {\varphi(N)}$;
+\end{itemize}
+Omdat $de \equiv 1 \pmod {\varphi(N)}$, betekent dit dat $de$ een veelvoud is van $\varphi(N)$ plus 1:
+\begin{equation*}
+    de = 1 + k \cdot \varphi(N)
+\end{equation*}
+\underbar{Het bewijs:} We willen nu aantonen dat $m^{de} \equiv m \pmod {N}$. We herschrijven $m^{de}$:
+\begin{equation*}
+    s^e = m^{de} = m^{1 + k \cdot \varphi(N)} = m^1 \cdot \left(m^{\varphi(N)}\right)^k
+\end{equation*}
+De stelling van Euler zegt dan, als $m$ en $N$ onderling ondeelbaar zijn ($\operatorname{ggd}(m,N)=1$), dan
+\begin{equation*}
+    m^{\varphi(N)} \equiv 1 \pmod N
+\end{equation*}
+Dit vullen we in in onze vergelijking:
+\begin{equation*}
+    m^{de} \equiv m \cdot (1)^k \pmod N
+\end{equation*}
+Dus
+\begin{equation*}
+    m^{de} \equiv m \pmod N
+\end{equation*}
 
 \subsection{Discrete-logaritmeprobleem}
 
+RSA is gebaseerd op het feit dat het factoriseren van een groot getal $N=pq$ in zijn oorspronkelijke priemfactoren $p$ en $q$ zeer moeilijk is.
+Er is echter nog een techniek, namelijk publieke-sleutelcryptografie gebaseerd op het \hl{discrete-logaritmeprobleem}.
+
+Laat $G$ een eindige cyclische groep zijn met generator $g$. Dan geldt:
+\begin{equation*}
+    G = \langle g \rangle = \{g^0, g^1, g^2, \dots\}
+\end{equation*}
+Voor elk element $h \in G$ bestaat er een unieke exponent $a$ modulo de orde van de groep ($a \in \{0, 1, \dots, \#G-1\}$) zodat
+\begin{equation*}
+    h = g^a
+\end{equation*} 
+Deze exponent heet de \hl{discrete logaritme van $h$ t.o.v. basis $g$}:
+\begin{equation*}
+    a = \log_g(h)
+\end{equation*}
+Dit is het "geheim", hoeveel keer je het startgetal $g$ met zichzelf hebt vermenigvuldigd.
+
+\begin{nicedefinition}*[Discrete-Logaritmeprobleem]
+    \nextpart[]*
+    Het \hl[PineGreen!75!black]{DLP} is: Gegeven $g$ en $h$, vind $a$.
+\end{nicedefinition}
+
+\SimpleHeading{Waarom is dit moeilijk?}
+
+Stel we werken modulo $17$ met een startgetal $g=3$.
+
+\underbar{De gemakkelijke kant:} Ik geef je het geheim $a=5$. Jij berekent dan:
+\begin{equation*}
+    \begin{gathered}
+        3^5 = 243 \\
+        234 \equiv 5 \pmod {17}
+    \end{gathered}
+\end{equation*}
+Dit kost een computer een microseconde om te berekenen, zelfs al is het geheim $a$ duizenden cijfers lang.
+
+\underbar{De moeilijke kant -- Het DLP:} We draaien het probleem nu om. Ik geeft je de basis $g=3$ en het eindresultaat $h=12$. Ik vraag je nu: "Welke $a$ heb ik gebruikt zodat $3^a \equiv 12 \pmod {17}$? Omdat we nu modulo rekenen springen de antwoorden chaotisch wild in het rond:
+\begin{equation*}
+    3^1 = 3, \qquad 3^2 = 9, \qquad 3^3 = 10, \qquad 3^4 = 13, \qquad 3^5 = 5, \qquad 3^6 = 15, \qquad \dots
+\end{equation*}
+Er zit geen logische stijgende of dalende lijn in. Je kunt het niet "benaderen" of slimme trucs gebruiken. Een aanvaller moet vrijwel alle mogelijkheden één voor één afgaan. Als de getallen gigantisch groot zijn (honderden cijfers lang), duurt dat zelfs voor de snelste supercomputers miljarden jaren.
+
+\SimpleHeading{Belangrijke Groepen}
+
+In de cryptografie zijn er twee belangrijke families van groepen wanneer het gaat over DLP.
+
+\hl{1. Multiplicatieve groep van een eindig veld}\newline
+Bijvoorbeeld:
+\begin{equation*}
+    \mathbb{F}_q^\times
+\end{equation*}
+Dit was het oorspronkelijke voorstel van \emph{Diffie en Hellman}. Er bestaan echter index-calculus-methoden die DLP in zulke groepen sub-exponentieel oplossen. Daarom moet $q$ zeer groot zijn voor moderne veiligheid. 
+
+\hl{2. Punten op elliptische krommen over eindige velden}\newline
+Bij elliptische krommen gebruikt men een groep van punten op een kromme over $\mathbb{F}_q$. Dit wordt gedetailleerd besproken in les 8.
+Het voordeel is dat de beste bekende algemene aanvallen ongeveer orde $\sqrt{q}$ hebben. Daardoor kan men met veel kleinere sleutels werken dan bij RSA of klassieke finite-field Diffie-Hellman. 
+
 \subsection{Diffie--Hellman-sleuteluitwisseling}
+
+\hl{Diffie-Hellman} is een protocol om via een publiek kanaal een geheim af te spreken. Een belangrijk verschil met RSA is:
+\begin{itemize}
+    \item Bij RSA kiest Alice een sleutel en stuurt die versleuteld naar Bob;
+    \item Bij Diffie-Helman genereren Alice en Bob samen een geheim.
+\end{itemize}
+Het doel is dus om het samen eens te worden over een gemeenschappelijk stukje geheime informatie. Dit kan dan vervolgens worden omgezet in een geheime sleutel voor bijvoorbeeld AES.
+
+\SimpleHeading{Publieke parameters}
+
+Alice en Bob spreken \hl{publiek} af:
+\begin{itemize}
+    \item Een cyclische groep $\langle G,\cdot \rangle$
+    \item Een generator $g \in G$
+    \item Meestal een groep van priemorde $p$
+\end{itemize}
+
+\SimpleHeading{Protocol}
+
+Alice kiest geheim:
+\begin{equation*}
+    a \in \{0, 1, \dots, p-1\}
+\end{equation*}
+en stuurt $g^a$ naar Bob. Bob kiest geheim:
+\begin{equation*}
+    b \in \{0, 1, \dots, p-1\}
+\end{equation*}
+en stuurt $g^b$ naar Alice.\newline
+Alice berekent dan:
+\begin{equation*}
+    \left(g^b\right)^a
+\end{equation*}
+Bob berekent:
+\begin{equation*}
+    \left(g^a\right)^b
+\end{equation*}
+Ze hebben dus hetzelfde geheime groeps-element $g^{ab}$. Een afluisteraar ziet enkel:
+\begin{equation*}
+    g, \quad, g^a, \quad g^b
+\end{equation*}
+Maar zonder $a$ of $b$ is het moeilijk om $g^{ab}$ te berekenen, als het onderliggende discrete-logaritmeprobleem moeilijk is. Daaruit kan men dan een AES-sleutel afleiden.
+Het geheim dat Alice en Bob uiteindelijk delen is:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    g^{ab} \pmod p
+\end{equationbox}
+
+\begin{center}
+\resizebox{0.8\textwidth}{!}{%
+    \input{figures/L7/diffie-hellman.tex}
+}
+\end{center}
 
 \subsection{ElGamal-encryptie}
 
+\hl{ElGamal} is een asymmetrisch ecryptieschema gebaseerd op het DLP. Het is in feite een uitbreiding van de Diffie-Hellman sleuteluitwisseling, waarbij het afgesproken geheim direct wordt gebruikt om een bericht te versleutelen met behulp van een \hl{Key Derivation Function (KDF)} en een \hl{XOR-operatie} ($\oplus$).
+
+\SimpleHeading{Publieke parameters}
+
+Net als bij Diffie-Hellman spreken Alice en Bob publiek een cyclische groep af met een generator $g$ en een bepaalde orde $p$.
+
+\SimpleHeading{Sleutelgeneratie door Alice}
+
+Alice bereidt zich voor om berichten te kunnen ontvangen. Ze kiest een willekeurige \textcolor{WildStrawberry}{private sleutel}:
+\begin{equation*}
+    \textcolor{WildStrawberry}{a} \in \{0, 1, \dots, p-1\}
+\end{equation*}
+Ze berekent haar \textcolor{Emerald}{publieke sleutel}:
+\begin{equation*}
+    \textcolor{Emerald}{h} = g^{\textcolor{WildStrawberry}{a}} 
+\end{equation*}
+en publiceert \textcolor{Emerald}{$h$} (of stuurt deze naar Bob via een open kanaal).
+
+\SimpleHeading{Encryptie door Bob}
+
+Bob wil nu een bericht $m$ veilig naar Alice sturen. Hij kiest een willekeurig, eenmalig geheim (ook wel een \emph{ephemeral key} genoemd):
+\begin{equation*}
+    r \in \{0, 1, \dots, p-1\}
+\end{equation*}
+Bob versleuteld zijn bericht $m$ in een cijfertekst die uit twee delen bestaat, $c = (\textcolor{BurntOrange}{c_1}, \textcolor{NavyBlue}{c_2})$:
+\begin{enumerate}
+    \item Het eerste deel is zijn "helft" van de Diffie-Hellman wiskunde:
+    \begin{equation*}
+        \textcolor{BurntOrange}{c_1} = g^r
+    \end{equation*}
+    \item Het tweede deel is het daadwerkelijke bericht $m$, versleuteld (ge-XOR'd) met het gedeelde geheim dat door een KDF is gehaald:
+    \begin{equation*}
+        \textcolor{NavyBlue}{c_2} = m \oplus KDF(h^r)
+    \end{equation*} 
+\end{enumerate}
+Bob stuurt dan de volledige cijfertekst $c$ naar Alice.
+
+\SimpleHeading{Decryptie door Alice}
+
+Alice ontvangt $c = (\textcolor{BurntOrange}{c_1}, \textcolor{NavyBlue}{c_2})$ en wil het originele bericht $m$ terughalen. Ze gebruikt hiervoor haar \textcolor{WildStrawberry}{private sleutel $a$} op het eerste deel van de cijfertekst ($\textcolor{BurntOrange}{c_1}$) om het gedeelde geheim te reconstrueren en voert de XOR-operatie opnieuw uit:
+\begin{equation*}
+    m = \textcolor{NavyBlue}{c_2} \oplus KDF(\textcolor{BurntOrange}{c_1}^{\textcolor{WildStrawberry}{a}})
+\end{equation*}
+
+\begin{center}
+\resizebox{0.9\textwidth}{!}{%
+    \input{figures/L7/elgamal.tex}
+}
+\end{center}
+
+\textbf{Waarom werkt dit?} \emoji{star} \newline
+Wanneer Bob het bericht versleuteld, gebruikt hij $h^r$. Omdat $h = g^a$, is dit wiskundig gelijk aan:
+\begin{equation*}
+    h^r = \left(g^a\right)^r = g^{ar}
+\end{equation*}
+Wanneer Alice het bericht ontcijferd, gebruikt zijn $c_1^a$. Omdat $c_1 = g^r$, is dit wiskundig gelijk aan:
+\begin{equation*}
+    c_1^a = \left(g^r\right)^a = g^{ar}
+\end{equation*}
+$\rightwhitearrow$ Ze berekenen dus onafhankelijk van elkaar exact dezelfde input voor de KDF! Omdat een dubbele XOR-operatie met dezelfde waarde zichzelf opheft ($X \oplus Y \oplus Y = X$), haalt Alice het originele bericht $m$ foutloos terug.
+Een afluisteraar kent $a$ en $r$ niet, en kan dus $g^{ar}$ niet berekenen (wegens DLP), en kan dus de XOR-operatie niet ongedaan maken.
+
 \subsection{Schnorr-identificatie}
+
+Bij een \hl{identificatieprotocol} noemen we de partijen:
+\begin{itemize}
+    \item Peggy = prover / bewijzer
+    \item Victor = verifier / verifieerder
+\end{itemize}
+Peggy wil bewijzen dat ze  een \textcolor{WildStrawberry}{geheim $a$} kent, zonder \textcolor{WildStrawberry}{$a$} vrij te geven. Peggy wil dus aan Victor bewijzen dat zij  het discrete logaritme $\textcolor{WildStrawberry}{a} = \log_g (h)$ van een \textcolor{Emerald}{publiek element} $\textcolor{Emerald}{h} \in G$ kent.
+
+\SimpleHeading{Setup}
+
+Publiek:
+\begin{itemize}
+    \item cyclische groep $\langle G, \cdot \rangle$ van priemorde $p$
+    \item generator $g$
+    \item \textcolor{Emerald}{publiek element}
+    \begin{equation*}
+        \textcolor{Emerald}{h} = g^{\textcolor{WildStrawberry}{a}}
+    \end{equation*}
+\end{itemize}
+Privaat:
+\begin{equation*}
+    \textcolor{WildStrawberry}{a} = \log_g(\textcolor{Emerald}{h})
+\end{equation*}
+$\rightwhitearrow$ Peggy kent $\textcolor{WildStrawberry}{a}$, Victor kent alleen maar $\textcolor{Emerald}{h}$. 
+
+\SimpleHeading{Doel}
+
+Peggy wil Victor overtuigen dat zij $\textcolor{WildStrawberry}{a}$ kent, zonder dat Victor dus $\textcolor{WildStrawberry}{a}$ leert!
+
+Dit is een voorbeeld van een \hl{zero-knowledge proof}.
 
 \subsubsection{Schnorr-identificatieprotocol}
 
+Het protocol bestaat uit drie stappen:
+
+\begin{center}
+\resizebox{0.9\textwidth}{!}{%
+    \input{figures/L7/schnorr-identificatie.tex}
+}
+\end{center}
+
+\hl{Stap 1: commitment}\newline
+Peggy kiest willekeurig
+\begin{equation*}
+    r \in \mathbb{Z}/p\mathbb{Z}
+\end{equation*}
+Dit is hetzelfde als $r \in \{0, 1, \dots, p-1\}$. Ze berekent dan:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    c = g^r
+\end{equationbox}
+en stuurt $c$ naar Victor. Dit noemt men de \hl{commitment}: Peggy "legt zich vast" op $r$, zonder $r$ te onthullen.
+
+\hl{Stap 2: challenge}\newline
+Victor kiest op zijn beurt nu een willekeurige \hl{challenge}:
+\begin{equation*}
+    e \in \{0, 1, \dots, p-1\}
+\end{equation*}
+en stuurt $e$ naar Peggy.
+
+\hl{Stap 3: response}\newline
+Peggy berekent nu 
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    z = r + e \cdot \textcolor{WildStrawberry}{a} \pmod p
+\end{equationbox}
+en stuurt $z$ naar Victor.
+
+\textbf{Waarom werkt dit?} \emoji{star} \newline
+Victor controleert nu of
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    g^z = c\textcolor{Emerald}{h}^e
+\end{equationbox}
+Hij zal Peggy dus geloven als dit klopt. Maar waarom klopt dit nu als Peggy eerlijk is? Laten we het uitschrijven:
+\begin{equation*}
+    g^z = g^{r + ae} = g^r \cdot \left(g^a\right)^e = ch^e
+\end{equation*}
+Dus inderdaad, een eerlijke Peggy wordt geaccepteerd.
+
 \subsubsection{Betekenis van de eigenschappen}
 
+\SimpleHeading{Completeness / Volledigheid}
+
+Als Peggy het geheim $a$ kent en het protocol correct uitvoert, dan zal Victor accepteren. Dit volgt rechtstreeks uit:
+\begin{equation*}
+    g^{r + ea} = g^r\left(g^a\right)^e
+\end{equation*}
+
+\SimpleHeading{Soundness / betrouwbaarheid}
+
+Als Peggy $a$ niet kent, zou ze niet in staat mogen zijn om correct te antwoorden op willekeurige challenges.
+
+\SimpleHeading{Zero-knowledge}
+
+Victor leert niets over $a$. Dit komt door het feit dat de response
+\begin{equation*}
+    z = r + ea
+\end{equation*}
+gemaskeerd wordt door de willekeurige $r$. Victor kent $c=g^r$, maar door de moeilijkheid van het DLP kan hij $r$ NIET uit $c$ halen.
+
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \hl[RoyalPurple!75!]{Let op!} Als Peggy voor dezelfde commitment $c=g^r$ correct kan antwoorden op \hl[RoyalPurple!75!]{twee verschillende challenges} $e$ en $e'$, dan kan men $a$ berekenen, en lekt ze dus haar geheime sleutel! Dit wordt aangetoond in \cref{ex:l7_schnorr-lek}.
+\end{barbox}
+
 \subsubsection{Van identificatie naar handtekening}
+
+Het Schnorr-identificatieprotocol is interactief. Victor stuurt een challenge. Voor een digitale handtekening wil men een \hl{niet-interactief} protocol: Peggy moet in één keer een handtekening kunnen publiceren.
+
+In het normale Schnorr-identificatieprotocol moeten Peggy en Victor direct met elkaar praten:
+\begin{enumerate}
+    \item Peggy kiest $r$ en stuurt $c = g^r$.
+    \item Victor kiest een willekeurige challenge $e$ en stuurt die terug.
+    \item Peggy berekent $z = r + ea$ en stuurt $z$.
+\end{enumerate}
+Peggy mag $e$ absoluut niet vooraf weten of zelf kiezen. Als zij $e$ namelijk vooraf mag uitkiezen, kan ze valsspelen! Ze zou dan een valse $c$ en $z$ kunnen construeren zonder de geheime sleutel $a$ te kennen.
+
+Maar als Peggy een document of bericht $m$ wil ondertekenen voor de hele wereld, kan ze niet wachten tot elke lezer (zoals Victor) haar eerst een persoonlijke challenge $e$ stuurt. Het moet in één keer op papier/netwerk gezet worden.
+
+Men gebruikt hiervoor een \hl{hashfunctie}.
+Peggy wil nu een bericht $m$ naar Victor sturen en daar een handtekening aan toevoegen. Maar in plaats van dat Victor $e$ kiest, berekent Peggy dit zelf:
+\begin{equation*}
+    e = H(c, m, h)
+\end{equation*}
+waarbij:
+\begin{itemize}
+    \item $m$ het bericht is
+    \item $c = g^r$ de commitment is
+    \item $h = g^a$ de publieke sleutel is
+    \item $H$ een hashfunctie is
+\end{itemize}
+Daarna berekent Peggy opniew
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    z = r + ea \pmod p 
+\end{equationbox}
+De handtekening bestaat dan bijvoorbeeld uit
+\begin{equation*}
+    (c, z) \qquad \text{of equivalent} \qquad (e, z)
+\end{equation*}
+afhankelijk van de conventie. Victor herberekent de challenge met de hashfunctie en controleert de Schnorr-verificatievergelijking.
+
+\begin{center}
+\resizebox{0.9\textwidth}{!}{%
+    \input{figures/L7/schnorr-handtekening.tex}
+}
+\end{center}
+
+\textbf{Waarom werkt dit?} \emoji{star} \newline
+Stel dat Peggy de handtekening $(e, z)$ samen met het bericht $m$ online zet. Victor leest dit. Hoe weet hij zeker dat Peggy $a$ kent én dat het bericht niet is aangepast?
+\begin{enumerate}
+    \item Victor heeft alles wat hij nodig heeft: Hij kent $m$ (het bericht), $h$ (Peggy's publieke sleutel), en hij krijgt $(e, z)$.
+    \item Victor reconstrueert de commitment $c$: Uit de vergelijking $g^z = c \cdot h^e$ kan Victor $c$ isoleren:
+    \begin{equation*}
+        c' = g^z \cdot h^{-e}
+    \end{equation*}
+    \item Victor controleert de Hash: Nu berekent Victor zelf de hash opnieuw:
+    \begin{equation*}
+        e' = H(c', m, h)
+    \end{equation*}
+    \item De check: Als $e' == e$, dan accepteert Victor de handtekening. Als een hacker (Eve) het bericht dus zou aanpassen, $m \to m^*$, dan zal de hash $H(c, m^*, h)$ een compleet andere waarde $e^*$ geven.
+\end{enumerate}
 
 \subsection{Samenvattende Oefeningen}
 
@@ -655,7 +1038,7 @@ M.a.w.
     m^{ed} \equiv m \pmod {\underbrace{pq}_N}
 \end{equation*}
 Aangezien $c^d \equiv m^{ed} \pmod N$, kan je besluiten dat:
-\begin{equationbox}
+\begin{equationbox}*
     c^d \equiv m \pmod N
 \end{equationbox}
 
@@ -666,5 +1049,72 @@ Aangezien $c^d \equiv m^{ed} \pmod N$, kan je besluiten dat:
 
 Onrechtstreeks aangetoond in \cref{ex:l7_rsa-m-deelt-N-niet}.
 
-\emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin}
+\begin{niceexercise}*[Veiligheid van RSA]\label{ex:l7_rsa-veiligheid}
+    \nextpart[]*
+    Toon aan dat $\varphi(N)$ berekenen uit alleen $N$ even moeilijk is als $N$ factoriseren.
+\end{niceexercise}
+
+Als $N = pq$, dan is
+\begin{equation*}
+    \begin{aligned}
+        \varphi(N) &= (p-1)(q-1) \\
+        &= pq - p - q +1 \\
+        &= N - (p + q) + 1
+    \end{aligned}
+\end{equation*}
+Dus als je $N$ en $\varphi(N)$ kent, ken je ook
+\begin{equation*}
+    p + q = N + 1 - \varphi(N)
+\end{equation*}
+Stel nu dat je twee getallen $p$ en $q$ zoekt. Als je een vergelijking maakt waarvan $p$ en $q$ te oplossingen moeten zijn, schrijf je dat als:
+\begin{equation*}
+    \begin{gathered}
+        (X-p)(X-q) = 0 \\
+        \Updownarrow \\
+        X^2 - qX - pX + pq = 0 \\
+        \Updownarrow \\
+        X^2 - (p+q)X + pq = 0
+    \end{gathered}
+\end{equation*}
+Om nu aan te tonen dat twee problemen "even moeilijk" zijn, moet je twee richtingen aantonen:
+
+\textbf{Richting 1:} Als je $N$ kunt factoriseren, kun je $\varphi(N)$ berekenen. Dit is de gemakkelijkste kan. Als je $p$ en $q$ kent, bereken je gewoon $\varphi(N) = (p-1)(q-1)$ direct in één simpele vermenigvuldiging. Dus $\varphi(N)$ berekenen kan nooit moeilijker zijn dan $N$ factoriseren.
+
+\textbf{Richting 2:} Als je $\varphi(N)$ kent, kun je $N$ factoriseren. We weten ook dat $p + q = N + 1 - \varphi(N)$. We noemen deze som even $S$:
+\begin{equation*}
+    S = N + 1 - \varphi(N)
+\end{equation*}
+Merk op dat we nu $S$ en $N$ gewoon kunnen invullen in de tweedegraadsvergelijking die $p$ en $q$ als oplissingen heeft:
+\begin{equation*}
+    X^2 - SX + N = 0
+\end{equation*}
+Omdat we in deze richting $N$ en $\varphi(N)$ kennen (want we veronderstellen dat als je $\varphi(N)$ kent, je $N$ kunt factoriseren), moeten we gewoon een tweedegraadsvergelijking oplossen:
+\begin{equation*}
+    p,q = \frac{S \pm \sqrt{S^2 - 4N}}{2}
+\end{equation*}
+Dus $N$ factoriseren kan nooit moeilijker zijn dan $\varphi(N)$ berekenen.
+
+$\rightwhitearrow$ Als $N$ factoriseren dus moeilijk is (wat we aannemen bij RSA), dan moet $\varphi(N)$ berekenen ook moeilijk zijn!
+
+\begin{niceexercise}*[Schnorr's identificatieprotocol]\label{ex:l7_schnorr-lek}
+    \nextpart[]*
+    Toon aan dat als Peggy voor dezelfde commitment $c=g^r$ correct kan antwoorden op twee verschillende challenges $e$ en $e'$, dan lekt ze haar geheime sleutel $a$.
+\end{niceexercise}
+
+Stel dat Peggy twee geldige antwoorden heeft:
+\begin{equation*}
+    \begin{aligned}
+        z &= r + ea \pmod p \\
+        z' &= r + e'a \pmod p
+    \end{aligned}
+\end{equation*}
+We nemen het verschil:
+\begin{equation*}
+    z - z' = (e - e')a \pmod p
+\end{equation*}
+Omdat $e \neq e'$ en omdat $p$ priem is, is $e - e'$ inverteerbaar modulo $p$. Dus:
+\begin{equation*}
+    a = (z - z')(e - e')^{-1} \pmod p 
+\end{equation*}
+
 
