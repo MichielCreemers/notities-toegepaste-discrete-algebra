@@ -375,7 +375,7 @@ De \textcolor{Emerald}{publieke parameters} zijn dan: $E, \mathbb{F}_q, P$ en $l
 \end{equation*}
 en stuurt $\textcolor{WildStrawberry}{a}P$ naar Bob.
 
-\textbf{2.} Bob kiest \textcolor{WildStrawberry}{geheim}
+\textbf{2.} Bob kiest \textcolor{BurntOrange}{geheim}
 \begin{equation*}
     \textcolor{BurntOrange}{b} \in \{0, 1, \dots, l-1\}
 \end{equation*}
@@ -457,16 +457,82 @@ $i:a_i = 1$ wil gewoon zeggen "neem de som over alle indexen $i$ waarvoor de bit
     \begin{equation*}
         13P = 8P + 4P + P
     \end{equation*}
-    $\rightwhitearrow$ Dus voor $13P$ te berekenen heb je maar slechts 3 verdubbelingen en 2 optellingen nodig. Trek je dit door naar een 256-bit getal, dan vraagt dit algoritme gemiddeld maar 256 verdubbelingen en 128 optellingen. Verglijk dit met de naïve $2^256$ optellingen!
+    $\rightwhitearrow$ Dus voor $13P$ te berekenen heb je maar slechts 3 verdubbelingen en 2 optellingen nodig. Trek je dit door naar een 256-bit getal, dan vraagt dit algoritme gemiddeld maar 256 verdubbelingen en 128 optellingen. Verglijk dit met de naïve $2^{256}$ optellingen!
 \end{enumerate}
+
+\section*{Codetheorie}
 
 \tocdecorline{Hoofdtuk 5 -- Codetheorie}
 
 \subsection{Motivatie -- Codetheorie}
 
+De setting lijkt op cryptografie: een boodschap wordt over een onbetrouwbaar kanaal verstuurd. Maar "onbetrouwbaar" betekent hier iets anders.
+\begin{itemize}
+    \item In cryptografie: iemand kan meeluisteren of berichten manipuleren.
+    \item In codetheorie: er treedt \hl{ruis} op, waardoor sommige symbolen of bits veranderen
+\end{itemize}
+
+\begin{center}
+\resizebox{0.60\textwidth}{!}{%
+    \input{figures/L8/codetheorie-1.tex}
+}
+\end{center}
+
+Voorbeelden:
+\begin{itemize}
+    \item CD's, DVD's en opslagmedia;
+    \item harde schijven;
+    \item satellietcommunicatie;
+    \item communicatie met ruimtesondes zoals Voyager;
+    \item QR-codes;
+    \item digitale netwerken.
+\end{itemize}
+Het doel is fouten te \hl{detecteren} en indien mogelijk te \hl{corrigeren}. Het basisidee is dus:
+\begin{center}
+    Voeg \hl{redundantie} toe aan de boodschap.
+\end{center}
+
 \subsubsection{Voorbeeld: pariteitsbit}
 
+Neem een binaire boodschap
+\begin{equation*}
+    m = (m_1, \dots, m_{n-1}) \in \mathbb{F}_2^{n-1}
+\end{equation*}
+Dit is de oorspronkelijke boodschap, een rijtje van $n-1$ nullen en enen. Je voegt hier nu één extra bit acteraan aan toe: $p = m_1 + m_2 + \cdots + m_{n-1}$. Het totale codewoord $c$ heeft dan lengte $n$:
+\begin{equation*}
+    c = (m_1, m_2, \dots, m_{n-1}, \underbrace{m_1 + \cdots + m_{n-1}}_{\text{pariteitsbit}})
+\end{equation*}
+\hl{Waarom maakt dit het totaal aantal enen even?}\newline
+in $\mathbb{F}_2$ geldt $1+1=0$ (optellen is XOR).
+\begin{itemize}
+    \item Als er een EVEN aantal enen in $m$ zit:\newline
+    De som $m_1 + \cdots + m_{n-1} = 0$. De pariteitsbit wordt 0. Het totaal aantal even blijft \textbf{even}.
+    \item Als er een ONEVEN aantal enen in $m$ zit:\newline
+    De som $m_1 + \cdots + m_{n-1} = 1$. De pariteitsbit wordt 1. Met die extra 1 erbij wordt het totale aantal enen \textbf{even}.
+\end{itemize}
+\textbf{De regel:} Elk geldig codewoord $c$ bevat altijd een \textbf{even aantal enen!}
+
+\hl{Waarom doet dit foutdetectie?}\newline
+Stel dat de ontvanger een bericht binnenkrijgt. Hij telt het aantal enen.
+
+Als er onderweg precies 1 bit flipt ($0\to1$ of $1\to0$), dan verandert de pariteit van even naar \textbf{oneven}.
+
+De ontvanger telt een oneven aantal enen en weet meteen: "Er is onderweg iets misgegaan!"
+
+\hl{Beperkingen}
+\begin{enumerate}
+    \item Geen fout\hl{correctie}. Kan detecteren, niet herstellen.
+    \item Onzichtbaar voor dubbele fouten.
+\end{enumerate}
+
+
 \subsubsection{Algemene setting van codes}
+
+\begin{center}
+\resizebox{1.00\textwidth}{!}{%
+    \input{figures/L8/codetheorie-2.tex}
+}
+\end{center}
 
 \subsection{lineaire codes}
 

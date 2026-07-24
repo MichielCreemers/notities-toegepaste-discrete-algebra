@@ -1,0 +1,105 @@
+\begin{tikzpicture}[
+    >=latex,
+    formula/.style={
+        font=\Large
+    },
+    textline/.style={
+        font=\large,
+        align=center
+    },
+    message/.style={
+        ->,
+        thin,
+        shorten >=1pt,
+        shorten <=1pt
+    },
+    noisy channel/.style={
+        ->,
+        thin,
+        decorate,
+        decoration={
+            snake,
+            amplitude=0.8mm,
+            segment length=7mm,
+            post length=2mm
+        }
+    }
+]
+
+% ==================================================
+% Message and encoding
+% ==================================================
+
+\node[formula] (message) at (0,0)
+    {$m$};
+
+\node[formula] (codeword) at (3,0)
+    {$c=f(m)$};
+
+\draw[message]
+    (message.east)
+    --
+    (codeword.west);
+
+% ==================================================
+% Noisy channel
+% ==================================================
+
+\node[formula] (received) at (8,0)
+    {$\widetilde{c}$};
+
+\draw[noisy channel]
+    (codeword.east)
+    --
+    (received.west);
+
+% ==================================================
+% Error correction
+% ==================================================
+
+\node[formula] (corrected) at (12.7,0)
+    {$\overline{c}\in C$};
+
+\draw[message]
+    (received.east)
+    --
+    node[
+        above=5pt,
+        textline
+    ]
+    {fouten-\\verbetering}
+    (corrected.west);
+
+% ==================================================
+% Decoding
+% ==================================================
+
+\node[formula] (decoded) at (17,0)
+    {$\overline{m}$};
+
+\draw[message]
+    (corrected.east)
+    --
+    node[
+        above=6pt,
+        formula
+    ]
+    {$f^{-1}$}
+    (decoded.west);
+
+% ==================================================
+% Desired result
+% ==================================================
+
+\node[
+    textline,
+    anchor=west
+] (hopefully) at (18.3,-1.1)
+    {hopelijk $m$};
+
+\draw[message]
+    (decoded.south)
+    |-
+    (hopefully.west);
+
+\end{tikzpicture}
