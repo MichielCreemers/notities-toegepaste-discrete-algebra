@@ -30,7 +30,7 @@ Er bestaan generieke aanvallen die in elke groep werken. In de cursus wordt de m
 
 \begin{nicefact}*[Pohlig-Hellman-reductie]
     \nextpart[]*
-    Het DLP is een groep van orde
+    Het DLP in een groep van orde
     \begin{equation*}
         n = |G| = p_1^{e_1} p_2^{e_2} \cdots p_r^{e_r}
     \end{equation*}
@@ -492,7 +492,7 @@ Het doel is fouten te \hl{detecteren} en indien mogelijk te \hl{corrigeren}. Het
     Voeg \hl{redundantie} toe aan de boodschap.
 \end{center}
 
-\subsubsection{Voorbeeld: pariteitsbit}
+\subsubsection{Voorbeeld: pariteitsbit}\label{sec:l8_pariteitsbit}
 
 Neem een binaire boodschap
 \begin{equation*}
@@ -528,31 +528,386 @@ De ontvanger telt een oneven aantal enen en weet meteen: "Er is onderweg iets mi
 
 \subsubsection{Algemene setting van codes}
 
+We kiezen een eindig veld $\mathbb{F}_q$ (dus een veld met precies $q$ elementen). Dit is het alfabet waarin de symbolen van de boodschap geschreven worden. Vaak is $q=2$, maar in bijvoorbeeld QR-codes of Reed-Solomon-codes gebruikt men grotere eindige velden.
+
+Een \hl{boodschap} is een rijvector
+\begin{equation*}
+    m = \begin{bmatrix}
+        m_1 & m_2 & \cdots & m_k
+    \end{bmatrix} \in \mathbb{F}_q^k
+\end{equation*}
+Een \hl{codewoord} is dan een vector van lengte $n$, met $n \ge k$:
+\begin{equation*}
+    c \in \mathbb{F}_q^n
+\end{equation*}
+Een \hl{encodering} is een \hl{injectieve} functie
+\begin{equation*}
+    f : \mathbb{F}_q^k \to \mathbb{F}_q^n
+\end{equation*}
+De verzameling van codewoorden is dan
+\begin{equation*}
+    C = f\left(\mathbb{F}_q^k\right) \subseteq \mathbb{F}_q^n
+\end{equation*}
+Dit geeft dan het volgende algemen schema:
+
 \begin{center}
 \resizebox{1.00\textwidth}{!}{%
     \input{figures/L8/codetheorie-2.tex}
 }
 \end{center}
 
+Hier is:
+\begin{itemize}
+    \item $m$: de oorspronkelijke boodschap;
+    \item $c = f(m)$: het verzonden codewoord;
+    \item $\tilde{c}$: het ontvangen woord, mogelijks met fouten;
+    \item $\bar{c}$: het gekozen dichtsbijzijnde codewoord;
+    \item $\bar{m} = f^{-1}(\bar{c})$: de gedecodeerde boodschap.
+\end{itemize}
+Je hoopt natuurlijk dat $\bar{m} = m$.
+
 \subsection{lineaire codes}
+
+In deze cursus nemen we meestal aan dat de encodering $f$ \hl{lineair} is. M.a.w.:
+\begin{equation*}
+    f(\lambda_1m_1 + \lambda_2m_2) = \lambda_1 f(m_1) + \lambda_2 f(m_2)
+\end{equation*}
+Dan is $C$ een lineaire deelruimte van $\mathbb{F}_q^n$. En dit voor alle berichten $m_1, m_2 \in \mathbb{F}_q^k$ en alle scalars $\lambda_1, \lambda_2 \in \mathbb{F}_q$. Dus eerst berichten combineren en daarna encoderen geeft hetzelfde resultaat als eerst encoderen en daarna de codewoorden combineren.
+
+$\rightwhitearrow$ Een lineaire $(n,\ k)$-code is dus een $k$-dimensionele lineaire deelruimte
+\begin{equation*}
+    C \subseteq \mathbb{F}_q^n
+\end{equation*}
+Hierbij betekent:
+\begin{itemize}
+    \item $n$: de lengte van elk codewoord;
+    \item $k$: het aantal informatiesymbolen, of equivalent de dimensie van $C$.
+\end{itemize}
+Omdat $C$ dimensie $k$ heeft over $\mathbb{F}_q$, bevat de code
+\begin{equation*}
+    |C| = q^k
+\end{equation*}
+codewoorden.
+
+\textbf{\underbar{Voorbeeld:}} Een binaire $(5,\ 2)$-code ligt in $\mathbb{F}_2^5$, elk codewoord heeft lengte $5$, en er zijn $2^2=4$ codewoorden.
+
+\SimpleHeading{Groepshomomorfisme}
+
+Herinner, een groepshomomorfisme voor de optelling voldoet aan
+\begin{equation*}
+    f(m_1 + m_2) = f(m_1) + f(m_2)
+\end{equation*}
+Een vectorruimtehomomorfisme moet bovendien compatibel zijn met scalars:
+\begin{equation*}
+    f(\lambda m) = \lambda f(m)
+\end{equation*}
+
+Combineren we deze twee eigenschappen dan definiëren we precies lineariteit:
+\begin{equation*}
+    f(\lambda_1m_1 + \lambda_2m_2) = \lambda_1 f(m_1) + \lambda_2 f(m_2)
+\end{equation*}
+Dit is precies wat we aannemen en geeft hetvolgende gevolg:
+
+\newpage
+\begin{nicecorollary}*\label{gevolg:l8_lineaire-code}
+    \nextpart[]*
+    De lineaire afbeelding $f$ is dus een \hl[orange!75!black]{groepshomomorfisme} voor de additieve groep die compatibel is met scalars. Want $f$ bewaart de optelling én scalaire vermenigvuldiging, en is daarom een lineaire afbeelding tussen vectorruimten.
+
+    \vspace{0.2cm}
+
+    $\rightwhitearrow$ Dit is een \hl[orange!75!black]{vectorruimte-homomorfisme}!
+\end{nicecorollary}
 
 \subsubsection{Generatormatrix}
 
+Omdat $f$ linear is, en uit \Cref{gevolg:l8_lineaire-code}, volgt dat men $f$ kan voorstellen met een matrix $G$. Want herinner uit lineaire algebra. Omdat $f: \mathbb{F}_q^k \to \mathbb{F}_q^n$ lineair is, bestaat er een matrix $G$ zodat encoderen gewoon neerkomt op matrixvermenigvuldiging.
+\begin{equation*}
+    f(m) = mG
+\end{equation*}
+Omdat $m$ een rijvector is van lengte $k$, en omdat $mG$ lengte $n$ moet hebben, is
+\begin{equation*}
+    G \in \mathbb{F}_q^{k \times n}
+\end{equation*}
+Deze matrix $G$ heet de \hl{generatormatrix} van de code.
+
+Meer nog, voor injectiviteit moet $G$ rang $k$ hebben: $\qquad \operatorname{rank}(G) = k$ \newline
+Dit woordt aangetoond in \cref{ex:l8_injectiviteit-f}.
+
+Meer nog, de rijen van $G$ vormen een basis voor $C$. En in het geval hier als $f$ injectief is ($\operatorname{rank}(G)=k$), dan geldt dat
+\begin{equation*}
+    \operatorname{Row}(G) = C
+\end{equation*}
+Inderdaad, als
+\begin{equation*}
+    m = \begin{bmatrix}
+        m_1 & \dots & m_k
+    \end{bmatrix}
+\end{equation*}
+dan is
+\begin{equation*}
+    mG = m_1G_1 + m_2G_2 + \cdots + m_kG_k
+\end{equation*}
+waarbij $G_i$ de $i$-de rij is van $G$.
+
+\textbf{\underbar{Voorbeeld:}} Werk over $\mathbb{F}_2$, en neem
+\begin{equation*}
+    G = \begin{bmatrix}
+        1 & 0 & 1 \\
+        0 & 1 & 1
+    \end{bmatrix}
+\end{equation*}
+Dit is een generatormatrix van een lineare $(3,\ 2)$-code. Voor een bericht
+\begin{equation*}
+    m = \begin{bmatrix}
+        a & b
+    \end{bmatrix} \in \mathbb{F}_2^2
+\end{equation*}
+is het codewoord dan
+\begin{equation*}
+    mG = \begin{bmatrix}
+        a & b
+    \end{bmatrix}\begin{bmatrix}
+        1 & 0 & 1 \\
+        0 & 1 & 1
+    \end{bmatrix} = \begin{bmatrix}
+        a & b & a + b
+    \end{bmatrix}
+\end{equation*}
+De vier mogelijke berichten zijn:
+\begin{equation*}
+    \begin{gathered}
+        (0, 0) \mapsto (0,0,0) \\
+        (1, 0) \mapsto (1,0,1) \\
+        (0, 1) \mapsto (0,1,1) \\
+        (1, 1) \mapsto (1,1,1) 
+    \end{gathered}
+\end{equation*}
+Dus
+\begin{equation*}
+    C = \{\mathtt{000},\ \mathtt{101},\ \mathtt{011},\ \mathtt{111}\}
+\end{equation*}
+Dit is inderdaad een tweedimensionale deelruimte van $\mathbb{F}_2^3$, en de twee rijen van $G$ vormen een basis voor $C$. Ook geldt dat de code vier codewoorden heeft want $|C| = q^k = 2^2 = 4$.
+
 \subsubsection{Systematische codes}
+
+\begin{nicedefinition}*[Systematische Code]
+    \nextpart[]*
+    Een generatormatrix is \hl[PineGreen!75!black]{systematisch} als ze van de vorm is
+    \begin{equation*}
+        G = \begin{bmatrix}
+            I_k & A
+        \end{bmatrix}
+    \end{equation*}
+    waarbij $I_k$ de $k \times k$ identiteitsmatrix is en $A \in \mathbb{F}_q^{k \times (n-k)}$.
+\end{nicedefinition}
+
+Een boodschap $m = (m_1, \dots, m_k)$ wordt dan gecodeerd als
+\begin{equation*}
+    mG = \begin{bmatrix}
+        m_1 & m_2 & \dots & m_k & \textcolor{NavyBlue}{\text{controlesymbolen}}
+    \end{bmatrix}
+\end{equation*}
+Met andere woorden: de oorspronkelijke boodschap blijft vooraan staan, en achteraan worden redundante symbolen toegevoegd.
+
+Soms wordt de redundantie vooraan gezet. Dan gebruikt men een equivalente vorm met het identiteitsblok achteraan.
 
 \subsubsection{Pariteitscontrole als lineaire code}
 
+Voor de binaire pariteitscode met boodschappen van lengte $n-1$ is
+\begin{equation*}
+    G = \begin{bmatrix}
+        I_{n-1} & \mathbf{1}
+    \end{bmatrix}
+\end{equation*}
+waarbij $\mathbf{1} = \begin{bmatrix}
+    1 & 1 & \dots & 1
+\end{bmatrix}^\top \in \mathbb{F}_2^{n-1}$ een kolomvector is met allemaal enen.
+
+Een boodschap $m$ wordt dan als volgt gecodeerd:
+\begin{equation*}
+    \mathbb{F}_2^{n-1} \to \mathbb{F}_2^n : m \mapsto mG
+\end{equation*}
+\begin{equation*}
+    c = f(m) = mG = \begin{bmatrix}
+        m_1 & \dots & m_{n-1}
+    \end{bmatrix} \begin{bmatrix}
+        1 & 0 & \cdots & 0 & 1 \\
+        0 & 1 & \cdots & 0 & 1 \\
+        \vdots & \vdots & \ddots & \vdots & \vdots \\
+        0 & 0 & \cdots & 1 & 1
+    \end{bmatrix} = \begin{bmatrix}
+        m_1 & \dots & m_{n-1} & \textcolor{NavyBlue}{m_1 + \dots + m_{n-1}}
+    \end{bmatrix}
+\end{equation*}
+Dit voegt precies de pariteitsbit to zoals we in \Cref{sec:l8_pariteitsbit} hebben gezien.
+
+\subsubsection{Pariteitscontrolematrix}
+
+\begin{nicedefinition}*[Pariteitscontrolematrix]
+    \nextpart[]*
+    Voor een lineaire $(n,\ k)$-code $C$ is een \hl[PineGreen!75!black]{pariteitscontrolematrix} een matrix
+    \begin{equation*}
+        H \in \mathbb{F}_q^{(n-k) \times n}
+    \end{equation*}
+    waarvoor
+    \begin{equation*}
+        C = \left\{ c \in \mathbb{F}_q^n \mid Hc^\top = 0 \right\}
+    \end{equation*}
+    Met andere woorden: \hl[PineGreen!75!black]{$C$ is de kern van $H$} ($C = \pm \ker(H)$), waarbij codewoorden als kolomvectoren worden bekeken.
+\end{nicedefinition}
+
+Een pariteitscontrolematrix heeft rang
+\begin{equation*}
+    \operatorname{rank}(H) = n-k
+\end{equation*}
+
+\begin{nicelemma}*
+    \nextpart[]*
+    Als $G \in \mathbb{F}_q^{k \times n}$ een generatormatrix is van $C$, dan voldoet $H$ aan
+    \begin{equation*}
+        GH^\top = 0
+    \end{equation*}
+    Omegkeerd: als $H$ rang $n-k$ heeft en $GH^\top = 0$, dan is $H$ een pariteitscontrolematrix voor de code gegenereerd door $G$. 
+\end{nicelemma}
+
+\newpage
 \subsubsection{Pariteitscontrolematrix bij systematische codes}
 
+\begin{nicecorollary}*
+    \nextpart[]*
+    Als
+    \begin{equation*}
+        G = \begin{bmatrix}
+            I_k & A
+        \end{bmatrix}
+    \end{equation*}
+    met $A \in \mathbb{F}_q^{k \times (n-k)}$ systematisch is, dan is
+    \begin{equation*}
+        H = \begin{bmatrix}
+            -A^\top & I_{n-k}
+        \end{bmatrix}
+    \end{equation*}
+    een pariteitscontrolematrix. Let op, deze is niet uniek!
+\end{nicecorollary}
+Inderdaad:
+\begin{equation*}
+    \begin{bmatrix}
+        I_k & A
+    \end{bmatrix}\begin{bmatrix}
+        -A \\ I_{n-k}
+    \end{bmatrix} = -I_kA + AI_{n-k} = -A + A = 0
+\end{equation*}
+Voor binaire codes kan je het minteken weglaten, want in $\mathbb{F}_2$ geldt dat $-1=1$.
+
+\SimpleHeading{Toepassing op de pariteitscode}
+
+Voor de pariteitscode is $G = \begin{bmatrix}
+    I_{n-1} & \mathbf{1}
+\end{bmatrix}$
+Dus $A \in \mathbb{F}_2^{(n-1) \times (n - (n-1))} = \mathbb{F}_2^{(n-1) \times 1}$. Dan geldt:
+\begin{equation*}
+    H = \begin{bmatrix}
+        A^\top & I_{n-(n-1)}
+    \end{bmatrix} = \left[
+    \begin{array}{cccc}
+        \multicolumn{3}{c}{
+            \underbrace{\begin{matrix}1 & \cdots & 1\end{matrix}}_{n-1}
+        }
+        & \textcolor{Aquamarine}{1}
+    \end{array}
+    \right]
+\end{equation*}
+Dus
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    H = \underbrace{\begin{bmatrix}
+        1 & 1 & \cdots & 1
+    \end{bmatrix}}_{n}
+\end{equationbox}
+
+Een ontvangen woord $x \in \mathbb{F}_2^n$ is dan een geldig codewoord \emph{asa}
+\begin{equation*}
+    Hx^\top = 0
+\end{equation*}
+Dit betekent letterlijk: de som van alle bits is nul in $\mathbb{F}_2$, dus het aantal enen is even.
+
+\newpage
 \subsection{Foutdetectie via pariteitscontrole}
+
+Met een pariteitscontrolematrix kunnnen we nagaan of een ontvangen woord $\tilde{c}$ in de code ligt:
+
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    H \tilde{c}^\top = 0 \iff \tilde{c} \in C
+\end{equationbox}
+Als
+\begin{equation*}
+    H \tilde{c}^\top \neq 0
+\end{equation*}
+dan weten we dat er een fout is opgetreden. Maar dit detecteert alleen dat er iets is misgegaan; het zegt nog niet automatich hoe we de fout moeten verbeteren!
 
 \subsubsection{Nearest-neighbour decoding}
 
+Het algemene principe voor foutcorrectie is \hl{nearest-neighbour decoding}.
+
+Gegeven een ontvangen woord
+\begin{equation*}
+    \tilde{c} \in \mathbb{F}_q^n
+\end{equation*}
+zoeken we een codewoord
+\begin{equation*}
+    \bar{c} \in C
+\end{equation*}
+dat zo dicht mogelijk bij $\tilde{c}$ ligt. Dan decoderen we $\tilde{c}$ als $\bar{c}$.
+
+$\rightwhitearrow$ Er is geen automatische garantie dat $\bar{c}$ het oorspronkelijke verzonden codewoord is. Dat hangt af van hoeveel fouten zijn opgetreden en hoe goed de codewoorden uit elkaar liggen.
+
 \subsubsection{Hamming-gewicht en Hamming-afstand}
+
+\begin{nicedefinition}*[Hamming-gewicht]
+    \nextpart[]*
+    Het \hl[PineGreen!75!black]{Hamming-gewicht} van een vector $x \in \mathbb{F}_q^n$ is het aantal niet-nul coördinaten van $x$:
+    \begin{equation*}
+        w(x) = \#\left\{i \mid x_i \neq 0\right\}
+    \end{equation*}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Hamming-afstand]
+    \nextpart[]*
+    De \hl[PineGreen!75!black]{Hamming-afstand} tussen twee vectoren $x,y \in \mathbb{F}_q^n$ is het aantal posities waarin ze verschillen:
+    \begin{equation*}
+        d(x,y) = \#\{i \mid x_i \neq y_i\}
+    \end{equation*}
+    Equivalent:
+    \begin{equation*}
+        d(x,y) = w(x - y)
+    \end{equation*}
+\end{nicedefinition}
+
+De Hamming-afstand tussen het verzonden codewoord $c$ en het ontvangen woord $\tilde{c}$ is precies het aantal fouten dat optrad!
 
 \subsubsection{Geometrisch idee achter foutcorrectie}
 
-\subsection{Recap -- Kernpunten van deze les}
+Een goede code heeft codewoorden die ver uit elkaar liggen volgens de Hamming-afstand. Men wil ron elk codewoord een "bol" tekenen:
+\begin{equation*}
+    B_t(c) = \{x \in \mathbb{F}_q^n \mid d(x,c) \le t\}
+\end{equation*}
+Als deze bollen disjunct zijn, dan kan elk ontvangen woord binnen zo'n bol ondubbelzinnig aan het juiste codewoord gekoppeld worden.
+
+\begin{center}
+\resizebox{1.00\textwidth}{!}{%
+    \input{figures/L8/hamming-distance.tex}
+}
+\end{center}
+
+Dus het doel is:
+\begin{itemize}
+    \item codewoorden voldoende ver uit elkaar plaatsen;
+    \item maar tegelijk niet te veel redundantie gebruiken;
+    \item en een efficiënt decodeeralgoritme hebben.
+\end{itemize}
+
+Decoderen is over het algemeen zeer moeilijk, zelfs NP-hard in algemene vorm. Daarom bestudeert men speciale families van codes waarvoor efficiënt decoderen mogelijk is.
+
+% \subsection{Recap -- Kernpunten van deze les}
 
 \subsection{Samenvattende oefeningen}
 
@@ -582,3 +937,64 @@ Door te delen door $g$! Dat is dus gewoon vermenigvuldigen met de modulaire inve
     x \equiv y \cdot g^{-1} \pmod p
 \end{equation*}
 Het uitgebreide algoritme van Euclides kan dit extreem snel berekenen!
+
+\begin{niceexercise}*[Injectiviteit van encodering $f$]\label{ex:l8_injectiviteit-f}
+    \nextpart[]*
+    Toon aan dat voor de encodering $f$ geldt:
+    \begin{equation*}
+        f \text{ injectief } \iff G \text{ heeft rang } k
+    \end{equation*}
+\end{niceexercise}
+
+We gebruiken de eigenschap dat een lineaire afbeelding injectief is \emph{asa} haar kern alleen de nulvector bevat:
+\begin{equation*}
+    f \text{ injectief} \iff \operatorname{ker}(f) = \{0\}
+\end{equation*}
+In ons geval geldt voor de encodering $f$
+\begin{equation*}
+    \operatorname{ker}(f) = \left\{ m \in \mathbb{F}_q^k \mid mG=0 \right\}
+\end{equation*}
+
+\textbf{Richting $\Rightarrow$} \newline
+Veronderstel $f$ injectief. Dan geldt $\ker(f) = \{0\}$. Schrijf nu de rijen van $G$ als $g_1, \dots, g_k$. Voor een bericht $m = \begin{bmatrix}
+    m_1 & \dots & m_k
+\end{bmatrix}$ geldt dan
+\begin{equation*}
+    mG = m_1g_1 + \dots + m_kg_k
+\end{equation*}
+Stel dan dat er een lineaire combinatie is van de rijen gelijk aan nul:
+\begin{equation*}
+    mG = m_1g_1 + \dots + m_kg_k = 0
+\end{equation*}
+Dan is $mG=0$. Dus $m \in \ker(f)$. Omdat de kern alleen de nulvector bevat, moet wel gelden dat
+\begin{equation*}
+    m = \begin{bmatrix}
+        m_1 & \dots & m_k
+    \end{bmatrix} = 0
+\end{equation*}
+Dus de enige lineaire combinatie van de rijen die nul geeft is de triviale oplossing. Bijgevolg zijn de $k$ rijen van $G$ dus lineair onafhankelijk en geldt dus $\operatorname{rang}(G) = k$
+
+\textbf{Richting $\Leftarrow$} \newline
+Veronderstel nu dat $\operatorname{rang}(G) = k$. Omdat $G$ precies $k$ rijen heeft, betekent dit dat alle rijen van $G$ lineair onafhankelijk zijn.
+
+Neem nu twee berichten $m_1,\ m_2 \in \mathbb{F}_q^k$ waarvoor geldt
+\begin{equation*}
+    \begin{gathered}
+        f(m_1) = f(m_2) \\
+        \Updownarrow \\
+        m_1G = m_2G \\
+        \Updownarrow \\
+        (m_1 - m_2)G = 0
+    \end{gathered}
+\end{equation*}
+Omdat de rijen van $G$ lineair onafhankelijk zijn, kan een lineaire combinatie van de rijen alleen nul zijn wanneer alle coëfficiënten nul zijn. Bijgevolg:
+\begin{equation*}
+    \begin{gathered}
+        m_1 - m_2 = 0 \\
+        \Updownarrow \\
+        m_1 = m_2 \\
+        \Downarrow \\
+        f \text{ injectief}
+    \end{gathered}
+\end{equation*}
+

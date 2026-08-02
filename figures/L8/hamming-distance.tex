@@ -1,0 +1,176 @@
+\begin{tikzpicture}[
+    >=Latex,
+    font=\small,
+    ambient/.style={
+        draw=black!45,
+        thick,
+        rounded corners=4pt,
+        fill=black!2
+    },
+    goodball/.style={
+        draw=blue!70,
+        thick,
+        fill=blue!15,
+        fill opacity=.55
+    },
+    badball/.style={
+        draw=red!70,
+        thick,
+        fill=red!18,
+        fill opacity=.55
+    },
+    codeword/.style={
+        circle,
+        fill=black!85,
+        inner sep=2.2pt
+    },
+    received/.style={
+        diamond,
+        fill=orange!85!red,
+        draw=orange!40!black,
+        inner sep=2.4pt
+    },
+    decode/.style={
+        ->,
+        very thick,
+        draw=teal!70!black,
+        shorten >=2pt,
+        shorten <=2pt
+    },
+    ambiguous/.style={
+        ->,
+        thick,
+        dashed,
+        draw=red!75!black,
+        shorten >=2pt,
+        shorten <=2pt
+    }
+]
+
+% ==================================================
+% Linkerpaneel: goede code
+% ==================================================
+
+\path[ambient] (-6,-2.5) rectangle (2.3,2.7);
+
+\node[font=\large\bfseries, text=blue!70!black]
+    at (-1.85,3.15)
+    {Goede code: unieke decodering};
+
+\node[anchor=north west, font=\large]
+    at (-5.8,2.5)
+    {$\mathbb F_q^n$};
+
+% Codewoorden
+\coordinate (c1) at (-4.55,0.65);
+\coordinate (c2) at (-1.80,-0.20);
+\coordinate (c3) at (0.85,0.80);
+
+% Disjuncte Hamming-bollen
+\draw[goodball] (c1) circle[radius=1.05];
+\draw[goodball] (c2) circle[radius=1.05];
+\draw[goodball] (c3) circle[radius=1.05];
+
+\node[text=blue!70!black]
+    at ($(c1)+(0,1.30)$)
+    {$B_t(c_1)$};
+
+\node[text=blue!70!black]
+    at ($(c2)+(0,1.30)$)
+    {$B_t(c_2)$};
+
+\node[text=blue!70!black]
+    at ($(c3)+(0,1.30)$)
+    {$B_t(c_3)$};
+
+% Centra van de bollen
+\node[codeword] at (c1) {};
+\node[codeword] at (c2) {};
+\node[codeword] at (c3) {};
+
+\node[anchor=north] at ($(c1)+(0,-0.10)$) {$c_1$};
+\node[anchor=north] at ($(c2)+(0,-0.10)$) {$c_2$};
+\node[anchor=north] at ($(c3)+(0,-0.10)$) {$c_3$};
+
+% Ontvangen woord
+\node[received] (ygood) at (-1.25,0.35) {};
+\node[anchor=south west] at ($(ygood)+(0.05,0.08)$)
+    {$y$};
+
+% Decodering naar het unieke codewoord
+\draw[decode]
+    (ygood)
+    --
+    node[midway, below, sloped, text=teal!70!black, xshift=3mm]
+    {decodeer}
+    (c2);
+
+% Voorwaarde voor unieke decodering
+\node[
+    align=center,
+    text=teal!55!black
+]
+at (-1.85,-2.05)
+{
+    $d_{\min}(C)\ge 2t+1$\\[-1pt]
+    $\Longrightarrow$ unieke decodering
+};
+
+
+% ==================================================
+% Rechterpaneel: slechte code
+% ==================================================
+
+\path[ambient] (3.1,-2.5) rectangle (8.6,2.7);
+
+\node[font=\large\bfseries, text=red!70!black]
+    at (5.85,3.15)
+    {Overlapping: ambiguïteit};
+
+\node[anchor=north west, font=\large]
+    at (3.3,2.5)
+    {$\mathbb F_q^n$};
+
+% Twee codewoorden die te dicht bij elkaar liggen
+\coordinate (d1) at (4.75,0.05);
+\coordinate (d2) at (6.95,0.05);
+
+% Overlappende bollen
+\draw[badball] (d1) circle[radius=1.45];
+\draw[badball] (d2) circle[radius=1.45];
+
+\node[text=red!70!black]
+    at (4.35,1.80)
+    {$B_t(c_i)$};
+
+\node[text=red!70!black]
+    at (7.35,1.80)
+    {$B_t(c_j)$};
+
+% Codewoorden
+\node[codeword] at (d1) {};
+\node[codeword] at (d2) {};
+
+\node[anchor=north] at ($(d1)+(0,-0.10)$) {$c_i$};
+\node[anchor=north] at ($(d2)+(0,-0.10)$) {$c_j$};
+
+% Ontvangen woord in de overlap
+\node[received] (ybad) at (5.85,0.60) {};
+\node[anchor=south] at ($(ybad)+(0,0.15)$)
+    {$y$};
+
+% Twee mogelijke decoderingen
+\draw[ambiguous] (ybad) -- (d1);
+\draw[ambiguous] (ybad) -- (d2);
+
+\node[
+    align=center,
+    text=red!70!black
+]
+at (5.85,-2.05)
+{
+    $d_H(c_i,c_j)\le 2t$\\[-1pt]
+    $\Longrightarrow$ niet eenduidig
+};
+
+\end{tikzpicture}
