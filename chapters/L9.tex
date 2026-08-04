@@ -1,26 +1,653 @@
 \section{Les 9 -- Cyclische codes}
 
-\subsection{Lineaire codes: korte herhaling}
+\subsection{Lineaire codes: korte herhaling + vervolg}
 
+\begin{nicedefinition}*[Lineaire $(n,\ k)$-code]
+    \nextpart[]*
+    Een \hl[PineGreen!75!black]{lineaire $(n,\ k)$-code} over $\mathbb{F}_q$ is een $k$-dimensionele deelruimte
+    \begin{equation*}
+        C \subseteq \mathbb{F}_q^n
+    \end{equation*}
+    \begin{itemize}
+        \item $k=$ lengte van de oorspronkelijke boodschap.
+        \item $n=$ lengte van het codewoord.
+        \item $n-k=$ aantal redundante symbolen.
+        \item Omdat $C$ een vectorruimte is, is $C$ gesloten onder additie en scalaire veelvouden.
+    \end{itemize}
+\end{nicedefinition}
+
+\begin{nicedefinition}*[Generatormatrix]
+    \nextpart[]*
+    Een \hl[PineGreen!75!black]{generatormatrix} is een matrix
+    \begin{equation*}
+        G \in \mathbb{F}_q^{k \times n}
+    \end{equation*}
+    waarvan de rijruimte gelijk is aan de code:
+    \begin{equation*}
+        C = \operatorname{Row}(G)
+    \end{equation*}
+\end{nicedefinition}
+
+Dit bepaald dan een endodering:
+\begin{equation*}
+    f \quad:\quad \mathbb{F}_q^k \quad\hookrightarrow\quad \mathbb{F}_q^n \quad:\quad a \quad\longmapsto\quad aG \qquad \text{met} \qquad n > k
+\end{equation*}
+Wiskudig is \inlinetext{"$\hookrightarrow$"} het symbool voor "injectief". $a$ is een rijvector met $k$ componenten, het woord dat we willen versturen. Dus een boodschap wordt gecodeerd door een lineaire combinatie van de rijen van $G$.
+
+\newpage
 \subsubsection{Pariteitscontrolematrix en syndroom}
+
+\begin{nicedefinition}*[Pariteitscontrolematrix]
+    \nextpart[]*
+    Een \hl[PineGreen!75!black]{Pariteitscontrolematrix} voor $C$ is een matrix
+    \begin{equation*}
+        H \in \mathbb{F}_q^{(n-k) \times n}
+    \end{equation*}
+    zodat
+    \begin{equation*}
+        C = \left\{ c \in \mathbb{F}_q^n \mid Hc^\top = 0 \right\}
+    \end{equation*}
+    M.a.w. de code $C$ is de kern van $H$.
+\end{nicedefinition}
+
+Pariteitscontrolematrices kunnen gebruikt worden voor \hl{fout-detectie}. Zij $\tilde{c} \in \mathbb{F}_q^n$ een ontvangen woord, dan definiëren we het \hl{syndroom} als
+\begin{equation*}
+    S(\tilde{c}) = H\tilde{c}^\top
+\end{equation*}
+Dan geldt
+\begin{equation*}
+    \tilde{c} \in C \iff S(\tilde{c}) = 0
+\end{equation*}
+Interpretatie:
+\begin{itemize}
+    \item $S(\tilde{c}) = 0$: $\tilde{c}$ is een geldig codewoord.
+    \item $S(\tilde{c}) \neq 0$: $\tilde{c}$ is zeker geen codewoord, er is dus een fout gebeurd.
+\end{itemize}
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \hl[RoyalPurple!75!]{Let op!} $S(\tilde{c}) = 0$ betekent niet noodzakelijk dat er géén fout gebeurd is. Het kan dat fouten precies een ander codewoord opleveren.
+\end{barbox}
 
 \subsubsection{Hamming-afstand, Hamming-gewicht en minimumafstand}
 
-\subsubsection{Nearest-neighbour decoding}
+We hebben dit al gedefinieerd in de vorige les (zie \Cref{def:l8_hamming-w} en \Cref{def:l8_hamming-d}), maar herhalen ze even.
+
+Voor $x,y \in \mathbb{F}_q^n$ is de \hl{Hamming-afstand}
+
+\begin{equation*}
+    d(x,y)
+\end{equation*}
+
+het aantal posities waarin $x$ en $y$ verschillen.
+
+Het \hl{Hamming-gewicht} $w(x)$ is het aantal niet-nul coördinaten van $x$. Dus kunnen we de Hamming-afstand tussen twee vectoren $x$ en $y$ ook definiëren als
+
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    d(x,y) = w(x-y)
+\end{equationbox}
+
+Als nu een codewoord $c$ verzonden werd en $\tilde{c}$ werd ontvangen, dan is
+\begin{equation*}
+    e = \tilde{c} - c
+\end{equation*}
+de \textbf{foutvector}. Meer nog, het aantal fouten is
+\begin{equation*}
+    w(e) = d(c, \tilde{c})
+\end{equation*}
+
+\begin{nicedefinition}*[Minimumafstand]
+    \nextpart[]*
+    De \hl[PineGreen!75!black]{minimumafstand} van een lineaire code $C \subseteq \mathbb{F}_q^n$ is
+    \begin{equation*}
+        d_C = \min_{\substack{c,c' \in C \\ c \ne c'}} d(c, c')
+    \end{equation*}
+\end{nicedefinition}
+
+Omdat $C$ een lineaire code is, geldt
+\begin{equation*}
+    c, c' \in C \implies c - c' \in C
+\end{equation*}
+Dus vertekkende van de definitie:
+\begin{equation*}
+    \begin{aligned}
+        d_C &= \min_{\substack{c,c' \in C \\ c \ne c'}} d(c, c') \\
+        &\Updownarrow \textcolor{Green}{\;d(c, c') = w(c - c')} \\
+        d_C &= \min_{\substack{c,c' \in C \\ c \ne c'}} w(c - c')
+    \end{aligned}
+\end{equation*}
+Stel nu $x = c-c'$. Omdat $C$ lineair is, behoort $x$ opnieuw tot $C$. bovendien
+\begin{equation*}
+    c \ne c' \iff c - c' \ne 0 \iff x \ne 0
+\end{equation*}
+Wanneer $c$ en $c'$ alle mogelijke verschillende codewoorden doorlopen, doorloopt $x=c-c'$ alle niet-nulcodewoorden van $C$. Daarom:
+\begin{equation*}
+    d_C = \min_{\substack{x \in C \\ x \ne 0}} w(x)
+\end{equation*}
+En omdat
+\begin{equation*}
+    d(x, 0) = w(x-0) = w(x)
+\end{equation*}
+krijg je
+
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    d_C = \min_{\substack{c \in C \\ c \ne 0}} d(c,0) = \min_{\substack{c \in C \\ c \ne 0}} w(c)
+\end{equationbox}
+
+\subsubsection{Foutverbetering: Nearest-neighbour decoding}
+
+Bij \hl{nearest-neighbour decoding} corrigeren we een ontvangen woord $\tilde{c}$ naar het dichtsbijzijnde codewoord:
+\begin{equation*}
+    \bar{c} = \argmin_{c \in C} d(c, \tilde{c})
+\end{equation*}
+Het idee is dat weinig fouten waarschijnlijker zijn dan veel fouten.
+
+\begin{nicetheorem}*[$t$-foutverbeterend code]
+    \nextpart[]*
+    Een code is in theorie \hl[red!75!black]{$t$-foutverbeterend} als de Hamming-bollen met straal $t$ rond de codewoorden disjunct zijn. De centrale stelling isoleren
+    \begin{equation*}
+        C \text{ is } t \text{-foutverbeterend} \iff d_C \ge 2t + 1
+    \end{equation*}
+\end{nicetheorem}
+
+Dus als codewoorden minstens $2t+1$ uit elkaar liggen, dan kunnen de bollen met straal $t$ rond verschillende codewoorden elkaar niet raken. Dan ligt een ontvangen woord met hoogstens $t$ fouten in precies één bol.
+
+Omdat om van één codewoord precies in een ander codewoord te veranderen, er minstens $d_C$ fouten nodig zijn, kunnen alle foutpatronen met $s < d_C$ zeker gedecteerd worden.
+
+Een $t$-foutverbeterende code kan dus
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    d_C -1
+\end{equationbox}
+
+fouten detecteren.
+
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \hl[RoyalPurple!75!]{Let op!} Dit is in theorie. In het algemeen is het vinden van het dichtsbijzijnde codewoord computationeel moeilijk; het algemene decoderingsprobleem is NP-hard. Daarom zoekt men speciale codes waarvoor decoderen efficiënt kan.
+\end{barbox}
 
 \subsubsection{Syndromen en nevenklassen}
 
+\begin{nicelemma}*\label{lemma:l9_syndroom-nevenklassen}
+    \nextpart[]*
+    Laat $H$ een pariteitscontrolematrix zijn voor $C$. Dan geldt:
+    \begin{equation*}
+        \begin{aligned}
+            Hx^\top &= Hy^\top \qquad \text{voor } x,y \in \mathbb{F}_q^n \\
+            &\Updownarrow \\
+            x - y &\in C
+        \end{aligned}
+    \end{equation*}
+\end{nicelemma}
+
+Dus $\exists c \in C : x = y+c$.\newline
+$\rightwhitearrow$ Dus twee woorden hebben hetzelfde syndroom \emph{als en slechts als} ze in dezelfde nevenklasse modulo $C \subseteq \mathbb{F}_q^n$ liggen.
+
+$\rightwhitearrow$ Anders gezegd: Elk syndroom bepaald een unieke nevenklassen van $C$!
+
+\underbar{In het bijzonder:} Als 
+\begin{equation*}
+    \tilde{c} = c + e
+\end{equation*}
+waarbij $c \in C$ het verzonden codewoord is en $e$ de foutenvector. Volgens \Cref{lemma:l9_syndroom-nevenklassen} liggen $\tilde{c}$ en $e$ dus in dezelfde nevenklasse modulo $C$. Ze zijn dus op een element van de code zelf na gelijk.
+\begin{equation*}
+    \begin{aligned}
+        S(\tilde{c}) &= H(c + e)^\top \\
+                     &= Hc^\top + He^\top \\
+                     &= 0 + He^\top \\
+                     &= S(e)
+    \end{aligned}
+\end{equation*}
+Dus 
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    S(\tilde{c}) = S(e) \qquad \text{of} \qquad H\tilde{c}^\top = He^\top
+\end{equationbox}
+I.e., $\tilde{c}$ en $e$ hebben dezelfde syndromen!
+
+$\rightwhitearrow$ Dit is belangrijk: uit het ontvangen woord kunnen we het syndroom van de foutenvector bepalen. Het syndroom van het ontvangen woord bevat dus geen informatie over het oorspronkelijke codewoord $c$; de bijdrage van $c$ verdwijnt. Het syndroom vertelt ons wel in welke nevenklasse de foutvector ligt!
+
+\hl{Waarom zoeken we een $e$?}\newline
+We kennen de echte foutvector niet. We kennen alleen het ontvangen woord $\tilde{c}$, en dus kunnen we $S(\tilde{c})$ berekenen.
+Omdat dit gelijk is aan $S(e)$, zoeken we naar een vector $e'$ waarvoor geldt
+\begin{equation*}
+    S(e') = S(\tilde{c})
+\end{equation*}
+Er kunnen veel zulke vectoren zijn. Twee vectoren hebben namelijk hetzelfde syndroom wanneer hun vershil een codewoord is:
+\begin{equation*}
+    S(e') = S(e) \iff e' - e \in C
+\end{equation*}
+Daarom zoeken we onder alle kandidaten degene met het kleinste Hamming-gewicht:
+\begin{equation*}
+    \hat{e} = \argmin_{\substack{x \in \mathbb{F}_q^n \\ S(x) = S(\tilde{c})}} w(x)
+\end{equation*}
+Die $\hat{e}$ is de meest waarschijnlijke foutvector wanneer we veronderstellen dat weinig fouten waarschijnlijker zijn dan veel fouten.
+
+Decoderen komt dus neer op
+
+\begin{barbox}[NavyBlue][SkyBlue!10]
+    Zoek een vector $e$ met hetzelfde syndroom als $\tilde{c}$, en met minimaal Hamming-gewicht.
+
+    \vspace{0.25cm}
+
+    Nearest-neighbour decoding komt er op neer een woord $e \in \mathbb{F}_q^n$ te vinden met hetzelfde syndroom als $\tilde{c}$ met minimale Hamming-gewicht.
+\end{barbox}
+
+Daarna decodeer je gewoon als:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \bar{c} = \tilde{c} - \hat{e}
+\end{equationbox}
+
+Dit is inderdaad een codewoord, want
+\begin{equation*}
+    Hc^\top = H(\tilde{c} - \hat{e})^\top = S(\tilde{c}) - S(\hat{e}) = 0
+\end{equation*}
+
 \subsubsection{Coset-leader-algoritme}
+
+Het \hl{coset-leader-algoritme} is een algemeen decoderingsalgoritme, maar is meestal niet efficiënt. Het werkt als volgt:
+
+\SimpleHeading{Preprocessing}
+
+Maak een tabel met alle mogelijke syndromen
+\begin{equation*}
+    s \in \mathbb{F}_q^{n-k}
+\end{equation*}
+Stel dat $C$ een lineaire $(n,\ k)$-code over $\mathbb{F}_q$ is. Dan is de pariteitscontrolematrix van de vorm:
+\begin{equation*}
+    H \in \mathbb{F}_q^{(n-k) \times n}
+\end{equation*}
+Voor een woord $x \in \mathbb{F}_q^n$ is het syndroom $S(x) = Hx\top$. Omdat $H$ precies $n-k$ rijen heeft, is $S(x)$ een kolomvector met $n-k$ componenten.
+
+Dus alle mogelijk syndromen zijn precies alle vectoren in $\mathbb{F}_q^{n-k}$. Het aantal mogelijke syndromen is dus
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \text{aantal mogelijke syndromen} = q^{n-k}
+\end{equationbox}
+
+Voor elk syndroom kies je een vector $e$ met minimaal Hamming-gewicht waarvoor
+\begin{equation*}
+    He^\top = s
+\end{equation*}
+Deze vector noemt met de \hl{coset leader} of \hl{nevenklassenleider}.
+
+Je vult de tabel door vectoren te overlopen met stijgend Hamming-gewicht:
+\begin{enumerate}
+    \item eerst de nulvector;
+    \item dan alle vectoren met gewicht 1;
+    \item dan alle vectoren met gewicht 2;
+    \item enzovoort.
+\end{enumerate}
+Bij een nieuw syndroom vul je de eerste vector in die dat syndroom geeft.
+
+\SimpleHeading{Decoderen}
+
+Voor een ontvangen $\tilde{c}$:
+\begin{enumerate}
+    \item Bereken $S(\tilde{c}) = H\tilde{c}^\top$
+    \item Lees de coset leader $e$ uit de tabel;
+    \item return $\tilde{c} - e$
+\end{enumerate}
+
+\textbf{\underbar{Voorbeeld:}} We werken over $\mathbb{F}_2$ en de volgende pariteitscontrolematrix is gegeven:
+\begin{equation*}
+    H = \begin{bmatrix}
+        1 & 1 & 1 & 0 \\
+        0 & 1 & 0 & 1
+    \end{bmatrix}
+\end{equation*}
+Deze matrix heeft $n=4$ kolommen en $n-k=2$ rijen. We werken over $\mathbb{F}_2$, dus $q=2$. Een syndroom heeft daarom lengte $2$:
+\begin{equation*}
+    s \in \mathbb{F}_2^2
+\end{equation*}
+Alle mogelijke vectoren van lengte $2$ over $\mathbb{F}_2$ zijn (het zijn er $q^{n-k}=2^{2}=4$):
+\begin{equation*}
+    \mathtt{00}, \quad \mathtt{01}, \quad \mathtt{10}, \quad \mathtt{11}
+\end{equation*}
+We zoeken nu voor elk syndroom een foutvector $e$ met $He^\top = s$ met een zo klein mogelijkHamming-gewicht.
+
+\underbar{Gewicht 0}\newline
+$e=0000$ geeft
+\begin{equation*}
+    He^\top = \begin{bmatrix}
+        1 & 1 & 1 & 0 \\
+        0 & 1 & 0 & 1
+    \end{bmatrix} \begin{bmatrix}
+        0 \\ 0 \\ 0 \\ 0
+    \end{bmatrix} = \begin{bmatrix}
+        0 \\ 0
+    \end{bmatrix}
+\end{equation*}
+Dus \inlinetext{\texttt{00}}[Aquamarine!33] $\longleftrightarrow$ \inlinetext{\texttt{0000}}[Aquamarine!33]
+
+\underbar{Gewicht 1}\newline
+De vectoren van gewicht 1 zijn
+\begin{equation*}
+    \mathtt{1000}, \quad \mathtt{0100}, \quad \mathtt{0010}, \quad \mathtt{0001}
+\end{equation*}
+We zoeken nu de foutvectoren:
+\begin{equation*}
+    S(1000) = \begin{bmatrix}
+        1 \\ 0
+    \end{bmatrix}
+\end{equation*}
+Dus \inlinetext{\texttt{10}}[Goldenrod!33] $\longleftrightarrow$ \inlinetext{\texttt{1000}}[Goldenrod!33]
+\begin{equation*}
+    S(0100) = \begin{bmatrix}
+        1 \\ 1
+    \end{bmatrix}
+\end{equation*}
+Dus \inlinetext{\texttt{11}}[OrangeRed!33] $\longleftrightarrow$ \inlinetext{\texttt{0100}}[OrangeRed!33]
+\begin{equation*}
+    S(0010) = \begin{bmatrix}
+        1 \\ 0
+    \end{bmatrix}
+\end{equation*}
+Dus \inlinetext{\texttt{10}}[Goldenrod!33] $\longleftrightarrow$ \inlinetext{\texttt{0010}}[Goldenrod!33]. Maar deze hebben we al.
+\begin{equation*}
+    S(0001) = \begin{bmatrix}
+        0 \\ 1
+    \end{bmatrix}
+\end{equation*}
+Dus \inlinetext{\texttt{01}}[Green!33] $\longleftrightarrow$ \inlinetext{\texttt{0001}}[Green!33]
+
+We verkrijgen dan de volgende tabel:
+\[
+\begin{array}{c|c}
+\text{syndroom} & \text{coset leader} \\
+\hline
+00 & 0000 \\
+01 & 0001 \\
+10 & 1000 \\
+11 & 0100
+\end{array}
+\]
+
+Stel je ontvangt nu $\tilde{c} = 1011$. Dan bereken je $S(\tilde{c}) = H \tilde{c}^\top$. Dat geeft:
+\begin{equation*}
+    S(1011) = \begin{bmatrix}
+        1 & 1 & 1 & 0 \\
+        0 & 1 & 0 & 1
+    \end{bmatrix} \begin{bmatrix}
+        1 \\ 0 \\ 1 \\ 1
+    \end{bmatrix} = \begin{bmatrix}
+        0 \\ 1
+    \end{bmatrix}
+\end{equation*}
+In de tabel hoort bij syndroom $01$ de coset leader $e=0001$. Je decodeert dus als
+\begin{equation*}
+    \tilde{c} - e = 1011 - 0001 = 1011 + 0001 = 1010
+\end{equation*}
 
 \subsection{Cyclische codes}
 
+\begin{nicedefinition}*[Cyclische code]
+    \nextpart[]*
+    Een lineaire $(n,\ k)$-code $C \in \mathbb{F}_q^n$ wordt \hl[PineGreen!75!black]{cyclisch} genoemd als ze gesloten is onder het cyclisch doorschuiven van de coördinaten.
+    \begin{equation*}
+        \begin{gathered}
+            (c_0, c_1, \dots, c_{n-1}) \in C \\
+            \Downarrow \\
+            (c_{n-1}, c_0, c_1, \dots, c_{n-2}) \in C
+        \end{gathered}
+    \end{equation*}
+    Dus cyclisch doorschuiven van de coördinaten geeft opnieuw een codewoord.
+\end{nicedefinition}
+
 \subsubsection{Codewoorden als veeltermen}
+
+We maken nu een belangrijke identificatie. We identificeren
+\begin{equation*}
+    (c_0, c_1, \dots, c_{n-1})
+\end{equation*}
+met
+\begin{equation*}
+    c(x) = c_0 + c_1x + \cdots + c_{n-1x^{n-1}}
+\end{equation*}
+of om heel correct te zijn met notatie schrijf je dit als
+\begin{equation*}
+    \overline{c(x)} = c_0 + c_1 \bar{x} + \cdots + \bar{x}^{n-1}
+\end{equation*}
+maar dit is wat omslachtig en zullen we in het vervolg niet meer doen.
+
+We werken in
+\begin{equation*}
+    R = \frac{\mathbb{F}_q\left[x\right]}{x^n-1}
+\end{equation*}
+waar geldt dat
+\begin{equation*}
+    x^n=1
+\end{equation*}
+Wat als we nu vermenigvuldigen met $x$?
+\begin{equation*}
+    \begin{aligned}
+        c(x) = c_0 + c_1x &+ \cdots + c_{n-1x^{n-1}} \\
+        &\Downarrow \textcolor{Green}{\cdot x} \\
+        \textcolor{Green}{x} \cdot c(x) = c_0x + c_1x^2 + &\cdots + c_{n-2}x^{n-1} + c_{n-1}x^n \\
+        &\Downarrow \textcolor{Green}{x^n=1} \\
+        xc(x) \equiv c_{n-1} + c_0x &+ c_1x^2 + \cdots + c_{n-2}x^{n-1}
+    \end{aligned}
+\end{equation*}
+Dit is precies de cyclische verschuiving. Dus:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \text{cyclisch doorschuiven} \iff \text{vermenigvuldigen met } x \text{ modulo } x^n-1
+\end{equationbox}
 
 \subsubsection{Hoofdstelling over cyclische codes}
 
+\begin{nicetheorem}*[Hoofdstelling cyclische codes]
+    \nextpart[]*
+    Een lineaire $(n,\ k)$-code $C \in \mathbb{F}_q^n$ is \hl[purple!75!black]{cyclisch} \emph{als en slechts als} en een unieke monische veelterm $g(x) \in \mathbb{F}_q\left[x\right]$ bestaat waarvoor
+    \begin{equation*}
+        g(x) \mid x^n-1
+    \end{equation*}
+    en
+    \begin{equation*}
+        C = \left\{ a(x)g(x) \;\text{ mod }\; (x^n-1) \quad\mid a(x) \in \mathbb{F}_q\left[x\right] \right\}
+    \end{equation*}
+\end{nicetheorem}
+
+\inlinetext{\underline{Bewijs:}}[Goldenrod!44] Stel dat $C$ cyclisch is. Kies een niet-nul codewoord $g(x) \in C$ van kleinst mogelijke graad en neem aan dat $g(x)$ monisch is.
+
+$\boxed{\Rightarrow}$ Neem een willekeurig codewoord $c(x) \in C$. Euclidische deling met $g(x)$ geeft
+\begin{equation*}
+    c(x) = q(x)g(x) + r(x) \qquad \text{ met } \deg(r) < \deg(g)
+\end{equation*}
+Omdat $C$ cyclisch is, is $C$ gesloten onder vermenigvuldiging met $x$. Omdat $C$ lineair is, is $C$ ook gesloten onder lineaire combinaties. Dus
+\begin{equation*}
+    q(x)g(x) \in C
+\end{equation*}
+Aangezien $c(x) \in C$, volgt dat
+\begin{equation*}
+    r(x) = c(x) - q(x)g(x) \in C
+\end{equation*}
+Maar $r(x)$ heeft graad kleiner dan $g(x)$, en $g(x)$ was zodanig gekozen met minimale graad. Dus moet wel gelden dat:
+\begin{equation*}
+    r(x) = 0
+\end{equation*}
+$\rightwhitearrow$ Elk codewoord is dus een veelvoud van $g(x)$
+
+Ten slotte past men hetzelfde argument to op $x^n-1$, dat nul is in $R = \mathbb{F}_q\left[x\right] / (x^n-1)$. We delen $x^n-1$ dus door $g(x)$:
+\begin{equation*}
+    \begin{aligned}
+        x^n-1 = q(x)g(x) + r(x) &\qquad \text{ met } \deg(r) < \deg(g) \\
+        &\Updownarrow \\
+        0 = q(x)&g(x) + r(x) \\
+        &\Downarrow \\
+        r(x) \equiv -q(x)g(x) &\pmod {x^n-1}
+    \end{aligned}
+\end{equation*}
+En opnieuw is $r(x)=0$ net als eerder dus de Euclidische deling wordt $x^n-1 = q(x)g(x)$, en dus
+\begin{equation*}
+    g(x) \mid x^n-1
+\end{equation*}
+
+$\boxed{\Leftarrow}$ Stel dat $g(x) \mid x^n-1$ en definieer
+\begin{equation*}
+    C = \left\{ a(x)g(x) \;\text{ mod }\; (x^n-1) \right\}
+\end{equation*}
+Dan is $C$ lineair, want sommen en scalaire veelvouden van $g(x)$ zijn opnieuw veelvouden van $g(x)$. Neem bijvoorbeeld twee codewoorden $c_1(x) = a_1(x)g(x)$ en $c_2(x) = a_2(x)g(x)$. Dan is hun som
+\begin{equation*}
+    c_1(x) + c_2(x) = a_1(x)g(x) + a_2(x)g(x) = \left(a_1(x) + a_2(x)\right)g(x)
+\end{equation*}
+Dit is opnieuw een veelvoud van $g(x)$. Analoog voor een scalar $\lambda \in \mathbb{F}_q$ geldt
+\begin{equation*}
+    \lambda c_1(x) = \lambda a_1(x)g(x) = \left(\lambda a_1(x)\right)g(x)
+\end{equation*}
+
+Als nu
+\begin{equation*}
+    c(x) = a(x)g(x) \in C
+\end{equation*}
+dan is
+\begin{equation*}
+    x \cdot c(x) = x \cdot a(x) g(x)
+\end{equation*}
+wat opnieuw een veelvoud is van $g(x)$. Maar vermenigvuldiging met $x$ is cyclisch doorschuiven. Dus $C$ is cyclisch.
+
+\begin{nicedefinition}*[Generatorveelterm]
+    \nextpart[]*
+    De unieke monische veelterm $g(x)$ waarvoor
+    \begin{equation*}
+        C = \left\{a(x)g(x) \mid \deg(a(x)) \le n-1-\deg(g(x))\right\}
+    \end{equation*}
+    wordt de \hl[PineGreen!75!black]{generatorveelterm} van $C$ genoemd.
+\end{nicedefinition}
+
+Voor een $(n,\ k)$-code geldt: $\deg(g(x)) = n-k$
+
+Men mag $a(x)$ beperken tot $\deg(a(x)) \le n - 1 - \deg(g(x)) = n - 1 - n + k = k-1$. Dus
+\begin{equation*}
+    \deg(a(x)) < k
+\end{equation*}
+
 \subsubsection{Pariteitscontroleveelterm}
 
+We hebben een cyclische code
+\begin{equation*}
+    C = \langle g(x) \rangle = \left\{ a(x)g(x) \;\text{ mod }\; (x^n-1) \right\}
+\end{equation*}
+waarbij $g(x) \mid x^n-1$. Daarom kunnen we schrijven
+\begin{equation*}
+    x^n-1 = g(x)h(x)
+\end{equation*}
+met 
+\begin{equation*}
+    h(x) = \frac{x^n-1}{g(x)}
+\end{equation*}
+Deze $h(x)$ noemt de \hl{pariteitscontroleveelterm}.
+
+\begin{niceproperty}*
+    \nextpart[]*
+    \begin{equation*}
+        c(x) \in C \iff c(x)h(x) \equiv 0 \pmod {x^n-1}
+    \end{equation*}
+\end{niceproperty}
+M.a.w. $h(x)$ controleert of $c(x)$ een codewoord is.
+
+$\boxed{\Rightarrow}$ Stel dat $c(x) \in C$. Omdat $C$ wordt voortgebracht door $g(x)$, bestaat er een veelterm $a(x)$ zodat
+\begin{equation*}
+    \begin{aligned}
+        c(x) \equiv a(x)g(x) &\pmod {x^n-1} \\
+        &\Downarrow \textcolor{Green}{\cdot h(x)} \\
+        c(x)h(x) \equiv a(x)g(x)&h(x) \pmod {x^n-1} \\
+        &\Downarrow \textcolor{Green}{g(x)h(x) = x^n-1} \\
+        c(x)h(x) \equiv a(x)(x^n-&1)\equiv 0 \pmod {x^n-1}
+    \end{aligned}
+\end{equation*}
+Elk veelvoud van $x^n-1$ is immers nul modulo $x^n-1$. Dus:
+\begin{equation*}
+    c(x) \in C \implies c(x)h(x) \equiv 0 \pmod {x^n-1}
+\end{equation*}
+
+$\boxed{\Leftarrow}$ Stel nu dat 
+\begin{equation*}
+    c(x)h(x) \equiv 0 \pmod {x^n-1}
+\end{equation*}
+Dit betekent dat $x^n-1$ de veelterm $c(x)h(x)$ deelt. Er bestaat dus een $b(x) \in \mathbb{F}_q\left[x\right]$ waarvoor geldt
+\begin{equation*}
+    \begin{aligned}
+        c(x)h(x) &= b(x)(x^n-1) \\
+        &\Downarrow \textcolor{Green}{x^n-1 = g(x)h(x)} \\
+        c(x)h(x) &= b(x)g(x)h(x) \\
+    \end{aligned}
+\end{equation*}
+We werken hier in $\mathbb{F}_q\left[x\right]$, dus we kunnen gewoon de niet-nul veelterm $h(x)$ wegdelen. Dus
+\begin{equation*}
+    c(x) = b(x)g(x)
+\end{equation*}
+Daaruit volgr dat $c(x)$ dus een veelvoud is van $g(x)$, en dus $c(x) \in C$.
+
+Daarom:
+\begin{equation*}
+    c(x)h(x) \equiv 0 \pmod {x^n-1} \implies c(x) \in C
+\end{equation*}
+
+\textbf{\underbar{Voorbeeld:}} We werken in $\mathbb{F}_2$ en nemen $n=3$. Dan is bijvoorbeeld
+\begin{equation*}
+    x^3-1 = x^3 + 1 = (x+1)(x^2 + x + 1)
+\end{equation*}
+omdat in $\mathbb{F}_2$ geldt dat $-1=1$. We kiezen nu 
+\begin{equation*}
+    g(x) = x+1
+\end{equation*}
+Dan is
+\begin{equation*}
+    h(x) = \frac{x^3+1}{x+1} = x^2+x+1
+\end{equation*}
+Als we nu een codewoord nemen
+\begin{equation*}
+    c(x) = xg(x) = x(x+1) = x^2+x
+\end{equation*}
+Dan geldt
+\begin{equation*}
+    c(x)h(x) = xg(x)h(x) = x(x^3+1)
+\end{equation*}
+Dit is een veelvoud van $x^3+1$, dus 
+\begin{equation*}
+    c(x)h(x) \equiv 0 \pmod {x^3+1}
+\end{equation*}
+De controle geeft dus mooi aan dat $c(x)$ een codewoord is.
+
 \subsubsection{Voorbeeld -- parity-check-code}
+
+De binaire parity-check-code bestaat uit alle woorden met een even aantal enen. Deze code is cyclisch, want cyclisch doorschuiven verandert het aantal enen niet.
+
+De generatorveelterm is
+\begin{equation*}
+    g(x)=x+1
+\end{equation*}
+Over $\mathbb{F}_2$ geldt $x+1=x-1$. De pariteitscontroleveelterm is
+\begin{equation*}
+    h(x) = \frac{x^n-1}{x+1} = 1 + x + x^2 + \cdots + x^{n-1}
+\end{equation*}
+De link met even pariteit: een woord $c(x)$ heeft een even aantal enen als
+\begin{equation*}
+    c(1)=0
+\end{equation*}
+in $\mathbb{F}_2$. Dat is equivalent met deelbaarheid door $x+1$.
+
+\hl{Verduidelijking}\newline
+Herinner de binaire parity-check code van lengte $n$:
+\begin{equation*}
+    C = \left\{(c_0, \dots, c_{n-1}) \in \mathbb{F}_2^n \mid c_0 + \cdots + c_{n-1} = 0\right\}
+\end{equation*}
+Omdat we in $\mathbb{F}_2$ rekenen betekent $c_0 + \cdots + c_{n-1} = 0$ precies dat het aantal enen even is. Bijvoorbeeld $(1,0,1,0) \in C$ maar $(1, 1, 1, 0) \notin C$.
+
+Aan het woord $(c_0, c_1, \dots, c_{n-1})$ koppelen we nu de veelterm zoals eerder.
+\begin{equation*}
+    c(x) = c_0 + c_1x + \cdots + c_{n-1}x^{n-1}
+\end{equation*}
+Vul je nu $x=1$ in:
+\begin{equation*}
+    c(1) = c_0, + c_1 + \cdots + c_{n-1}
+\end{equation*}
+Dus $c(1)$ is precies de som van alle bits en in $\mathbb{F}_2$ is deze nul als er een even aantal enen is.
+
+Volgens de factorstelling geldt:
+\begin{equation*}
+    c(1) = 0 \iff x-1 \mid c(x)
+\end{equation*}
+Maar in $\mathbb{F}_2$ geldt dat $-1=1$. Dus $x-1 = x+1$.
+Vandaar dat geldt:
+\begin{equation*}
+    c(1) = 0 \iff x+1 \mid c(x)
+\end{equation*}
 
 \subsection{Generatormatrix uit de generatorveelterm}
 
