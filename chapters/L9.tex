@@ -509,11 +509,11 @@ wat opnieuw een veelvoud is van $g(x)$. Maar vermenigvuldiging met $x$ is cyclis
     wordt de \hl[PineGreen!75!black]{generatorveelterm} van $C$ genoemd.
 \end{nicedefinition}
 
-Voor een $(n,\ k)$-code geldt: $\deg(g(x)) = n-k$
+Voor een $(n,\ k)$-code geldt: $\boxed{\deg(g(x)) = n-k}$
 
 Men mag $a(x)$ beperken tot $\deg(a(x)) \le n - 1 - \deg(g(x)) = n - 1 - n + k = k-1$. Dus
 \begin{equation*}
-    \deg(a(x)) < k
+    \boxed{\deg(a(x)) < k}
 \end{equation*}
 
 \subsubsection{Pariteitscontroleveelterm}
@@ -653,23 +653,404 @@ Vandaar dat geldt:
 
 \subsubsection{Niet-systematische generatormatrix}
 
+We kunnen nu de monische generatorveelterm $g(x)$ van een cyclische code $C$ schrijven als
+\begin{equation*}
+    g(x) = \textcolor{Aquamarine}{1}x^{n-k} + g_{n-k-1}x^{n-k-1} + \cdots + g_1x + g_0
+\end{equation*}
+We weten ook dat de code $C$ bestaat uit
+\begin{equation*}
+    C = \left\{ a(x)g(x) \;\mid\; \deg(a(x)) < k \right\}
+\end{equation*}
+Dus als vectorruimte wordt $C$ voortgebracht door
+\begin{equation*}
+    1\cdot g(x),\ x\cdot g(x),\ x^2\cdot g(x),\ \dots,\ x^{k-1}\cdot g(x)
+\end{equation*}
+want de monomen $1,\ x,\ x^2, \dots,\ x^{k-1}$ vormen een basis voor alle mogelijke $a(x)$ met $\deg(a)<k$. namelijk
+\begin{equation*}
+    \begin{aligned}
+        a(x)g(x) &= (a_0 + a_1x + \cdots + a_{k-1}x^{k-1})g(x) \\
+                 &= a_0g(x) + a_1xg(x) + \cdots + a_{k-1}x^{k-1}g(x)
+    \end{aligned}
+\end{equation*}
+Dus inderdaad, elk codewoord $a(x)g(x)$ is een lineaire combinatie van de monomen van $a(x)$.
+
+\textbf{\underbar{Voorbeeld:}} Neem $k=3$. Dan heeft $a(x)$ de vorm
+\begin{equation*}
+    a_0 + a_1x + a_2x^2
+\end{equation*}
+Dan is
+\begin{equation*}
+    a(x)g(x) = a_0g(x) + a_1xg(x) + a_2x^2g(x)
+\end{equation*}
+Dus het hele codewoord wordt voortgebracht door slechts drie basisveeltermen: $g(x), xg(x), x^2g(x)$.
+
+Als we nu van iedere veelterm de coëfficiënten opschrijven als een vector, worden dit de rijen van de generatormatrix (hier $g$ niet monisch). Herinner ook dat $g$ van graad $n-k$ is en $G \in \mathbb{F}_q^{k\times n}$.
+\begin{equation*}
+    \begin{aligned}
+        1 \cdot g(x) &\longleftrightarrow \left( g_0,\ g_1,\dots,\ g_{n-k},\ \textcolor{Aquamarine}{\overbrace{0, \dots,\ 0}^{\text{code heeft lengte }n}} \right) \\
+        x \cdot g(x) &\longleftrightarrow \left( 0,\ g_0,\ g_1, \dots,\ g_{n-k},\ 0, \dots,\ 0 \right) \\
+        &\vdots \\
+        x^{k-1}g(x) &\longleftrightarrow \left( \underbrace{0, \dots,\ 0}_{k \text{ nullen}},\ g_0,\ g_1, \dots,\ g_{n-k} \right)
+    \end{aligned}
+\end{equation*}
+Dit leidt tot een generatormatrix waarvan de rijen dus ge verschoven kopieën zijn van de coëfficiënten van $g(x)$:
+\begin{equation*}
+    G = \begin{bmatrix}
+        g_0 & g_1 & \cdots & g_{n-k} & 0 & \cdots & 0 \\
+        0 & g_0 & g_1 & \cdots & g_{n-k} & \cdots & 0 \\
+        \vdots & & \ddots & & & \ddots & \vdots \\
+        0 & \cdots & 0 & g_0 & g_1 & \cdots & g_{n-k}
+    \end{bmatrix}
+\end{equation*}
+$\rightwhitearrow$ Deze matrix vertoont de cyclische structuur mooi, maar ze is (meestal) \hl[OrangeRed]{niet systematisch}. Kunnen we nu $G$ misschien veranderen in een systematische encodering?
+
 \subsubsection{Systematische encodering van type \texorpdfstring{$\left[A\;\;I_k\right]$}{[A Ik]}}
+
+Bij cyclische code is het vaak handig om de redundantie vooraan te zetten en het bericht achteraan. Dan zoeken we een matrix van type
+\begin{equation*}
+    G = \begin{bmatrix}
+        A & I_k
+    \end{bmatrix}
+\end{equation*}
+met $A \in \mathbb{F}_q^{k \times (n-k)}$. 
+
+$\to$ Om nu een systematische generatormatrix te vinden kunnen we als volgt te werk gaan:
+Laat het bericht een veelterm zijn
+\begin{equation*}
+    a(x), \qquad \deg(a) < k
+\end{equation*}
+We willen nu dat het bericht in het \textbf{hoge-graadstuk} staat, want je wil dat het oorspronkelijke bericht letterlijk in het codewoord verschijnt. Dus voor een matrix $G$ van de vorm zoals hierboven wil je:
+\begin{equation*}
+    (c_0, \dots, c_{n-k-1} \mid a_0, ..., a_{k-1})
+\end{equation*}
+Dus de eerste $n-k$ posities bevatten de controlesymbolen en de laatste $k$ posities bevatten onveranderd het bericht. We nemen aan dat de vectorcoördinaten van lage naar hoge graad lopen, dus de laatste $k$ posities komen overeen met de machten $x^{n-k},x^{n-k+1},\dots,x^{n-1}$.
+We schuiven $a(k)$ dus op met $n-k$ posities:
+\begin{equation*}
+    x^{n-k}a(x)
+\end{equation*}
+$a(x)$ heeft hoogstens graad $k-1$, dus elke term $x^{n-k}a(x)$ heeft graad $x^{n-k}$ of hoger, dat is wat we willen.
+
+Maar $x^{n-k}a(x)$ is nog niet meteen een codewoord! Herinner, een cyclisch codewoord moet een veelvoud zijn van $g(x)$, maar $x^{n-k}a(x)$ is in het algemeen niet deelbaar door $g(x)$. Daarom delen we door $g(x)$:
+\begin{equation*}
+    x^{n-k}a(x) = q(x)g(x) + r(x), \qquad \deg(r) < \underbrace{n-k}_{\deg(g)}
+\end{equation*}
+Dan is
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    c(x) = x^{n-k}a(x) - r(x)
+\end{equationbox}
+
+wel deelbaar door $g(x)$, en dus een codewoord. Omdat $\deg(r) < \deg(g) = n-k$ kan je nog redundantie toevoegen in de termen
+\begin{equation*}
+    1, x, \dots, x^{n-k-1}
+\end{equation*}
+Dan zit inderdaad de redundantie in de lage graden en het bericht in de hoge graden wat een systematische encodering van het type $\begin{bmatrix}
+    A & I_k
+\end{bmatrix}$ geeft.
+
+\begin{niceexample}*\label{voorbeeld:l9_systematische-encodering}
+    \nextpart[]*
+    Gegeven een $(7,4)$-code met $g(x) = x^3 + x + 1$ over $\mathbb{F}_2$. Geeft een systematische encodering om het bericht \inlinecode{0}[Aquamarine!22]\inlinecode{0}[LimeGreen!33]\inlinecode{1}[OrangeRed!22]\inlinecode{1}[Goldenrod!22] te versturen. Gebruik MSB.
+\end{niceexample}
+\textbf{\underbar{Oplossing:}} We gebruiken MSB, dus het bericht omgezet in een veelterm is equivalent met
+\begin{center}
+    \inlinecode{0}[Aquamarine!22]$\cdot x^3 +$\inlinecode{0}[LimeGreen!33]$\cdot x^2 +$\inlinecode{1}[OrangeRed!22]$\cdot x +$\inlinecode{1}[Goldenrod!22]$\cdot 1$ 
+\end{center}
+$\rightwhitearrow\;\; a(x) = x + 1$
+
+Vermenigvuldig met $x^{n-k} = x^3$:
+\begin{equation*}
+    x^3a(x) = x^4+x^3
+\end{equation*}
+We delen dan door $g(x)$ omdat we $r(x)$ uit $x^{n-k}a(x) = q(x)g(x)+r(x)$ nodig hebben:
+\begin{equation*}
+    \polylongdiv[style=D]{x^4+x^3}{x^3+x+1}    
+\end{equation*}
+We werken in $\mathbb{F}_2$, dus $r(x)=-x^2 -2x -1 = x^2+1$. Daarom
+\begin{equation*}
+    \begin{aligned}
+        c(x) &= x^{n-k}a(x) - r(x) \\
+             &= x^3(x+1) - (x^2+1) \\
+             &= x^4 + x^3 + x^2 + 1
+    \end{aligned}
+\end{equation*}
+Als coëfficiënten van laag naar hoog geeft dit dus de volgende code:
+\begin{equation*}
+    (1,0,1,1,1,0,0)
+\end{equation*}
+wat je als bitstring in MSB-volgorde interpreteert als \inlinecode{0}[Aquamarine!22]\inlinecode{0}[LimeGreen!33]\inlinecode{1}[OrangeRed!22]\inlinecode{1}[Goldenrod!22]\inlinecode{1}\inlinecode{0}\inlinecode{1}
 
 \subsubsection{Volledige systematische generatorveelterm \texorpdfstring{$\left[A\;\;I_4\right]$}{[A I4]}}
 
+We gebruiken \Cref{voorbeeld:l9_systematische-encodering} om een strategie te illusteren. 
+Omdat $\deg(a)<k=4$, gebruik je de basisberichten
+\begin{equation*}
+    1,x,x^2,x^3
+\end{equation*}
+Omdat verder geldt voor $g(x)$ dat
+\begin{equation*}
+    x^3 \equiv x + 1 \pmod {g(x)}
+\end{equation*}
+krijgen we
+\begin{equation*}
+    \begin{aligned}
+        x^3 \pmod {g} &= x + 1 \\
+        x^4 \pmod {g} &= x^2 + 1 \\
+        x^5 \pmod {g} &= x^2 + x + 1 \\
+        x^6 \pmod {g} &= x^2 + 1
+    \end{aligned}
+\end{equation*}
+Dus de systematische generatormatrix van type $\left[A \;\ I_4\right]$, in coëfficiëntenvolgorde van laag naar hoog, is
+\begin{equation*}
+    G_{\left[A \;\ I_4\right]} = \left[
+        \begin{array}{ccc|cccc}
+        1 & 1 & 0 & 1 & 0 & 0 & 0 \\
+        0 & 1 & 1 & 0 & 1 & 0 & 0 \\
+        1 & 1 & 1 & 0 & 0 & 1 & 0 \\
+        1 & 0 & 1 & 0 & 0 & 0 & 1
+    \end{array}
+    \right]
+\end{equation*}
+De eerste drie kolommen zijn redundantie; de laatste vier kolommen vormen $I_4$.
+
 \subsubsection{Systematische vorm \texorpdfstring{$\left[I_k\;\;A\right]$}{[Ik A]}}
+
+Wat nu als je het bericht vooraan wil zetten? Dan zoek je codewoorden van de vorm:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    c(x) = a(x) + x^kp(x)
+\end{equationbox}
+
+waarbij $p(x)$ de redundantie bevat. Opdat dit een geldig codewoord is, eis je nog dat
+\begin{equation*}
+    g(x) \mid c(x)
+\end{equation*}
+Dus modulo $g(x)$ geldt dan:
+\begin{equation*}
+    a(x) + x^kp(x) \equiv 0 \pmod {g(x)}
+\end{equation*}
+Dus
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    p(x) \equiv -a(x)\left(x^k\right)^{-1} \pmod {g(x)}
+\end{equationbox}
+
+Dit werkt omdat $x^k$ inverteerbaar is modulo $g(x)$. Voor het voorbeeld met $g(x) = x^3 + x + 1$, $n=7$, $k=4$, geldt dan
+\begin{equation*}
+    \begin{aligned}
+        \left(x^4\right) &\equiv -a(x)\left(x^k\right)^{-1} \pmod {g(x)} \\
+        &\equiv +a(x)\left(x^k\right)^{-1} \pmod {g(x)}
+    \end{aligned}
+\end{equation*}
+Met het uitgebreide algoritme van Euclides vind je dat
+\begin{equation*}
+    \left(x^4\right)^{-1} \equiv x+1 \pmod {g(x)}
+\end{equation*}
+We kunnen hiermee nu de systematische matrix van type $\left[I_4 \;\ A\right]$ afleiden.
+
+\underbar{Rij 1: $a(x)=1$:}
+\begin{equation*}
+    p(x) = 1 \cdot (x+1) = x+1
+\end{equation*}
+Dus $p(x) \longleftrightarrow (1, 1, 0)$
+
+\underbar{Rij 2: $a(x)=x$:}
+\begin{equation*}
+    p(x) = x(x+1) = x^2+x
+\end{equation*}
+Dus $p(x) \longleftrightarrow (0, 1, 1)$
+
+\underbar{Rij 3: $a(x)=x^2$:}
+\begin{equation*}
+    p(x) = x^2(x+1) = x^3+x^2 \equiv x^2 + x + 1
+\end{equation*}
+Dus $p(x) \longleftrightarrow (1, 1, 1)$
+
+\underbar{Rij 4: $a(x)=x^3$:}
+\begin{equation*}
+    p(x) = x^3(x+1) = x^4+x^3 \equiv x^2 + x + x + 1 \equiv x^2 + 1
+\end{equation*}
+Dus $p(x) \longleftrightarrow (1, 0, 1)$
+
+\begin{equation*}
+    G_{\left[I_4 \;\ A\right]} = \left[
+        \begin{array}{cccc|ccc}
+        1 & 0 & 0 & 0 & 1 & 1 & 0 \\
+        0 & 1 & 0 & 0 & 0 & 1 & 1 \\
+        0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+        0 & 0 & 0 & 1 & 1 & 0 & 1
+    \end{array}
+    \right]
+\end{equation*}
 
 \subsection{Generatorveelterm beschrijven via wortels}
 
+Waarom wortels? We zullen later in BCH-codes zien dat het handig is om $g(x)$ niet via coëfficiënten, maar via wortels te beschrijven.
+
+We zullen zien dat omdat
+\begin{equation*}
+    g(x) \mid x^n-1
+\end{equation*}
+alle wortels van $g(x)$ ook $n$-de eenheidswortels zijn:
+\begin{equation*}
+    \alpha^n = 1
+\end{equation*}
+Want:
+\begin{equation*}
+    \begin{aligned}
+        g(x) \mid &\;x^n-1 \\
+        &\Updownarrow \\
+        x^n-1 &= g(x)h(x) \\
+        &\Downarrow \textcolor{Green}{\alpha \text{ is een worten van } g(x)} \\
+        \alpha^n-1 &= g(\alpha)h(\alpha) \\
+        &\Updownarrow \textcolor{Green}{g(\alpha)=0} \\
+        \alpha^n-1 &= 0 \\
+        &\Updownarrow \\
+        \alpha^n &= 1
+    \end{aligned}
+\end{equation*}
+Dus elke wortel van $g(x)$ is automatisch een $n$-de eenheidswortel.
+
+Meestal zullen die wortels niet in $\mathbb{F}_q$ liggen, maar in een uitbreiding $\mathbb{F}_q^n$.
+
 \subsubsection{Splijtveld / ontbindingsveld}
+
+\begin{nicefact}*[Ontbindingsveld / Splijtveld]
+    \nextpart[]*
+    Voor elke veelterm $g(x) \in \mathbb{F}_q\left[x\right]$ bestaat er een eindig veld $\mathbb{F}_{q^m} \supset \mathbb{F}_q$ waarin $g(x)$ splitst in lineaire factoren wanneer bekeken als element van $\mathbb{F}_{q^m}\left[x\right]$:
+    \begin{equation*}
+        g(x) = \prod_i (x-\alpha_i)
+    \end{equation*}
+    Dit veld heet een \hl[factcolor]{ontbindingsveld} of \hl[factcolor]{splijtveld}.
+\end{nicefact}
+
+\underbar{Analogie:} $x^2+1$ splitst niet over $\mathbb{R}$, maar wel over $\mathbb{C}$:
+\begin{equation*}
+    x^2+1 = (x-i)(x+i)
+\end{equation*}
+
+\begin{barbox}[RoyalPurple!75][gray!3]
+    \hl[RoyalPurple!75!]{\underbar{Idee:}} Als $g(x)$ irreduceerbaar is, dan kan je $\mathbb{F}_{q^m} = \mathbb{F}_q\left[x\right]/g(x)$ nemen. 
+\end{barbox}
 
 \subsubsection{Geen dubbele wortels als \texorpdfstring{$\operatorname{ggd}(n,q)=1$}{gcd(n,q)=1}}
 
+\begin{nicefact}*[Geen dubbele wortels als $\operatorname{ggd}(n,q)=1$]
+    \nextpart[]*
+    Als
+    \begin{equation*}
+        \operatorname{ggd}(n,q)=1
+    \end{equation*}
+    met $n$ de lengte van de code. Dan heeft $x^n-1$ geen dubbele wortels. M.a.w. dan zijn de nulpunten van $g(x)$ in $\mathbb{F}_{q^m}$ allemaal verschillend.
+\end{nicefact}
+
+\textbf{\underbar{Reden:}} Dubbele wortels zou betekenen dat $x^n-1$ een gemeenschappelijke factor heeft met zijn formele afgeleide. Maar
+\begin{equation*}
+    (x^n-1)' = nx^{n-1}
+\end{equation*}
+Als $\operatorname{ggd}(n,q)=1$, dan is $n \neq 0$ in $\mathbb{F}_q$, en dus
+\begin{equation*}
+    \operatorname{ggd}(x^n-1, nx^{n-1}) = 1.
+\end{equation*}
+Daarom heeft $x^n-1$ geen dubbele wortels. Omdat $g(x) \mid x^n-1$, heeft ook $g(x)$ geen dubbele wortels.
+
+\begin{nicecorollary}*
+    \nextpart[]*
+    Een monische veelterm $g(x)$ wordt volledig bepaald door zijn wortels.
+    
+    \vspace{0.25cm}
+
+    Om $g(x)$ te kennen volstaat het de nulputen in $\mathbb{F}_{q^m}$ te kennen want $g(x)$ is monisch zonder dubbele wortels!
+\end{nicecorollary}
+
 \subsubsection{Minimale veelterm}
+
+\begin{nicedefinition}*[Minimale veelterm]
+    \nextpart[]*
+    Zij $\alpha \in \mathbb{F}_{q^m} \supseteq \mathbb{F}_q$. De monische veelterm
+    \begin{equation*}
+        m_\alpha(x) \in \mathbb{F}_q\left[x\right]
+    \end{equation*}
+     van kleinste graad die nul wordt in $\alpha$ wordt de \hl[PineGreen!75!black]{minimale veelterm} van $\alpha$ over $\mathbb{F}_q$ genoemd.
+    \begin{equation*}
+        m_\alpha(\alpha) = 0
+    \end{equation*}
+\end{nicedefinition}
+
+\begin{niceproperty}*\label{eigenshap:l9_min-veelterm}
+    \nextpart[]*
+    \begin{enumerate}
+        \item $m_\alpha(x)$ bestaat en is uniek.
+        \item $m_\alpha(x)$ is irreduceerbaar over $\mathbb{F}_q$.
+        \item Als $f(x) \in \mathbb{F}_q\left[x\right]$ en $f(\alpha)=0$, dan geldt:
+        \begin{equation*}
+            m_\alpha(x) \mid f(x)
+        \end{equation*}
+    \end{enumerate}
+\end{niceproperty}
+
+\underbar{Analogie:} $m_i(x) = x^2 + 1$ is de minimale veelterm van $i$ over $\mathbb{R}$.
+
+\begin{barbox}[SeaGreen][gray!5]
+    \hl[SeaGreen]{Intuïtief:} Je hebt een element $\alpha$ dat mogelijks niet in het kleine veld $\mathbb{F}_q$ ligt, maar wel in een groter veld $\mathbb{F}_{q^m}$.
+    
+    \vspace{0.25cm}
+
+    Je zoekt dan een veelterm met coëfficiënten uit het \textbf{kleine veld} waarvoor $\alpha$ een wortel is. Van al deze veeltermen kies je degene die monisch is en die de kleinste graad heeft.
+\end{barbox}
 
 \subsubsection{"Gratis" wortels}
 
+We weten uit \Cref{eigenshap:l9_min-veelterm} dat als een veelterm $f(x) \in \mathbb{F}_q\left[x\right]$ één wortel $\alpha$ heeft, dan moet de minimale veelterm $m\alpha(x)$ van $\alpha$ $f(x)$ delen. Dus
+\begin{equation*}
+    f(\alpha) = 0 \implies m_\alpha(x) \mid f(x)
+\end{equation*}
+Maar $m_\alpha(x)$ heeft meestal meerdere wortels. Daarom zijn al die andere wortels automatisch ook wortels van $f(x)$.
+
+In een eindig veld werkt de afbeelding
+\begin{equation*}
+    \beta \longmapsto \beta^q
+\end{equation*}
+op een bijzondere manier. Neem bijvoorbeeld
+\begin{equation*}
+    f(x) = a_0 + a_1x + \cdots + a_rx^r
+\end{equation*}
+met $a_i \in \mathbb{F}_q$ en stel dat $f(\alpha)=0$. Dan:
+\begin{equation*}
+    \begin{aligned}
+        a_0 + a_1\alpha \;+ &\cdots + a_r\alpha^r = 0 \\
+        &\Downarrow \textcolor{Green}{\text{verhef tot } q\text{-de macht}} \\
+        (a_0 + a_1\alpha \;+ &\cdots + a_r\alpha^r)^q = 0 
+    \end{aligned}
+\end{equation*}
+
+\begin{nicefact}*
+    \nextpart[]*
+    In karakteristiek $p$ geldt dat de $p$-de macht over sommen verdeeld mag worden.
+\end{nicefact}
+
+Gebruiken we het bovenstaande feit, dan krijgen we:
+\begin{equation*}
+    a_0^q + a_1^q\alpha^q + \cdots + a_r^q\alpha^{qr} = 0 
+\end{equation*}
+Omdat nu ook geldt dat $a_i \in \mathbb{F}_q$ geldt ook dat
+\begin{equation*}
+    a_i^q = a_i
+\end{equation*}
+Dus:
+\begin{equation*}
+    a_0^q + a_1^q\alpha^q + \cdots + a_r(\alpha^q)^r = 0 
+\end{equation*}
+Dus:
+\begin{equation*}
+    \boxed{f(\alpha^q) = 0}
+\end{equation*}
+Hetzelfde argument kan je maken voor $f(\alpha^{q^2}) = 0$ en daarna $f(\alpha^{q^3})=0$ enzovoort. Dus uit één wortel krijg je automatisch:
+\begin{equationbox}*[NavyBlue][SkyBlue!10]
+    \alpha, \alpha^q, \alpha^{q^2}, \dots, \alpha^{q^{m-1}}
+\end{equationbox}
+
+
 \subsubsection{Link met BCH-codes}
+
+\emoji{pushpin} \inlinecode{TODO}[red!22] \emoji{pushpin}
 
 \subsection{Samenvattende oefeningen}
 
